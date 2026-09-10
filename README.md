@@ -2,100 +2,88 @@
 
 **PRT691 AI Practice — evidence-grounded NT self-drive trip planner**
 
-Terra NT is a mobile-first academic prototype for planning the **Darwin → Kakadu → Katherine** self-drive corridor. The project is designed around a simple principle: safety-critical travel decisions should be grounded in traceable evidence and deterministic checks rather than generated from an LLM's memory.
+Terra NT is a mobile-first academic prototype for the **Darwin → Kakadu → Katherine** self-drive corridor. The core design principle is that safety-critical travel decisions should be grounded in traceable evidence and deterministic checks rather than generated from an LLM's memory.
 
-## Prototype screenshots
+## Current repository build
 
-| Explore | AI route plan | Interactive safety sheet |
-|---|---|---|
-| ![Explore map](docs/screenshots/explore.png) | ![Evidence-grounded plan](docs/screenshots/plan.png) | ![Interactive sheet](docs/screenshots/interactive-sheet.png) |
+The repository now contains a runnable browser prototype with:
 
-## What is implemented
+- professional mobile-first interface and smooth screen transitions;
+- prototype login, Explore, Plan AI, Trips, Saved and Profile flows;
+- Google-Maps-inspired route view for Darwin–Kakadu–Katherine;
+- Route, Parks, Fuel and Permits map layers;
+- search and photographic NT destination cards;
+- traveller and vehicle-aware planning context;
+- evidence/source detail views and uncertainty warnings;
+- save, reorder, restore and Google Maps export interactions;
+- real Northern Territory travel photography with credits; and
+- reduced-motion support for accessibility.
 
-- Mobile-first UI with smooth SPA transitions and touch-friendly controls.
-- Interactive Google-Maps-inspired route map with drag/pan, zoom and route/park/fuel/permit layers.
-- Search autocomplete and photographic place cards using credited Wikimedia Commons travel images.
-- Prototype login, onboarding and traveller profile.
-- Vehicle-aware planning inputs including standard car, 4x4, campervan and caravan/towing.
-- Deterministic planning/rules layer for the Darwin–Kakadu–Katherine corridor.
-- Evidence metadata: source authority, source type, URL and last-checked date.
-- Safety notices for road access, fuel uncertainty, weather, park access and permit boundaries.
-- Hard-exclusion demonstration for the 2026 Jim Jim / Twin Falls closure snapshot.
-- Save, remove, restore and reorder itinerary stops.
-- Place and evidence bottom sheets, motion feedback, map layers, saved routes and profile settings.
-- Google Maps export/open actions for route navigation.
-- Reduced-motion accessibility support.
+## Run
+
+Open:
+
+```text
+browser_demo/index.html
+```
+
+Prototype login accepts any valid email plus any non-empty password, for example:
+
+```text
+max@example.com
+123456
+```
+
+No build system or API key is required for the browser prototype.
 
 ## Repository structure
 
 ```text
-browser_demo/             Dependency-free interactive web prototype
-flutter_app/              Flutter mobile app source
-  lib/                    Models, state, rules, UI and demo data
-  docs/                   Assignment alignment + data/safety notes
-  test/                   Planner engine tests
-demo/                     Standalone single-file demo
-docs/screenshots/         Prototype screenshots
+browser_demo/
+  index.html              App entry point
+  styles.css              Mobile UI and animation system
+  app.js                  App state, itinerary, map and interactions
+  manifest.webmanifest    Installable-web-app metadata
+  service-worker.js       Basic offline shell caching
+  README.md               Browser prototype notes
+
+docs/
+  IMPLEMENTATION_EVIDENCE.md
+  ASSIGNMENT_ALIGNMENT.md
 ```
 
-## Run the browser prototype
-
-Open `browser_demo/index.html` in a modern browser. The prototype login accepts any valid email plus any non-empty password.
-
-For a single-file demo, open:
+## Implemented architecture
 
 ```text
-demo/TerraNT_Mobile_v4_Interactive_Live_Demo.html
+Traveller profile / vehicle / trip preferences
+                    ↓
+          deterministic planning rules
+                    ↓
+       curated evidence/source metadata
+                    ↓
+        allowed corridor itinerary
+                    ↓
+ evidence-linked warnings + human-readable plan
+                    ↓
+          traveller review / edit / export
 ```
 
-## Run the Flutter app
-
-With Flutter installed:
-
-```bash
-cd flutter_app
-flutter pub get
-flutter analyze
-flutter test
-flutter run
-```
-
-If platform folders are missing, run `flutter create .` once inside `flutter_app/` before the commands above.
-
-## Architecture
-
-```text
-Traveller preferences / vehicle profile
-                 ↓
-         Planner rules layer
-                 ↓
-  Curated evidence / future RAG API
-                 ↓
-      Allowed itinerary stops
-                 ↓
-     Human-readable plan + citations
-                 ↓
-          Traveller review
-```
-
-The current browser and Flutter prototypes use a **curated demonstration evidence snapshot dated 10 September 2026**. A future RAG service should replace the demo evidence seam, while legal/safety constraints remain outside free-form language generation.
+The current prototype uses a **curated demonstration evidence snapshot dated 10 September 2026**. Live Google Maps tiles, live NT data APIs and a production RAG backend are future work.
 
 ## Responsible-AI boundary
 
-This repository is an academic prototype, not a live travel-safety service. It does **not** guarantee current road, park, fuel, weather, operator or permit status. The design deliberately:
+This is an academic prototype, not a live travel-safety service. It does **not** guarantee current road, park, fuel, weather, business or permit status. The design deliberately:
 
 - does not infer Aboriginal land permission or cultural protocol;
 - does not present uncertain fuel/operator availability as guaranteed;
-- exposes source authority and freshness;
-- keeps user review and editing in the workflow; and
-- treats safety rules as constraints that an LLM should not override.
-
-See `flutter_app/docs/DATA_AND_SAFETY.md` and `flutter_app/docs/ASSIGNMENT_ALIGNMENT.md`.
+- exposes source authority and freshness in the prototype data model;
+- keeps traveller review/editing in the workflow; and
+- keeps safety constraints conceptually outside free-form language generation.
 
 ## Photo credits
 
-The browser prototype references credited Wikimedia Commons images for Yellow Water / Kakadu, Nitmiluk Gorge, Darwin Waterfront and Pine Creek. Full credit information is displayed in the app profile and source code.
+The prototype references credited Wikimedia Commons images for Yellow Water / Kakadu, Nitmiluk Gorge, Darwin Waterfront and Pine Creek. Credit metadata is included in the application source/profile content.
 
 ## Project status
 
-Current milestone: **interactive mobile prototype / Assignment 2 evidence build**. Live Google Maps tiles, live NT APIs and a production RAG backend are future work.
+Current milestone: **Assignment 2 interactive prototype**. The next stage is evaluation: controlled rule tests, retrieval/freshness testing when the data layer is connected, and user/expert validation against the stakeholder requirements.
