@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:terra_nt/core/theme/colors.dart';
+import 'package:terra_nt/core/theme/app_theme.dart';
 import 'package:terra_nt/core/theme/motion.dart';
 import 'package:terra_nt/data/models/saved_route.dart';
 import 'package:terra_nt/data/repositories/notifiers.dart';
@@ -39,6 +40,7 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: MaterialApp(
+            theme: AppTheme.dark,
             builder: (context, child) => MediaQuery(
               data: MediaQuery.of(context)
                   .copyWith(textScaler: TextScaler.linear(textScale)),
@@ -617,7 +619,7 @@ void main() {
         await tester.pumpWidget(
           UncontrolledProviderScope(
             container: container,
-            child: const MaterialApp(home: SavedRoutesScreen()),
+            child: MaterialApp(theme: AppTheme.dark, home: SavedRoutesScreen()),
           ),
         );
 

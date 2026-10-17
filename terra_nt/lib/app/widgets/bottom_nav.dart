@@ -35,9 +35,9 @@ class BottomNav extends StatelessWidget {
     // The device's bottom inset stays below the content.
     return DecoratedBox(
       key: const ValueKey('bottom-nav'),
-      decoration: const BoxDecoration(
-        color: AppColors.surface1,
-        border: Border(top: BorderSide(color: AppColors.hairline)),
+      decoration: BoxDecoration(
+        color: AppColors.of(context).surface1,
+        border: Border(top: BorderSide(color: AppColors.of(context).hairline)),
       ),
       child: SafeArea(
         top: false,
@@ -49,7 +49,9 @@ class BottomNav extends StatelessWidget {
               children: List.generate(_items.length, (index) {
                 final item = _items[index];
                 final active = index == selectedIndex;
-                final color = active ? AppColors.ink : AppColors.inkTertiary;
+                final color = active
+                    ? AppColors.of(context).ink
+                    : AppColors.of(context).inkTertiary;
                 return Expanded(
                   child: InkWell(
                     key: ValueKey('bottom-nav-tab-$index'),
@@ -81,8 +83,8 @@ class BottomNav extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style: AppType.captionApp.copyWith(
                                 color: active
-                                    ? AppColors.ink
-                                    : AppColors.inkSubtle,
+                                    ? AppColors.of(context).ink
+                                    : AppColors.of(context).inkSubtle,
                               ),
                             ),
                           ],

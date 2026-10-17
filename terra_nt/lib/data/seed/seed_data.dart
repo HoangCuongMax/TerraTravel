@@ -20,9 +20,15 @@ const List<Stop> seedStops = [
       PlanEntry(time: "9:00am", activity: "Land in Darwin, collect vehicle"),
       PlanEntry(time: "11:00am", activity: "Check in, Waterfront precinct"),
       PlanEntry(time: "1:00pm", activity: "Lunch at Stokes Hill Wharf"),
-      PlanEntry(time: "3:00pm", activity: "Free time — Museum & Art Gallery of the NT"),
+      PlanEntry(
+        time: "3:00pm",
+        activity: "Free time — Museum & Art Gallery of the NT",
+      ),
       PlanEntry(time: "5:00pm", activity: "Mindil Beach Sunset Market"),
-      PlanEntry(time: "7:30pm", activity: "Dinner, early night before the drive south"),
+      PlanEntry(
+        time: "7:30pm",
+        activity: "Dinner, early night before the drive south",
+      ),
     ],
   ),
   Stop(
@@ -38,7 +44,10 @@ const List<Stop> seedStops = [
     tags: ["Nature", "Adventure"],
     detailedPlan: [
       PlanEntry(time: "7:00am", activity: "Depart Darwin"),
-      PlanEntry(time: "8:30am", activity: "Arrive Litchfield, Florence Falls walk & swim"),
+      PlanEntry(
+        time: "8:30am",
+        activity: "Arrive Litchfield, Florence Falls walk & swim",
+      ),
       PlanEntry(time: "11:30am", activity: "Buley Rockholes"),
       PlanEntry(time: "1:00pm", activity: "Lunch, Wangi Falls picnic area"),
       PlanEntry(time: "2:30pm", activity: "Wangi Falls swim"),
@@ -64,10 +73,16 @@ const List<Stop> seedStops = [
       PlanEntry(time: "12:00pm", activity: "Bowali Visitor Centre"),
       PlanEntry(time: "3:00pm", activity: "Ubirr rock art walk"),
       PlanEntry(time: "5:30pm", activity: "Sunset over the Nadab floodplain"),
-      PlanEntry(time: "6:30am", activity: "Day 2 - Yellow Water Billabong cruise"),
+      PlanEntry(
+        time: "6:30am",
+        activity: "Day 2 - Yellow Water Billabong cruise",
+      ),
       PlanEntry(time: "9:30am", activity: "Breakfast, Cooinda"),
       PlanEntry(time: "11:00am", activity: "Nourlangie rock art site"),
-      PlanEntry(time: "2:00pm", activity: "Free time - Gunlom plunge pool (seasonal)"),
+      PlanEntry(
+        time: "2:00pm",
+        activity: "Free time - Gunlom plunge pool (seasonal)",
+      ),
       PlanEntry(time: "5:00pm", activity: "Depart for Katherine"),
     ],
   ),
@@ -125,9 +140,15 @@ const List<Stop> seedStops = [
     detailedPlan: [
       PlanEntry(time: "6:00am", activity: "Depart Alice Springs"),
       PlanEntry(time: "9:00am", activity: "Arrive Kings Canyon"),
-      PlanEntry(time: "9:30am", activity: "Rim Walk (3.5hr, moderate-high effort)"),
+      PlanEntry(
+        time: "9:30am",
+        activity: "Rim Walk (3.5hr, moderate-high effort)",
+      ),
       PlanEntry(time: "1:30pm", activity: "Lunch at Kings Canyon Resort"),
-      PlanEntry(time: "3:30pm", activity: "Kathleen Springs walk (easy, optional)"),
+      PlanEntry(
+        time: "3:30pm",
+        activity: "Kathleen Springs walk (easy, optional)",
+      ),
       PlanEntry(time: "6:00pm", activity: "Sunset at the resort lookout"),
     ],
   ),
@@ -143,8 +164,14 @@ const List<Stop> seedStops = [
     aiNote: "Base Walk in the cool of the morning, Kata Tjuta in the afternoon, then sunset at the designated viewing area to close the trip.",
     tags: ["Culture", "Nature", "Relaxation"],
     detailedPlan: [
-      PlanEntry(time: "5:30am", activity: "Sunrise viewing, Talinguru Nyakunytjaku"),
-      PlanEntry(time: "7:00am", activity: "Uluru Base Walk (10.6km, allow 3.5hr)"),
+      PlanEntry(
+        time: "5:30am",
+        activity: "Sunrise viewing, Talinguru Nyakunytjaku",
+      ),
+      PlanEntry(
+        time: "7:00am",
+        activity: "Uluru Base Walk (10.6km, allow 3.5hr)",
+      ),
       PlanEntry(time: "11:00am", activity: "Cultural Centre"),
       PlanEntry(time: "1:00pm", activity: "Lunch, Yulara"),
       PlanEntry(time: "3:00pm", activity: "Kata Tjuta - Walpa Gorge walk"),
@@ -154,35 +181,175 @@ const List<Stop> seedStops = [
 ];
 
 const List<Poi> seedPois = [
-  Poi(id: "darwin-wf", name: "Darwin Waterfront", tag: "Relaxation", rating: "4.6", description: "Historic wave pool, dining and sunset views right on the harbour.", lat: -12.4680, lng: 130.8410),
-  Poi(id: "mindil", name: "Mindil Beach", tag: "Culture", rating: "4.7", description: "Home to the famous sunset market, Thursdays and Sundays in the dry season.", lat: -12.4380, lng: 130.8330),
-  Poi(id: "litchfield", name: "Litchfield National Park", tag: "Nature", rating: "4.8", description: "Waterfalls and safe swimming holes, an easy day trip from Darwin.", lat: -13.1830, lng: 130.6805),
-  Poi(id: "ubirr", name: "Kakadu (Ubirr)", tag: "Culture", rating: "4.8", description: "Ancient rock art galleries overlooking the Nadab floodplain.", lat: -12.4260, lng: 132.9760),
-  Poi(id: "nitmiluk", name: "Nitmiluk Gorge", tag: "Nature", rating: "4.7", description: "Thirteen sandstone gorges, best seen by cruise or canoe.", lat: -14.3103, lng: 132.4204),
-  Poi(id: "desertpark", name: "Alice Springs Desert Park", tag: "Nature", rating: "4.6", description: "Central Australian wildlife and desert ecology in one walkable park.", lat: -23.7180, lng: 133.8330),
-  Poi(id: "kingscanyon", name: "Kings Canyon", tag: "Adventure", rating: "4.9", description: "The Rim Walk is one of the most dramatic day walks in the Red Centre.", lat: -24.2634, lng: 131.5567),
-  Poi(id: "uluru", name: "Uluru", tag: "Culture", rating: "4.9", description: "The Territory's most recognisable landmark, best at sunrise or sunset.", lat: -25.3444, lng: 131.0369, photoUrl: null),
+  Poi(
+    id: "darwin-wf",
+    name: "Darwin Waterfront",
+    tag: "Relaxation",
+    rating: "4.6",
+    description:
+        "Historic wave pool, dining and sunset views right on the harbour.",
+    lat: -12.4680,
+    lng: 130.8410,
+  ),
+  Poi(
+    id: "mindil",
+    name: "Mindil Beach",
+    tag: "Culture",
+    rating: "4.7",
+    description: "Home to the famous sunset market, Thursdays and Sundays in the dry season.",
+    lat: -12.4380,
+    lng: 130.8330,
+  ),
+  Poi(
+    id: "litchfield",
+    name: "Litchfield National Park",
+    tag: "Nature",
+    rating: "4.8",
+    description:
+        "Waterfalls and safe swimming holes, an easy day trip from Darwin.",
+    lat: -13.1830,
+    lng: 130.6805,
+  ),
+  Poi(
+    id: "ubirr",
+    name: "Kakadu (Ubirr)",
+    tag: "Culture",
+    rating: "4.8",
+    description: "Ancient rock art galleries overlooking the Nadab floodplain.",
+    lat: -12.4260,
+    lng: 132.9760,
+  ),
+  Poi(
+    id: "nitmiluk",
+    name: "Nitmiluk Gorge",
+    tag: "Nature",
+    rating: "4.7",
+    description: "Thirteen sandstone gorges, best seen by cruise or canoe.",
+    lat: -14.3103,
+    lng: 132.4204,
+  ),
+  Poi(
+    id: "desertpark",
+    name: "Alice Springs Desert Park",
+    tag: "Nature",
+    rating: "4.6",
+    description:
+        "Central Australian wildlife and desert ecology in one walkable park.",
+    lat: -23.7180,
+    lng: 133.8330,
+  ),
+  Poi(
+    id: "kingscanyon",
+    name: "Kings Canyon",
+    tag: "Adventure",
+    rating: "4.9",
+    description:
+        "The Rim Walk is one of the most dramatic day walks in the Red Centre.",
+    lat: -24.2634,
+    lng: 131.5567,
+  ),
+  Poi(
+    id: "uluru",
+    name: "Uluru",
+    tag: "Culture",
+    rating: "4.9",
+    description: "The Territory's most recognisable landmark, best at sunrise or sunset.",
+    lat: -25.3444,
+    lng: 131.0369,
+    photoUrl: null,
+  ),
   // Task-46: coordinates from Nominatim for the name as written; ratings read 2026-09-29.
   // Rating: https://www.tripadvisor.com/Attraction_Review-g256205-d258575-Reviews-Kata_Tjuta_The_Olgas-Uluru_Kata_Tjuta_National_Park_Red_Centre_Northern_Territory.html
-  Poi(id: "kata-tjuta", name: "Kata Tjuta", tag: "Culture", rating: "4.7", description: "Thirty-six red domes, seen on the Walpa Gorge and Valley of the Winds walks.", lat: -25.2993, lng: 130.7406),
+  Poi(
+    id: "kata-tjuta",
+    name: "Kata Tjuta",
+    tag: "Culture",
+    rating: "4.7",
+    description: "Thirty-six red domes, seen on the Walpa Gorge and Valley of the Winds walks.",
+    lat: -25.2993,
+    lng: 130.7406,
+  ),
   // Rating: https://www.tripadvisor.com/Attraction_Review-g1729515-d12083838-Reviews-Ormiston_Gorge-West_MacDonnell_National_Park_Red_Centre_Northern_Territory.html
-  Poi(id: "ormiston", name: "Ormiston Gorge", tag: "Nature", rating: "4.8", description: "Swim the permanent waterhole beneath the red cliffs of the West MacDonnells.", lat: -23.6323, lng: 132.7267),
+  Poi(
+    id: "ormiston",
+    name: "Ormiston Gorge",
+    tag: "Nature",
+    rating: "4.8",
+    description: "Swim the permanent waterhole beneath the red cliffs of the West MacDonnells.",
+    lat: -23.6323,
+    lng: 132.7267,
+  ),
   // Rating: https://www.tripadvisor.com.au/Attraction_Review-g494978-d496570-Reviews-Karlu_Karlu_Devils_Marbles_Conservation_Reserve-Wauchope_Barkly_Northern_Territory.html
-  Poi(id: "karlu-karlu", name: "Karlu Karlu (Devils Marbles)", tag: "Culture", rating: "4.6", description: "Balanced granite boulders, best seen from the walking tracks at sunset.", lat: -20.5662, lng: 134.2917),
+  Poi(
+    id: "karlu-karlu",
+    name: "Karlu Karlu (Devils Marbles)",
+    tag: "Culture",
+    rating: "4.6",
+    description: "Balanced granite boulders, best seen from the walking tracks at sunset.",
+    lat: -20.5662,
+    lng: 134.2917,
+  ),
   // Rating: https://www.tripadvisor.com/Attraction_Review-g494973-d10467081-Reviews-Mataranka_Thermal_Pool-Mataranka_Top_End_Northern_Territory.html
-  Poi(id: "mataranka", name: "Mataranka Thermal Pool", tag: "Relaxation", rating: "4.1", description: "A warm, spring-fed swimming pool shaded by palms in Elsey National Park.", lat: -14.9230, lng: 133.1356),
+  Poi(
+    id: "mataranka",
+    name: "Mataranka Thermal Pool",
+    tag: "Relaxation",
+    rating: "4.1",
+    description: "A warm, spring-fed swimming pool shaded by palms in Elsey National Park.",
+    lat: -14.9230,
+    lng: 133.1356,
+  ),
   // Rating: https://www.tripadvisor.com/Attraction_Review-g256203-d2502044-Reviews-Edith_Falls-Katherine_Top_End_Northern_Territory.html
-  Poi(id: "edith-falls", name: "Leliyn (Edith Falls)", tag: "Nature", rating: "4.6", description: "Swim the plunge pool below the falls, or walk up to the upper pool.", lat: -14.1797, lng: 132.1875),
+  Poi(
+    id: "edith-falls",
+    name: "Leliyn (Edith Falls)",
+    tag: "Nature",
+    rating: "4.6",
+    description:
+        "Swim the plunge pool below the falls, or walk up to the upper pool.",
+    lat: -14.1797,
+    lng: 132.1875,
+  ),
   // Rating: https://www.tripadvisor.com/Attraction_Review-g2213397-d566732-Reviews-Territory_Wildlife_Park-Berry_Springs_Top_End_Northern_Territory.html
-  Poi(id: "wildlife-park", name: "Territory Wildlife Park", tag: "Wildlife", rating: "4.6", description: "Top End animals in natural habitats, with a walk-through aviary and bird show.", lat: -12.7065, lng: 130.9897),
+  Poi(
+    id: "wildlife-park",
+    name: "Territory Wildlife Park",
+    tag: "Wildlife",
+    rating: "4.6",
+    description: "Top End animals in natural habitats, with a walk-through aviary and bird show.",
+    lat: -12.7065,
+    lng: 130.9897,
+  ),
   // Rating: https://www.tripadvisor.com/Attraction_Review-g1729515-d3265283-Reviews-Standley_Chasm_Angkerle-West_MacDonnell_National_Park_Red_Centre_Northern_Territ.html
-  Poi(id: "standley-chasm", name: "Standley Chasm", tag: "Adventure", rating: "4.1", description: "Visit around midday, when the sun lights the narrow chasm walls orange.", lat: -23.7161, lng: 133.4702),
+  Poi(
+    id: "standley-chasm",
+    name: "Standley Chasm",
+    tag: "Adventure",
+    rating: "4.1",
+    description: "Visit around midday, when the sun lights the narrow chasm walls orange.",
+    lat: -23.7161,
+    lng: 133.4702,
+  ),
 ];
 
 // Not const: redCentreStops is built from seedStops entries at run time.
 final List<SavedRoute> seedSavedRoutes = [
-  SavedRoute(id: "full-nt", title: "Full NT: Darwin to Uluru", meta: "8 days · 7 stops", dateLabel: "Generated today", stops: seedStops, days: 8),
-  SavedRoute(id: "red-centre", title: "7 Days in the Red Centre", meta: "7 days · 4 stops", dateLabel: "Generated 3 days ago", stops: redCentreStops, days: 7),
+  SavedRoute(
+    id: "full-nt",
+    title: "Full NT: Darwin to Uluru",
+    meta: "8 days · 7 stops",
+    dateLabel: "Generated today",
+    stops: seedStops,
+    days: 8,
+  ),
+  SavedRoute(
+    id: "red-centre",
+    title: "7 Days in the Red Centre",
+    meta: "7 days · 4 stops",
+    dateLabel: "Generated 3 days ago",
+    stops: redCentreStops,
+    days: 7,
+  ),
 ];
 
 const List<String> loadingMessages = [
@@ -219,7 +386,8 @@ const Stop _desertParkStop = Stop(
   fee: "Desert Park entry \$40 adult",
   duration: "1 day",
   driveNext: "473 km · 4h 50m to Kings Canyon",
-  aiNote: "Central Australian wildlife and desert ecology in one walkable park.",
+  aiNote:
+      "Central Australian wildlife and desert ecology in one walkable park.",
   tags: ["Nature"],
   detailedPlan: [
     PlanEntry(time: "7:30am", activity: "Desert Park opens"),

@@ -1,4 +1,5 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:terra_nt/core/theme/app_theme.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:terra_nt/core/theme/colors.dart';
@@ -11,9 +12,12 @@ void main() {
   // `Center` stands in for the free space every screen leaves around a button:
   // it hands the button loose constraints, so the painted box takes its own
   // height instead of the whole test surface.
-  Widget host(Widget child) => Directionality(
-    textDirection: TextDirection.ltr,
-    child: Center(child: child),
+  Widget host(Widget child) => Theme(
+    data: AppTheme.dark,
+    child: Directionality(
+      textDirection: TextDirection.ltr,
+      child: Center(child: child),
+    ),
   );
 
   /// Whether a pointer at [point] reaches the button rather than the space

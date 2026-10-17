@@ -53,7 +53,9 @@ final poiProvider = Provider<List<Poi>>(
   (ref) => List<Poi>.unmodifiable(seedPois),
 );
 
-final loadingMessagesProvider = Provider<List<String>>((ref) => loadingMessages);
+final loadingMessagesProvider = Provider<List<String>>(
+  (ref) => loadingMessages,
+);
 
 final sessionNotifierProvider = NotifierProvider<SessionNotifier, Session>(
   SessionNotifier.new,

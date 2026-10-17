@@ -703,8 +703,8 @@ void main() {
       tester
           .widget<Text>(find.byKey(const ValueKey('loading-failure-body')))
           .data,
-      'Try again when you have signal, or use an offline suggestion '
-      'from places on this device.',
+      'Check your connection and try again. The planning service may be unavailable. '
+      'You can also use an offline suggestion from this device.',
     );
     expect(
       find.descendant(
@@ -884,9 +884,7 @@ void main() {
     },
   );
 
-  testWidgets('mounts no offstage Result map after a failure', (
-    tester,
-  ) async {
+  testWidgets('mounts no offstage Result map after a failure', (tester) async {
     await pumpLoading(tester, repositoryItinerary: null);
     await failWith(tester, PlanFailure.network);
 
@@ -922,9 +920,7 @@ void main() {
           overrides: [
             preferencesStoreProvider.overrideWithValue(preferencesStore()),
             itineraryRepositoryProvider.overrideWithValue(repository),
-            authRepositoryProvider.overrideWithValue(
-              InMemoryAuthRepository(),
-            ),
+            authRepositoryProvider.overrideWithValue(InMemoryAuthRepository()),
             sessionNotifierProvider.overrideWith(_FixedSessionNotifier.new),
             savedRoutesNotifierProvider.overrideWith(
               () => _FixedSavedRoutesNotifier(const []),
@@ -997,9 +993,7 @@ void main() {
     },
   );
 
-  testWidgets('system Back on a failure returns to onboarding', (
-    tester,
-  ) async {
+  testWidgets('system Back on a failure returns to onboarding', (tester) async {
     await pumpLoading(tester, repositoryItinerary: null);
     await failWith(tester, PlanFailure.cannotPlan);
 

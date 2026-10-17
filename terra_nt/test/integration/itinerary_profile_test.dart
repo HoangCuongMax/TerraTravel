@@ -363,7 +363,7 @@ void main() {
         });
 
         expect(errors, isEmpty);
-        expect(find.text('Export to Google Maps'), findsOneWidget);
+        expect(find.text('Open driving directions'), findsOneWidget);
         expect(find.text('Highlights'), findsOneWidget);
         expect(find.text('Detailed'), findsOneWidget);
         expect(find.text('Edit Route'), findsOneWidget);

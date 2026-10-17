@@ -27,6 +27,7 @@ import '../../data/repositories/itinerary_repository.dart';
 import '../../data/repositories/notifiers.dart';
 import '../../data/repositories/remote_itinerary_repository.dart';
 import '../../shared/map/route_car_backdrop.dart';
+import '../../shared/map/road_route_loader.dart';
 import '../../shared/map/terra_map.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/app_icon.dart';
@@ -281,18 +282,20 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
           line,
           key: ValueKey('loading-trip-summary-$index'),
           textAlign: TextAlign.center,
-          style: AppType.captionApp.copyWith(color: AppColors.inkSubtle),
+          style: AppType.captionApp.copyWith(
+            color: AppColors.of(context).inkSubtle,
+          ),
         ),
       const SizedBox(height: AppSpacing.xs),
       _StatusMessage(index: _messageIndex, messages: _messages),
       const SizedBox(height: AppSpacing.lg),
       // One quiet progress cue; the journey's car stays on the map above.
-      const LinearProgressIndicator(
+      LinearProgressIndicator(
         key: ValueKey('loading-progress-shell'),
         minHeight: AppMetrics.progressRoadHeight,
         borderRadius: BorderRadius.all(Radius.circular(AppRadius.pill)),
-        color: AppColors.primary,
-        backgroundColor: AppColors.surface3,
+        color: AppColors.of(context).primary,
+        backgroundColor: AppColors.of(context).surface3,
       ),
       const SizedBox(height: AppSpacing.lg),
       // Once the route is being saved there is nothing left to cancel; the
@@ -321,14 +324,14 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
         failure.title,
         key: const ValueKey('loading-failure-title'),
         textAlign: TextAlign.center,
-        style: AppType.titleApp.copyWith(color: AppColors.ink),
+        style: AppType.titleApp.copyWith(color: AppColors.of(context).ink),
       ),
       const SizedBox(height: AppSpacing.xxs),
       Text(
         failure.body,
         key: const ValueKey('loading-failure-body'),
         textAlign: TextAlign.center,
-        style: AppType.bodySm.copyWith(color: AppColors.inkSubtle),
+        style: AppType.bodySm.copyWith(color: AppColors.of(context).inkSubtle),
       ),
       const SizedBox(height: AppSpacing.lg),
       AppButton(
@@ -409,7 +412,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
         _cancel();
       },
       child: Scaffold(
-        backgroundColor: AppColors.canvas,
+        backgroundColor: AppColors.of(context).canvas,
         // Expanded rather than sized to its children: once the warm-up
         // mounts it is the only non-positioned child, and an Offstage lays
         // out at zero size, which would take the map and panel down with it.
@@ -472,7 +475,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
                                             'loading-failure-icon',
                                           ),
                                           size: AppMetrics.iconHuge,
-                                          color: AppColors.inkMuted,
+                                          color: AppColors.of(context).inkMuted,
                                         ),
                                       ),
                               ),
@@ -546,10 +549,15 @@ class _LoadingBackdrop extends StatelessWidget {
           padding: EdgeInsets.only(top: topInset),
           child: TickerMode(
             enabled: !frozen,
-            child: RouteCarBackdrop.ambient(coordinates: coordinates),
+            child: RouteCarBackdrop.ambient(
+              coordinates: coordinates,
+              roadRouteLoader: RoadRouteGeometry.load,
+            ),
           ),
         ),
-        IgnorePointer(child: ColoredBox(color: AppColors.welcomeScrim)),
+        IgnorePointer(
+          child: ColoredBox(color: AppColors.of(context).welcomeScrim),
+        ),
       ],
     );
   }
@@ -566,12 +574,12 @@ class _LoadingPanel extends StatelessWidget {
   Widget build(BuildContext context) => DecoratedBox(
     key: const ValueKey('loading-panel'),
     decoration: BoxDecoration(
-      color: AppColors.surface1,
+      color: AppColors.of(context).surface1,
       borderRadius: const BorderRadius.vertical(
         top: Radius.circular(AppRadius.panel),
       ),
       border: Border.all(
-        color: AppColors.hairline,
+        color: AppColors.of(context).hairline,
         width: AppElevation.hairlineWidth,
       ),
     ),
@@ -606,7 +614,7 @@ class _StatusMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Measured with exactly what the [Text] below renders with.
     final style = DefaultTextStyle.of(context).style
-        .merge(AppType.titleApp.copyWith(color: AppColors.ink));
+        .merge(AppType.titleApp.copyWith(color: AppColors.of(context).ink));
     final textScaler = MediaQuery.textScalerOf(context);
     final textDirection = Directionality.of(context);
     return LayoutBuilder(

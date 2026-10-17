@@ -121,23 +121,23 @@ class _SavedRoutesScreenState extends ConsumerState<SavedRoutesScreen> {
       ..showSnackBar(
         SnackBar(
           persist: false,
-          backgroundColor: AppColors.bgMenu,
+          backgroundColor: AppColors.of(context).bgMenu,
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.card),
-            side: const BorderSide(
-              color: AppColors.hairlineStrong,
+            side: BorderSide(
+              color: AppColors.of(context).hairlineStrong,
               width: AppElevation.hairlineWidth,
             ),
           ),
           content: Text(
             'Route deleted',
-            style: AppType.bodySm.copyWith(color: AppColors.ink),
+            style: AppType.bodySm.copyWith(color: AppColors.of(context).ink),
           ),
           action: SnackBarAction(
             label: 'Undo',
-            textColor: AppColors.primaryHover,
+            textColor: AppColors.of(context).primaryHover,
             onPressed: () {
               if (!mounted) return;
               unawaited(
@@ -186,7 +186,7 @@ class _SavedRoutesScreenState extends ConsumerState<SavedRoutesScreen> {
     // letting them run while the tab is hidden (`docs/PRD.md` D18).
     final shown = Visibility.of(context);
     return Scaffold(
-      backgroundColor: AppColors.canvas,
+      backgroundColor: AppColors.of(context).canvas,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -202,7 +202,9 @@ class _SavedRoutesScreenState extends ConsumerState<SavedRoutesScreen> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Saved Routes',
-                  style: AppType.headline.copyWith(color: AppColors.ink),
+                  style: AppType.headline.copyWith(
+                    color: AppColors.of(context).ink,
+                  ),
                 ),
               ),
             ),
@@ -310,13 +312,13 @@ class _SavedRouteCard extends StatelessWidget {
                   child: GestureDetector(
                     key: ValueKey('delete-route-${route.id}'),
                     onTap: onDelete,
-                    child: const ColoredBox(
-                      color: AppColors.tagRed,
+                    child: ColoredBox(
+                      color: AppColors.of(context).tagRed,
                       child: Center(
                         child: AppIcon(
                           LucideIcons.trash_2,
                           size: AppMetrics.iconLg,
-                          color: AppColors.ink,
+                          color: AppColors.of(context).ink,
                         ),
                       ),
                     ),
@@ -345,10 +347,10 @@ class _SavedRouteCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(AppMetrics.padRowY),
                 decoration: BoxDecoration(
-                  color: AppColors.surface1,
+                  color: AppColors.of(context).surface1,
                   borderRadius: BorderRadius.circular(AppRadius.card),
                   border: Border.all(
-                    color: AppColors.hairline,
+                    color: AppColors.of(context).hairline,
                     width: AppElevation.hairlineWidth,
                   ),
                 ),
@@ -373,20 +375,20 @@ class _SavedRouteCard extends StatelessWidget {
                               Text(
                                 route.title,
                                 style: AppType.titleApp.copyWith(
-                                  color: AppColors.ink,
+                                  color: AppColors.of(context).ink,
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.xxs),
                               Text(
                                 route.meta,
                                 style: AppType.caption.copyWith(
-                                  color: AppColors.inkSubtle,
+                                  color: AppColors.of(context).inkSubtle,
                                 ),
                               ),
                               Text(
                                 route.dateLabel,
                                 style: AppType.captionApp.copyWith(
-                                  color: AppColors.inkSubtle,
+                                  color: AppColors.of(context).inkSubtle,
                                 ),
                               ),
                             ],
@@ -396,38 +398,40 @@ class _SavedRouteCard extends StatelessWidget {
                         PopupMenuButton<_RouteAction>(
                           key: ValueKey('route-menu-${route.id}'),
                           tooltip: 'Route options for ${route.title}',
-                          color: AppColors.bgMenu,
+                          color: AppColors.of(context).bgMenu,
                           elevation: 0,
                           surfaceTintColor: AppElevation.level0Bg,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(AppRadius.card),
-                            side: const BorderSide(
-                              color: AppColors.hairlineStrong,
+                            side: BorderSide(
+                              color: AppColors.of(context).hairlineStrong,
                               width: AppElevation.hairlineWidth,
                             ),
                           ),
                           onOpened: onMenuOpened,
                           onSelected: onAction,
                           itemBuilder: (_) => [
-                            _menuItem(_RouteAction.rename, 'Rename'),
+                            _menuItem(context, _RouteAction.rename, 'Rename'),
                             _menuItem(
+                              context,
                               _RouteAction.moveUp,
                               'Move up',
                               enabled: canMoveUp,
                             ),
                             _menuItem(
+                              context,
                               _RouteAction.moveDown,
                               'Move down',
                               enabled: canMoveDown,
                             ),
                             // Swipe-to-delete is invisible to a screen reader;
                             // the menu is its reachable path.
-                            _menuItem(_RouteAction.delete, 'Delete'),
+                            _menuItem(context, _RouteAction.delete, 'Delete'),
                           ],
-                          icon: const AppIcon(
+                          icon: AppIcon(
                             LucideIcons.ellipsis,
                             size: AppMetrics.iconLg,
-                            color: AppColors.inkSubtle,
+                            color: AppColors.of(context).inkSubtle,
                           ),
                         ),
                       ],
@@ -443,6 +447,7 @@ class _SavedRouteCard extends StatelessWidget {
   }
 
   PopupMenuItem<_RouteAction> _menuItem(
+    BuildContext context,
     _RouteAction action,
     String label, {
     bool enabled = true,
@@ -453,7 +458,9 @@ class _SavedRouteCard extends StatelessWidget {
     child: Text(
       label,
       style: AppType.bodySm.copyWith(
-        color: enabled ? AppColors.ink : AppColors.inkTertiary,
+        color: enabled
+            ? AppColors.of(context).ink
+            : AppColors.of(context).inkTertiary,
       ),
     ),
   );
@@ -487,19 +494,19 @@ class _RenameRouteDialogState extends State<_RenameRouteDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    backgroundColor: AppColors.bgMenu,
+    backgroundColor: AppColors.of(context).bgMenu,
     elevation: 0,
     surfaceTintColor: AppElevation.level0Bg,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(AppRadius.panel),
-      side: const BorderSide(
-        color: AppColors.hairlineStrong,
+      side: BorderSide(
+        color: AppColors.of(context).hairlineStrong,
         width: AppElevation.hairlineWidth,
       ),
     ),
     title: Text(
       'Rename route',
-      style: AppType.cardTitle.copyWith(color: AppColors.ink),
+      style: AppType.cardTitle.copyWith(color: AppColors.of(context).ink),
     ),
     content: AppTextInput(
       label: 'Route name',
@@ -511,7 +518,9 @@ class _RenameRouteDialogState extends State<_RenameRouteDialog> {
         onPressed: () => Navigator.of(context).pop(),
         child: Text(
           'Cancel',
-          style: AppType.button.copyWith(color: AppColors.inkSubtle),
+          style: AppType.button.copyWith(
+            color: AppColors.of(context).inkSubtle,
+          ),
         ),
       ),
       TextButton(
@@ -522,8 +531,8 @@ class _RenameRouteDialogState extends State<_RenameRouteDialog> {
           'Save',
           style: AppType.button.copyWith(
             color: _controller.text.trim().isEmpty
-                ? AppColors.inkTertiary
-                : AppColors.primaryHover,
+                ? AppColors.of(context).inkTertiary
+                : AppColors.of(context).primaryHover,
           ),
         ),
       ),
@@ -546,12 +555,12 @@ class _SavedRoutesEmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Entrance(
+            Entrance(
               child: AppIcon(
                 LucideIcons.bookmark,
                 key: ValueKey('saved-routes-empty-bookmark'),
                 size: AppMetrics.iconHuge,
-                color: AppColors.inkTertiary,
+                color: AppColors.of(context).inkTertiary,
               ),
             ),
             const SizedBox(height: AppMetrics.gapRowAvatar),
@@ -560,7 +569,9 @@ class _SavedRoutesEmptyState extends StatelessWidget {
               child: Text(
                 'No saved routes yet',
                 textAlign: TextAlign.center,
-                style: AppType.cardTitle.copyWith(color: AppColors.ink),
+                style: AppType.cardTitle.copyWith(
+                  color: AppColors.of(context).ink,
+                ),
               ),
             ),
             const SizedBox(height: AppMetrics.gapRowAvatar),
@@ -569,7 +580,9 @@ class _SavedRoutesEmptyState extends StatelessWidget {
               child: Text(
                 "Generate an itinerary with Plan AI and it'll show up here.",
                 textAlign: TextAlign.center,
-                style: AppType.bodySm.copyWith(color: AppColors.inkSubtle),
+                style: AppType.bodySm.copyWith(
+                  color: AppColors.of(context).inkSubtle,
+                ),
               ),
             ),
             const SizedBox(height: AppMetrics.gapRowAvatar),

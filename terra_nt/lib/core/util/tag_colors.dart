@@ -4,19 +4,20 @@ import 'dart:ui' show Color;
 
 import '../theme/colors.dart';
 
-Color tagColor(String tag) {
+Color tagColor(String tag, {bool light = false}) {
+  final palette = light ? const AppPalette.light() : const AppPalette.dark();
   switch (tag) {
     case 'Nature':
-      return AppColors.tagGreen;
+      return palette.tagGreen;
     case 'Culture':
-      return AppColors.tagPurple;
+      return palette.tagPurple;
     case 'Adventure':
-      return AppColors.tagOrange;
+      return palette.tagOrange;
     case 'Wildlife':
-      return AppColors.tagBlue;
+      return palette.tagBlue;
     case 'Relaxation':
-      return AppColors.tagYellow;
+      return palette.tagYellow;
     default:
-      return AppColors.inkTertiary;
+      return palette.inkTertiary;
   }
 }

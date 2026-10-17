@@ -40,7 +40,7 @@ void main() {
         recordFatalError: (error, stack) => platformFatal.add(error),
       );
       final offline = _ClientSocketException(
-        'https://basemaps.cartocdn.com/rastertiles/dark_all/8/220/135@2x.png',
+        'https://tiles.openfreemap.org/planet/8/220/135.pbf',
       );
       FlutterError.reportError(
         FlutterErrorDetails(
@@ -69,9 +69,7 @@ void main() {
           library: 'image resource service',
         ),
         FlutterErrorDetails(
-          exception: _ClientSocketException(
-            'https://basemaps.cartocdn.com/api',
-          ),
+          exception: _ClientSocketException('https://tiles.openfreemap.org/api'),
           library: 'image resource service',
         ),
         // Even the same exception outside image loading is unexpected.

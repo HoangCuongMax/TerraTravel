@@ -25,7 +25,7 @@ class ResultEmptyState extends StatelessWidget {
     // replays the entrance when the user arrives instead of while it is hidden.
     final shown = Visibility.of(context);
     return ColoredBox(
-      color: AppColors.canvas,
+      color: AppColors.of(context).canvas,
       child: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -42,7 +42,9 @@ class ResultEmptyState extends StatelessWidget {
                   child: Text(
                     'No route yet',
                     textAlign: TextAlign.center,
-                    style: AppType.cardTitle.copyWith(color: AppColors.ink),
+                    style: AppType.cardTitle.copyWith(
+                      color: AppColors.of(context).ink,
+                    ),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.sm),
@@ -52,7 +54,9 @@ class ResultEmptyState extends StatelessWidget {
                     "Answer a few questions and we'll plan a route across the "
                     'Territory.',
                     textAlign: TextAlign.center,
-                    style: AppType.bodySm.copyWith(color: AppColors.inkMuted),
+                    style: AppType.bodySm.copyWith(
+                      color: AppColors.of(context).inkMuted,
+                    ),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.lg),

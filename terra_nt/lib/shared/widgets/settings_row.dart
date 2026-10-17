@@ -47,7 +47,7 @@ class _SettingsRowState extends State<SettingsRow> {
   @override
   Widget build(BuildContext context) {
     final interactive = widget.onTap != null;
-    final labelColor = widget.foregroundColor ?? AppColors.ink;
+    final labelColor = widget.foregroundColor ?? AppColors.of(context).ink;
 
     final row = Row(
       children: [
@@ -60,11 +60,16 @@ class _SettingsRowState extends State<SettingsRow> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(widget.label, style: AppType.titleApp.copyWith(color: labelColor)),
+              Text(
+                widget.label,
+                style: AppType.titleApp.copyWith(color: labelColor),
+              ),
               if (widget.subtitle != null)
                 Text(
                   widget.subtitle!,
-                  style: AppType.caption.copyWith(color: AppColors.inkSubtle),
+                  style: AppType.caption.copyWith(
+                    color: AppColors.of(context).inkSubtle,
+                  ),
                 ),
             ],
           ),
@@ -72,15 +77,17 @@ class _SettingsRowState extends State<SettingsRow> {
         if (widget.value != null)
           Text(
             widget.value!,
-            style: AppType.bodyApp.copyWith(color: AppColors.inkSubtle),
+            style: AppType.bodyApp.copyWith(
+              color: AppColors.of(context).inkSubtle,
+            ),
           ),
         if (widget.trailing != null) widget.trailing!,
         if (widget.showChevron) ...[
           const SizedBox(width: AppMetrics.gapRow),
-          const AppIcon(
+          AppIcon(
             LucideIcons.chevron_right,
             size: AppMetrics.iconMd,
-            color: AppColors.inkTertiary,
+            color: AppColors.of(context).inkTertiary,
           ),
         ],
       ],
@@ -94,9 +101,14 @@ class _SettingsRowState extends State<SettingsRow> {
         vertical: AppMetrics.padRowY,
       ),
       decoration: BoxDecoration(
-        color: _pressed ? AppColors.bgCardHover : AppColors.surface1,
+        color: _pressed
+            ? AppColors.of(context).bgCardHover
+            : AppColors.of(context).surface1,
         borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: AppColors.hairline, width: AppElevation.hairlineWidth),
+        border: Border.all(
+          color: AppColors.of(context).hairline,
+          width: AppElevation.hairlineWidth,
+        ),
       ),
       child: row,
     );

@@ -64,7 +64,11 @@ void main() {
     test('colors.dart declares no more literals than the CSS has base tokens', () {
       // 23 `--color-*` + 6 `--tag-*` in colors.css. Anything above this means an
       // alias was written as a copied hex instead of a reference.
-      const baseTokensInCss = 29;
+      final lightCss = File('../design/design-system/tokens/light.css')
+          .readAsStringSync();
+      final baseTokensInCss =
+          29 +
+          RegExp(r'--color-[a-z0-9-]+:\s*#[0-9a-f]+').allMatches(lightCss).length;
 
       final lines = File('lib/core/theme/colors.dart').readAsLinesSync();
       final literals = lines.where((line) => line.contains('0xFF')).length;
@@ -79,7 +83,8 @@ void main() {
       expect(
         literals,
         greaterThan(0),
-        reason: 'colors.dart was not actually read, so the bound proves nothing',
+        reason:
+            'colors.dart was not actually read, so the bound proves nothing',
       );
     });
   });
@@ -178,25 +183,15 @@ void main() {
       expect(theme.textTheme.bodyMedium?.fontFamily, 'Inter');
     });
 
-    test('no light theme is defined anywhere under lib/', () {
-      final sources = Directory('lib')
-          .listSync(recursive: true)
-          .whereType<File>()
-          .where((file) => file.path.endsWith('.dart'))
-          .toList();
-
-      final offenders = sources
-          .where((file) => file.readAsStringSync().contains('Brightness.light'))
-          .map((file) => file.path);
-      expect(offenders, isEmpty, reason: 'a light theme was introduced');
-
-      // Guards the guard: if the walk found nothing, `isEmpty` above is vacuous.
-      final dark = sources
-          .where((file) => file.readAsStringSync().contains('Brightness.dark'));
+    test('both approved themes use their declared palettes', () {
+      const light = AppPalette.light();
+      expect(AppTheme.light.brightness, Brightness.light);
+      expect(AppTheme.light.scaffoldBackgroundColor, light.canvas);
+      expect(AppTheme.light.colorScheme.onSurface, light.ink);
+      expect(AppTheme.dark.colorScheme.onSurface, AppColors.ink);
       expect(
-        dark,
-        isNotEmpty,
-        reason: 'lib/ was not actually walked, so the check proves nothing',
+        AppTheme.light.scaffoldBackgroundColor,
+        isNot(AppTheme.dark.scaffoldBackgroundColor),
       );
     });
   });

@@ -1,0 +1,410 @@
+[
+  {
+    "file": "01-account/01-sign-in.png",
+    "title": "Sign in",
+    "description": "Fresh installation of the same existing app opens the email/password and Google sign-in screen. No credentials were entered.",
+    "captured_at": "2026-10-17T19:29:40.306764+09:30",
+    "source": "Existing Terra NT app; clean iPhone 17e simulator; iOS 26.5",
+    "sha256": "e4e83845582a7b1dd75188fbb045f6a29e289f805477f24ffaf4a7ead0f602a0"
+  },
+  {
+    "file": "01-account/02-create-account.png",
+    "title": "Create an account",
+    "description": "Choose Sign up from sign-in to view email, password and password-confirmation fields. No account was created.",
+    "captured_at": "2026-10-17T19:28:31.274924+09:30",
+    "source": "Existing Terra NT app; clean iPhone 17e simulator; iOS 26.5",
+    "sha256": "30b1b644c3d2966ef5a1ae9b6f00b00e4e8dd7af0f10d055489470e75868f8b9"
+  },
+  {
+    "file": "01-account/03-reset-email-required.png",
+    "title": "Password reset requires an email",
+    "description": "Tap Reset it with an empty email field to show inline guidance. No reset email was sent and no password was changed.",
+    "captured_at": "2026-10-17T19:28:46.932698+09:30",
+    "source": "Existing Terra NT app; clean iPhone 17e simulator; iOS 26.5",
+    "sha256": "ee5203002b501961d281e434b47b55f9e83cd9035caad2fcb4d1ee573c9b8a68"
+  },
+  {
+    "file": "02-explore/01-explore-overview.png",
+    "title": "Explore — overview",
+    "description": "Open the Explore tab. Browse Northern Territory destinations on the light basemap before selecting a place.",
+    "captured_at": "2026-10-17T19:18:24.782727+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "57b214694c29962a538cc66bee6f712c0078d641524e53e752c2aed0fc134926"
+  },
+  {
+    "file": "02-explore/02-place-selected.png",
+    "title": "Explore — place selected",
+    "description": "Tap Darwin Waterfront. The selected marker opens a place card with the existing seeded rating, tag, description and Navigate action; the rating is not a live review lookup.",
+    "captured_at": "2026-10-17T19:18:32.404462+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "b6828ce2956732e1ae82a4dd005d64b8112e3f9300b6449f05233112aeb520af"
+  },
+  {
+    "file": "02-explore/03-search-single-result.png",
+    "title": "Explore — search result",
+    "description": "Enter Uluru in Search the Territory. A single match is selected and shown with its existing place card; the keyboard remains visible.",
+    "captured_at": "2026-10-17T19:18:41.043589+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "03cf05c6e7fb4d4bf3c7fd6e723a993b811a8134f77393500f36fd987bfbc0ff"
+  },
+  {
+    "file": "02-explore/04-search-no-results.png",
+    "title": "Explore — no matching places",
+    "description": "Enter an unmatched search term. The app displays the no-results message and Clear search recovery action.",
+    "captured_at": "2026-10-17T19:18:57.201618+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "1d5647c31abec8933cdaa3e044d5accec785864dbe04a00fe2dd289658653867"
+  },
+  {
+    "file": "03-planning/01-plan-empty.png",
+    "title": "Plan AI — before creating a route",
+    "description": "Open Plan AI with no active session route. Choose Plan My Route to start the questionnaire or open an existing saved route.",
+    "captured_at": "2026-10-17T19:19:05.269256+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "5148ab18080207f1aeb0d2b01a110a469ec2eefa909138ab5a51b2d5f04545f5"
+  },
+  {
+    "file": "03-planning/02-step-01-age-range.png",
+    "title": "Step 1 — age range",
+    "description": "Choose an age range to personalise the trip. The walkthrough uses a test selection, not a claim about the account holder.",
+    "captured_at": "2026-10-17T19:20:03.487420+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "afaeeccf6d3570772c9d28fdc696cf9afdbe05a2c209a86259844815b0b8ed33"
+  },
+  {
+    "file": "03-planning/03-step-02-trip-length.png",
+    "title": "Step 2 — trip length",
+    "description": "Adjust the trip length slider between 1 and 14 days. This walkthrough retains seven days.",
+    "captured_at": "2026-10-17T19:20:12.836194+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "676a1a7e488635eb6b2855d7509666b8441f30eff21ac732c5b95c123ec14d3f"
+  },
+  {
+    "file": "03-planning/04-step-03-companions.png",
+    "title": "Step 3 — travelling companions",
+    "description": "Choose Solo, Couple, Family or Friends. This walkthrough selects Solo.",
+    "captured_at": "2026-10-17T19:20:20.130382+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "4dabb7e2cfdc73c5ac5b20badfce44587158ef1f140e5ac59fc80bfc13f62e1e"
+  },
+  {
+    "file": "03-planning/05-step-04-trip-focus.png",
+    "title": "Step 4 — trip focus",
+    "description": "Select one or more interests: Nature, Aboriginal Culture, Adventure or Relaxation. The walkthrough chooses Nature.",
+    "captured_at": "2026-10-17T19:20:27.328290+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "ddb2dd9fe0155d37800ae4dae777522789145240f0795a141b800ede079a59c8"
+  },
+  {
+    "file": "03-planning/06-step-05-vehicle.png",
+    "title": "Step 5 — vehicle",
+    "description": "Choose the vehicle type. This walkthrough selects 4x4 so the conditional off-road-confidence question is also captured; a standard-car trip skips that question.",
+    "captured_at": "2026-10-17T19:20:34.152218+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "7275ab4bf2800d11acb53731a27fef8ecbd6e6610702b0c6ef8dfd2f5d5fa8e2"
+  },
+  {
+    "file": "03-planning/07-step-06-budget.png",
+    "title": "Step 6 — budget",
+    "description": "Choose Budget, Mid-range or Luxury. The walkthrough selects Mid-range.",
+    "captured_at": "2026-10-17T19:20:42.948047+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "83b16234e4c2a4b41794a5697ca4b2ba47de7c050c4ea84bc04438061c012768"
+  },
+  {
+    "file": "03-planning/08-step-07-accommodation.png",
+    "title": "Step 7 — accommodation type",
+    "description": "Choose Camping, Motel/Cabin or Hotel. This walkthrough selects Motel/Cabin.",
+    "captured_at": "2026-10-17T19:20:50.182815+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "b8c2932ac85ee4d501ce396f922cdd276406f855d209a980808e18da0da9073d"
+  },
+  {
+    "file": "03-planning/09-step-08-activity-level.png",
+    "title": "Step 8 — activity level",
+    "description": "Choose Low, Medium or High physical activity. This walkthrough selects Medium.",
+    "captured_at": "2026-10-17T19:20:57.740566+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "dc9f427a0ebbd3e896189da2e1d1ce4f10a3da2583f5b54de59ef69bf14a4c0b"
+  },
+  {
+    "file": "03-planning/10-step-09-region.png",
+    "title": "Step 9 — region",
+    "description": "Choose Top End, Red Centre or Full NT. Regional artwork illustrates each option. The walkthrough selects Top End.",
+    "captured_at": "2026-10-17T19:21:05.508934+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "35e9561eda935ba3c8a293a7f2831ee17f518efa79c72c173eff71895a45403a"
+  },
+  {
+    "file": "03-planning/11-step-10-off-road-confidence.png",
+    "title": "Step 10 — off-road confidence (4x4 only)",
+    "description": "This question appears for a 4x4 trip. Choose confidence in off-road driving. Selecting a standard car skips it and reduces the displayed total to 14 steps.",
+    "captured_at": "2026-10-17T19:21:13.107185+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "18047d0b4c8c9c798b6bce6244ab3c1ae17c4c642a3e68848a4de2161e1d15af"
+  },
+  {
+    "file": "03-planning/12-step-11-heat-preference.png",
+    "title": "Step 11 — heat preference",
+    "description": "Adjust comfort with heat using the slider. The selected sentence describes the value rather than a percentage; this is a preference, not a weather forecast.",
+    "captured_at": "2026-10-17T19:21:20.967832+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "ae3885396335f29b27d3890330fad87bd77b17cd63dbce343c93d52065d1f5ae"
+  },
+  {
+    "file": "03-planning/13-step-12-camping-comfort.png",
+    "title": "Step 12 — camping versus comfort",
+    "description": "Choose Camping all the way, Bit of both or Resort comfort. This walkthrough selects Bit of both.",
+    "captured_at": "2026-10-17T19:21:27.639907+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "fd553e5eb4212869610bd60f03ac0e51014b7aca36866d0d6f999cf3943b8845"
+  },
+  {
+    "file": "03-planning/14-step-13-wildlife-interest.png",
+    "title": "Step 13 — wildlife interest",
+    "description": "Choose interest in wildlife experiences. This walkthrough selects Interested.",
+    "captured_at": "2026-10-17T19:21:35.080998+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "6f7ee7d0f140bcb6b9219e8b4e80532fc7d82873dd56a8a74145949aa7061fb4"
+  },
+  {
+    "file": "03-planning/15-step-14-connectivity-preference.png",
+    "title": "Step 14 — connectivity preference",
+    "description": "Choose comfort with remote areas and limited phone signal. The preference informs planning; it does not measure coverage or internet speed.",
+    "captured_at": "2026-10-17T19:21:43.474396+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "8ae3007fb12f1f4517863f8d2985c9a8f4a6180dd25e5206838c130c144190f5"
+  },
+  {
+    "file": "03-planning/16-step-15-start-and-end.png",
+    "title": "Step 15 — start and end",
+    "description": "Choose starting and ending locations before generating the route. This screenshot shows the unselected endpoint fields.",
+    "captured_at": "2026-10-17T19:21:50.938531+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "3db333138c7df950d29d041d6b42effc8a6f8140d7e983a863736f0ebf20b61a"
+  },
+  {
+    "file": "03-planning/17-start-location-options.png",
+    "title": "Start-location menu",
+    "description": "Open the Start dropdown to see supported starting locations: Darwin, Jabiru, Katherine, Alice Springs and Uluru.",
+    "captured_at": "2026-10-17T19:21:59.440539+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "4d5311fe6bc0d9949e187e5d2169f119bfe061919a729f4d4ceb97f0f4d1cb73"
+  },
+  {
+    "file": "03-planning/18-end-location-options.png",
+    "title": "End-location menu",
+    "description": "Open the End dropdown. Choose the end location independently of the start; the walkthrough uses Katherine.",
+    "captured_at": "2026-10-17T19:22:09.746105+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "336fc28d4d4224acf71368e9a6114a51d4e8d5cf8fe2ba668927cdbbb907451f"
+  },
+  {
+    "file": "03-planning/19-ready-to-generate.png",
+    "title": "Ready to generate",
+    "description": "All questions are answered and the trip endpoints are Darwin and Katherine. Generate My Route submits the preferences to the authenticated planner.",
+    "captured_at": "2026-10-17T19:22:17.545649+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "dce41e4d2ffad8de3d0391a11c17086e079c5636bbc924c42d19af4d59c8ed4d"
+  },
+  {
+    "file": "03-planning/20-generating-route.png",
+    "title": "Generating the itinerary",
+    "description": "The app sends the selected preferences to the authenticated planning backend. The loading screen shows trip context, progress copy and Cancel.",
+    "captured_at": "2026-10-17T19:22:25.166907+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "62c306d64ce40496fd00fd97c2074def7a6eb5717f744bd8f866f8080585ddb3"
+  },
+  {
+    "file": "04-itinerary/01-generated-overview.png",
+    "title": "Itinerary — generated overview",
+    "description": "A real online generation completed for the seven-day Darwin-to-Katherine 4x4 test trip. The result shows five stops, map pins, the sheet and route actions.",
+    "captured_at": "2026-10-17T19:22:46.543435+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "4df4304fa23fead10ae5f137362ba29e9ea687aa0837b18bcbce03c53cd4badc"
+  },
+  {
+    "file": "04-itinerary/02-detailed-mode.png",
+    "title": "Itinerary — detailed schedule",
+    "description": "Select Detailed to replace highlights with timed activities for each stop. The displayed activities come from the generated test itinerary.",
+    "captured_at": "2026-10-17T19:22:54.540731+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "72f96728608e26f5db5dafcffee04c71bc5db5cf04ebae9c57ddbc0b40cfd45a"
+  },
+  {
+    "file": "04-itinerary/03-expanded-sheet.png",
+    "title": "Itinerary — expanded sheet",
+    "description": "Expand Trip stops to make more of the itinerary list visible while retaining the map behind it. The sheet also supports a collapsed state.",
+    "captured_at": "2026-10-17T19:23:01.595928+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "a70dd3ec1ec0933fa30fa05615d6e547b91ef9b039500773159d97319c25fc2f"
+  },
+  {
+    "file": "04-itinerary/04-stop-details.png",
+    "title": "Stop details — Darwin",
+    "description": "Tap a stop card to open its image, timed plan, tags, display hours/fees, next leg, road-condition link and Skip/Navigate actions. Generated display facts are not verified live opening or access status.",
+    "captured_at": "2026-10-17T19:23:11.402210+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "c6440c3b344ffd96aa23fbf7098c2ff58395dcbd56eec5c0ec62c2200516b225"
+  },
+  {
+    "file": "04-itinerary/05-stop-details-lower.png",
+    "title": "Stop details — practical information",
+    "description": "Scroll the stop detail to inspect hours, fee, next active stop, the official road-condition action and the generated explanatory note.",
+    "captured_at": "2026-10-17T19:23:20.230674+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "79dddd685bb149fde8d2b91ce9c82a4da4d068e95b74fc947b0416e76fb2a286"
+  },
+  {
+    "file": "04-itinerary/06-stop-skipped.png",
+    "title": "Itinerary — skipped stop",
+    "description": "Choose Skip on the Darwin detail screen. The route returns with Darwin visibly marked Skipped; the change is session-only and can be reversed.",
+    "captured_at": "2026-10-17T19:23:29.376823+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "73df101439c5ee86ee96e2094e5948f08731dd188df7c39a726642e813d5caec"
+  },
+  {
+    "file": "04-itinerary/07-unskip-action.png",
+    "title": "Stop details — unskip",
+    "description": "Reopen a skipped stop. Its primary route-state action is now Unskip. The walkthrough restores the stop after this capture.",
+    "captured_at": "2026-10-17T19:23:38.377233+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "66f3785b588f1420cf9fcc3f92a577482deab4c3e7c248bd552f73aa3a5a9495"
+  },
+  {
+    "file": "04-itinerary/08-edit-mode.png",
+    "title": "Itinerary — edit mode",
+    "description": "Select Edit Route to expose stop reordering and per-stop remove controls. Done exits editing. These changes affect the active session route.",
+    "captured_at": "2026-10-17T19:23:51.532610+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "8dffe64a29ea491e7af5fa2f488dde9027914495d003afb50b417177b170c9ec"
+  },
+  {
+    "file": "04-itinerary/09-removed-stop-restore.png",
+    "title": "Itinerary — restore a removed stop",
+    "description": "Remove a stop from the active test route. The count and pin numbering update, and Restore 1 removed stop provides a reversible recovery. No saved route was deleted.",
+    "captured_at": "2026-10-17T19:24:06.388542+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "291bbc85d54f36adc74ae8d225269f5bf717891f537d838c3b472e7e0f981600"
+  },
+  {
+    "file": "05-insights/01-no-data-and-public-sources.png",
+    "title": "Trip insights without imported data",
+    "description": "From an itinerary, tap Trip insights. Review public source links, refill preferences and the explicit no-data state.",
+    "captured_at": "2026-10-17T19:25:41.030728+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "c0164131e0dfbe577c04658d24a10df6465e94050fb1c73b7723369e2aa9941a"
+  },
+  {
+    "file": "05-insights/02-import-json.png",
+    "title": "Import a prepared dataset",
+    "description": "Tap Import JSON. Paste a version 1.0 dataset, then validate and import; invalid packages preserve the existing session data.",
+    "captured_at": "2026-10-17T19:25:50.625256+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "32ee410283b2dbed3cdc87d7671f18947658c2923da9b31b2222dea1651244c2"
+  },
+  {
+    "file": "05-insights/03-demo-preview-enabled.png",
+    "title": "Demo preview enabled",
+    "description": "Tap Preview demo. The visible banner explicitly identifies fictional places, prices and ratings; scroll down for the comparison cards.",
+    "captured_at": "2026-10-17T19:26:03.715621+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "8bc45781588096b78d32131ba1eaff0aeb96d79733d3d3e9587f3f1265e6426e"
+  },
+  {
+    "file": "05-insights/04-fictional-fuel-comparison.png",
+    "title": "Demo fuel savings comparison",
+    "description": "Scroll below preferences to view diesel at $1.85/L compared with $2.15/L, giving a fictional $12 saving on 40 litres before detour costs.",
+    "captured_at": "2026-10-17T19:26:13.183060+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "4e7dec1b65dbc0c94c6c01fb345339b83c5463d08925ea238044036222684ab7"
+  },
+  {
+    "file": "05-insights/05-fictional-coverage-advice.png",
+    "title": "Demo connectivity preparation",
+    "description": "Continue scrolling to view the fictional Telstra coverage preparation example beneath the fuel comparison.",
+    "captured_at": "2026-10-17T19:26:20.605348+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "442d2290a708e763f515e2a399f4f9596910a31fef09ea235965ff642524599a"
+  },
+  {
+    "file": "05-insights/06-fictional-accommodation-rating.png",
+    "title": "Demo accommodation score",
+    "description": "Continue scrolling to view the fictional accommodation card, showing a synthetic 4.4/5 score from 286 reviews and no live room inventory.",
+    "captured_at": "2026-10-17T19:26:27.096007+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "9663bd1d81028221f4f3a2517d13c7c6879aa9ab41f2171e6009927d17232d68"
+  },
+  {
+    "file": "05-insights/07-fictional-roadhouse-facilities.png",
+    "title": "Demo roadhouse facilities",
+    "description": "Scroll to the bottom of demo insights to see the fictional combined rest stop, diesel, food and toilet facilities.",
+    "captured_at": "2026-10-17T19:30:11.129882+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "a5c87bf80d27f748c89d20a4f5e62d1cb5a3a601c7e1a6fe73fa799ae7704e5f"
+  },
+  {
+    "file": "06-saved-routes/01-saved-route-list.png",
+    "title": "Saved routes",
+    "description": "Open Saved Routes to see the latest generated itinerary alongside existing example routes.",
+    "captured_at": "2026-10-17T19:26:37.953097+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "e54dab6a3385a83fb6e9d4bb7e5b66bb8149df39cebcaa06439b6665a2ec970d"
+  },
+  {
+    "file": "06-saved-routes/02-route-actions.png",
+    "title": "Saved route actions",
+    "description": "Tap the options button beside a route to rename, reorder or delete it. No saved route was deleted during this walkthrough.",
+    "captured_at": "2026-10-17T19:26:47.661499+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "8ad9531f1f8044fde6a2228f434b1d836984ba3a54c966ebfdee3d920b7429f6"
+  },
+  {
+    "file": "06-saved-routes/03-rename-dialog.png",
+    "title": "Rename a saved route",
+    "description": "Choose Rename to edit the title. This capture was followed by Cancel, preserving the existing name.",
+    "captured_at": "2026-10-17T19:26:55.316925+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "adc6efc3b13fd6cbd3334139763d95c26427c74f5d855ae0f3a2aaab78672955"
+  },
+  {
+    "file": "07-profile/01-light-profile.png",
+    "title": "Profile in the default light appearance",
+    "description": "Open Profile to review language, Light appearance, crash reporting disclosure, offline map explanation and account actions.",
+    "captured_at": "2026-10-17T19:27:07.276302+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "8de1bf3c21f4bde13cf4d510700017eeeb0d3122e428543a05f2b77af2fb4c43"
+  },
+  {
+    "file": "07-profile/02-appearance-options.png",
+    "title": "Appearance options",
+    "description": "Tap the current appearance to view Dark, Light and System choices. Light remains the app default.",
+    "captured_at": "2026-10-17T19:27:12.463849+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "db542014948c8bae744ba21eac5eed1dcf6d304b31e426da4a0c44bbaf611741"
+  },
+  {
+    "file": "07-profile/03-dark-profile.png",
+    "title": "Optional dark appearance",
+    "description": "Select Dark to preview the existing alternate appearance. Light was restored after this screenshot.",
+    "captured_at": "2026-10-17T19:27:22.066635+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "1140cd69034feecc6af5ed0c508e977938ed3ba850d08938ae0062297dcd25d5"
+  },
+  {
+    "file": "08-collected-data/01-historical-data-loaded.png",
+    "title": "Collected historical data loaded",
+    "description": "Open a saved itinerary, tap Trip insights, then View collected records. The banner states fuel is from December 2024 and accommodation listings from 2020.",
+    "captured_at": "2026-10-17T22:06:00.530319+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "d1c8c401309a18f14aa76a56b2823963d7f4415e20a73c9fddf72b25c23f36c2"
+  },
+  {
+    "file": "08-collected-data/02-historical-fuel-record.png",
+    "title": "Historical fuel record and source",
+    "description": "Scroll below preferences to a collected fuel record. Its December 2024 validity interval, attribution, source link and expired status remain visible; no current savings claim is shown.",
+    "captured_at": "2026-10-17T22:06:28.243330+09:30",
+    "source": "Existing Terra NT app; iPhone 17 Pro simulator; iOS 26.5",
+    "sha256": "8d82924b21f38c08437ec3fa45796aeeef29c99083040b474f080e9467261f3d"
+  }
+]

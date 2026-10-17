@@ -318,7 +318,7 @@ happens on failure (`docs/PRD.md` §3.4). The copy table is the PRD's, not this 
 
 | | |
 |---|---|
-| `PLAN_API_URL` | `String.fromEnvironment('PLAN_API_URL')`, from the gitignored `terra_nt/.env` through `--dart-define-from-file=.env`, like `CARTO_API_KEY` |
+| `PLAN_API_URL` | `String.fromEnvironment('PLAN_API_URL')`, from the gitignored `terra_nt/.env` through `--dart-define-from-file=.env` |
 | Empty or absent | The app keeps `SeedItineraryRepository`: a checkout with no `.env` still generates the seeded route, tests run without a network, and no screen blocks on the network at cold start |
 | Emulator or USB phone | `PLAN_API_URL=http://127.0.0.1:8787` with `adb reverse tcp:8787 tcp:8787` (run by `tools/plan_server/start.bat`), so the device's own loopback reaches the laptop over USB. Since 2026-09-29 release builds allow cleartext to the loopback only (`res/xml/network_security_config.xml`); everything else stays HTTPS. `http://10.0.2.2:8787` still works on the emulator in debug builds |
 

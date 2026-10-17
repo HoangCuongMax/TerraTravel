@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Map tiles are the only network resource; without this a release build renders no map. -->
+    <!-- Internet access supports maps, routing, Firebase and configured planning/travel-data services. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="Terra NT"

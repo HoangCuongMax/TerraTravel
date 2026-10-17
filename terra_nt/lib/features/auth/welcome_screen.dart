@@ -53,7 +53,7 @@ class WelcomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       key: const ValueKey('screen-welcome'),
-      backgroundColor: AppColors.canvas,
+      backgroundColor: AppColors.of(context).canvas,
       body: Stack(
         children: [
           // Invisible, non-interactive, and laid out under everything else: it
@@ -79,14 +79,14 @@ class WelcomeScreen extends ConsumerWidget {
                           Text(
                             'Welcome to Terra NT',
                             style: AppType.cardTitle.copyWith(
-                              color: AppColors.ink,
+                              color: AppColors.of(context).ink,
                             ),
                           ),
                           const SizedBox(height: AppSpacing.sm),
                           Text(
                             "Answer a few quick questions and we'll build a route across the Territory for you — or skip straight to exploring on your own.",
                             style: AppType.bodySm.copyWith(
-                              color: AppColors.inkMuted,
+                              color: AppColors.of(context).inkMuted,
                             ),
                           ),
                           const SizedBox(height: AppSpacing.lg),

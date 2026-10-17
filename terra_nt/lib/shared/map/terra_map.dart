@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_vector_tiles/flutter_map_vector_tiles.dart' as vt;
 import 'package:latlong2/latlong.dart';
 
 import '../../core/theme/colors.dart';
@@ -20,16 +21,38 @@ import '../widgets/app_icon.dart';
 import 'dashed_route_polyline.dart';
 import 'map_markers.dart';
 
-/// CARTO began watermarking unauthenticated raster tiles in late August 2026.
-/// The key is free, and the endpoint still serves the same watermarked tile
-/// without one, so a checkout with no key keeps rendering instead of going blank.
-/// The key lives in the gitignored `terra_nt/.env`, read at build time with
-/// `--dart-define-from-file=.env`. Copy `.env.example` to start.
-const cartoApiKey = String.fromEnvironment('CARTO_API_KEY');
+const openFreeMapStyleUrl = 'https://tiles.openfreemap.org/styles/dark';
+const openFreeMapUserAgent =
+    'TerraNT/1.0 (+https://github.com/Estaed/Terra-NT)';
+const openFreeMapAttribution =
+    'OpenFreeMap · OSRM routes · © OpenMapTiles · OpenStreetMap (ODbL)';
+// Kept as a source-compatible name for existing attribution layout callers.
+const cartoAttribution = openFreeMapAttribution;
+// Legacy values remain available to old map harnesses; production uses the
+// keyless OpenFreeMap vector style below.
+const cartoApiKey = '';
 const cartoDarkTileUrl =
     'https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png?key={key}';
-const cartoAttribution = '© OpenStreetMap © CARTO';
 const mapUserAgentPackageName = 'au.edu.cdu.terra_nt';
+const openFreeMapLightStyleUrl =
+    'https://tiles.openfreemap.org/styles/positron';
+String openFreeMapStyleFor(Brightness brightness) =>
+    brightness == Brightness.light
+    ? openFreeMapLightStyleUrl
+    : openFreeMapStyleUrl;
+final _openFreeMapStyles = <String, Future<vt.Style>>{};
+
+Future<vt.Style> _loadOpenFreeMapStyle(Brightness brightness) {
+  final uri = openFreeMapStyleFor(brightness);
+  return _openFreeMapStyles.putIfAbsent(
+    uri,
+    () => vt.StyleReader(
+      uri: uri,
+      headers: const {'User-Agent': openFreeMapUserAgent},
+    ).read(),
+  );
+}
+
 const _offlineAreaExplanation =
     'This map area is unavailable. Only areas you have opened '
     'are kept offline for up to 30 days. '
@@ -140,7 +163,10 @@ class TerraMap extends StatefulWidget {
   /// The reservation gives way, exactly as [resultFitPaddingFor]'s does, when
   /// [viewportHeight] is too short to also hold [AppMetrics.mapExploreMinimumStrip]
   /// — the keyboard open over Explore's search field is the case that hits this.
-  static EdgeInsets exploreFitPaddingFor(double topInset, double viewportHeight) {
+  static EdgeInsets exploreFitPaddingFor(
+    double topInset,
+    double viewportHeight,
+  ) {
     const margin = AppMetrics.mapExploreFitPadding;
     final desired =
         topInset +
@@ -284,25 +310,27 @@ class _TerraMapState extends State<TerraMap>
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppColors.surface1,
+        backgroundColor: AppColors.of(context).surface1,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.card),
-          side: const BorderSide(
-            color: AppColors.hairline,
+          side: BorderSide(
+            color: AppColors.of(context).hairline,
             width: AppElevation.hairlineWidth,
           ),
         ),
         scrollable: true,
         content: Text(
           _offlineAreaExplanation,
-          style: AppType.bodySm.copyWith(color: AppColors.inkSubtle),
+          style: AppType.bodySm.copyWith(
+            color: AppColors.of(context).inkSubtle,
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               'Close',
-              style: AppType.button.copyWith(color: AppColors.ink),
+              style: AppType.button.copyWith(color: AppColors.of(context).ink),
             ),
           ),
         ],
@@ -567,7 +595,7 @@ class _TerraMapState extends State<TerraMap>
           options: MapOptions(
             initialCenter: initialCenter,
             initialZoom: initialZoom,
-            backgroundColor: AppColors.surface1,
+            backgroundColor: AppColors.of(context).surface1,
             minZoom: _minZoom,
             maxZoom: AppMetrics.mapMaxZoom,
             // Default maps stay over Australia. Result needs its full camera
@@ -587,24 +615,22 @@ class _TerraMapState extends State<TerraMap>
             ),
           ),
           children: [
-            // The default network provider shares the cache configured in main,
-            // including this map when mounted by Welcome's TileWarmup.
-            TileLayer(
-              tileProvider: widget.tileProvider,
-              tileBuilder: (context, child, tile) => _TileStatus(
-                failed: tile.loadError,
-                onStatus: _onTileStatus,
-                child: child,
+            if (widget.tileProvider == null)
+              _OpenFreeMapLayer(onStatus: _onTileStatus)
+            else
+              TileLayer(
+                tileProvider: widget.tileProvider,
+                tileBuilder: (context, child, tile) => _TileStatus(
+                  failed: tile.loadError,
+                  onStatus: _onTileStatus,
+                  child: child,
+                ),
+                urlTemplate: cartoDarkTileUrl,
+                additionalOptions: const {'key': cartoApiKey},
+                retinaMode: RetinaMode.isHighDensity(context),
+                userAgentPackageName: mapUserAgentPackageName,
+                maxZoom: AppMetrics.mapMaxZoom,
               ),
-              urlTemplate: cartoDarkTileUrl,
-              additionalOptions: const {'key': cartoApiKey},
-              // Retina stays on: turning it off was profiled on 2026-09-12 and
-              // bought no measurable frame time, while visibly softening the
-              // basemap on a high density screen.
-              retinaMode: RetinaMode.isHighDensity(context),
-              userAgentPackageName: mapUserAgentPackageName,
-              maxZoom: AppMetrics.mapMaxZoom,
-            ),
             if (animatedPolylines != null)
               ListenableBuilder(
                 listenable: animatedPolylines.listenable,
@@ -650,26 +676,26 @@ class _TerraMapState extends State<TerraMap>
                     key: const ValueKey('map-offline-area-notice'),
                     onPressed: _showOfflineExplanation,
                     style: TextButton.styleFrom(
-                      backgroundColor: AppColors.surface1,
-                      foregroundColor: AppColors.inkSubtle,
+                      backgroundColor: AppColors.of(context).surface1,
+                      foregroundColor: AppColors.of(context).inkSubtle,
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.sm,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppRadius.md),
-                        side: const BorderSide(
-                          color: AppColors.hairline,
+                        side: BorderSide(
+                          color: AppColors.of(context).hairline,
                           width: AppElevation.hairlineWidth,
                         ),
                       ),
                     ),
                     child: atSide
-                        ? const Tooltip(
+                        ? Tooltip(
                             message: 'Map area unavailable. Show details',
                             child: AppIcon(
                               LucideIcons.info,
                               size: AppMetrics.iconMd,
-                              color: AppColors.inkSubtle,
+                              color: AppColors.of(context).inkSubtle,
                             ),
                           )
                         : Text(
@@ -677,7 +703,7 @@ class _TerraMapState extends State<TerraMap>
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppType.bodySm.copyWith(
-                              color: AppColors.inkSubtle,
+                              color: AppColors.of(context).inkSubtle,
                             ),
                           ),
                   ),
@@ -699,16 +725,18 @@ class _TerraMapState extends State<TerraMap>
                 key: const ValueKey('map-offline-area-notice'),
                 padding: const EdgeInsets.all(AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: AppColors.surface1,
+                  color: AppColors.of(context).surface1,
                   borderRadius: BorderRadius.circular(AppRadius.md),
                   border: Border.all(
-                    color: AppColors.hairline,
+                    color: AppColors.of(context).hairline,
                     width: AppElevation.hairlineWidth,
                   ),
                 ),
                 child: Text(
                   _offlineAreaExplanation,
-                  style: AppType.bodySm.copyWith(color: AppColors.inkSubtle),
+                  style: AppType.bodySm.copyWith(
+                    color: AppColors.of(context).inkSubtle,
+                  ),
                 ),
               ),
             ),
@@ -772,6 +800,60 @@ class _TileStatusState extends State<_TileStatus> {
 
   @override
   Widget build(BuildContext context) => widget.child;
+}
+
+class _OpenFreeMapLayer extends StatefulWidget {
+  const _OpenFreeMapLayer({required this.onStatus});
+
+  final void Function(Object identity, bool failed) onStatus;
+
+  @override
+  State<_OpenFreeMapLayer> createState() => _OpenFreeMapLayerState();
+}
+
+class _OpenFreeMapLayerState extends State<_OpenFreeMapLayer> {
+  final Object _identity = Object();
+  bool? _reportedFailure;
+
+  void _report(bool failed) {
+    if (_reportedFailure == failed) return;
+    _reportedFailure = failed;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.onStatus(_identity, failed);
+    });
+  }
+
+  @override
+  void dispose() {
+    if (_reportedFailure == true) widget.onStatus(_identity, false);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<vt.Style>(
+    future: _loadOpenFreeMapStyle(Theme.of(context).brightness),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState != ConnectionState.done) {
+        return const SizedBox.shrink();
+      }
+      if (snapshot.hasError || !snapshot.hasData) {
+        _report(true);
+        return const SizedBox.shrink();
+      }
+      _report(false);
+      final style = snapshot.requireData;
+      return vt.VectorTileLayer(
+        key: ValueKey(openFreeMapStyleFor(Theme.of(context).brightness)),
+        theme: style.theme,
+        tileProviders: style.providers,
+        rasterSources: style.rasterSources,
+        sprites: style.sprites,
+        tileOffset: vt.TileOffset.maplibre,
+        logger: const vt.Logger.console(),
+        diskCacheTtl: const Duration(days: 30),
+      );
+    },
+  );
 }
 
 /// Overlapping thumb-sized targets give the tap to the nearest visible pin.
@@ -868,10 +950,10 @@ class _MapAttribution extends StatelessWidget {
       horizontal: AppSpacing.xxs,
       vertical: AppSpacing.xxs,
     ),
-    color: AppColors.surface1,
+    color: AppColors.of(context).surface1,
     child: Text(
-      cartoAttribution,
-      style: AppType.caption.copyWith(color: AppColors.inkTertiary),
+      openFreeMapAttribution,
+      style: AppType.caption.copyWith(color: AppColors.of(context).ink),
     ),
   );
 }
@@ -916,13 +998,15 @@ class _MapMarkerGestureState extends State<_MapMarkerGesture> {
                   vertical: AppSpacing.xxs,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.surface1,
+                  color: AppColors.of(context).surface1,
                   borderRadius: BorderRadius.circular(AppRadius.sm),
-                  border: Border.all(color: AppColors.hairline),
+                  border: Border.all(color: AppColors.of(context).hairline),
                 ),
                 child: Text(
                   widget.tooltip!,
-                  style: AppType.caption.copyWith(color: AppColors.ink),
+                  style: AppType.caption.copyWith(
+                    color: AppColors.of(context).ink,
+                  ),
                 ),
               ),
             ),

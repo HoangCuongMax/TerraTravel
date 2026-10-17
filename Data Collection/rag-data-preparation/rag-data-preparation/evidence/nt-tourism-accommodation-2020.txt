@@ -1,0 +1,7 @@
+NT Tourism Accommodation Provider List January–December 2020
+Portal: https://data.nt.gov.au/dataset/nt-tourism-accommodation-provider-list-january-december-2020
+Licence: Creative Commons Attribution
+File: accommodation-providers-jul-dec-2020.xlsx
+Retrieved: 2026-10-17
+Use: Historical accommodation entity seed (name, address, lat/lng, phone, url).
+NOT live inventory or room rates. Contacts may be outdated.

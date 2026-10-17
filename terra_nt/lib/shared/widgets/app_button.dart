@@ -68,16 +68,16 @@ class _AppButtonState extends State<AppButton> {
     switch (widget.variant) {
       case AppButtonVariant.primary:
         return pressed
-            ? AppColors.actionPrimaryBgPressed
-            : AppColors.actionPrimaryBg;
+            ? AppColors.of(context).actionPrimaryBgPressed
+            : AppColors.of(context).actionPrimaryBg;
       case AppButtonVariant.secondary:
         return pressed
-            ? AppColors.actionSecondaryBgHover
-            : AppColors.actionSecondaryBg;
+            ? AppColors.of(context).actionSecondaryBgHover
+            : AppColors.of(context).actionSecondaryBg;
       case AppButtonVariant.inverse:
         return pressed
-            ? AppColors.actionInverseBgHover
-            : AppColors.actionInverseBg;
+            ? AppColors.of(context).actionInverseBgHover
+            : AppColors.of(context).actionInverseBg;
     }
   }
 
@@ -85,11 +85,11 @@ class _AppButtonState extends State<AppButton> {
     if (widget.foregroundColor != null) return widget.foregroundColor!;
     switch (widget.variant) {
       case AppButtonVariant.primary:
-        return AppColors.actionPrimaryFg;
+        return AppColors.of(context).actionPrimaryFg;
       case AppButtonVariant.secondary:
-        return AppColors.actionSecondaryFg;
+        return AppColors.of(context).actionSecondaryFg;
       case AppButtonVariant.inverse:
-        return AppColors.actionInverseFg;
+        return AppColors.of(context).actionInverseFg;
     }
   }
 
@@ -162,7 +162,7 @@ class _AppButtonState extends State<AppButton> {
             borderRadius: BorderRadius.circular(AppRadius.button),
             border: widget.variant == AppButtonVariant.secondary
                 ? Border.all(
-                    color: AppColors.borderCard,
+                    color: AppColors.of(context).borderCard,
                     width: AppElevation.hairlineWidth,
                   )
                 : null,

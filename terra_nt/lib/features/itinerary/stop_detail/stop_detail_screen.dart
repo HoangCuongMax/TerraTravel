@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/elevation.dart';
@@ -11,6 +10,7 @@ import '../../../core/theme/radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/theme/typography.dart';
 import '../../../core/util/itinerary_ops.dart';
+import '../../../core/util/maps_launcher.dart';
 import '../../../core/util/maps_url.dart';
 import '../../../core/util/tag_colors.dart';
 import '../../../data/models/plan_entry.dart';
@@ -30,7 +30,7 @@ class StopDetailScreen extends ConsumerStatefulWidget {
     super.key,
     required this.stop,
     required this.originalIndex,
-    this.launcher = launchUrl,
+    this.launcher = launchMapExternally,
   });
 
   final Stop stop;
@@ -62,7 +62,10 @@ class _StopDetailScreenState extends ConsumerState<StopDetailScreen> {
     if (url == null) return;
     var opened = false;
     try {
-      opened = await widget.launcher(Uri.parse(url));
+      opened = await launchDrivingDirections(
+        Uri.parse(url),
+        launcher: widget.launcher,
+      );
     } catch (_) {
       // A missing maps app or platform failure should offer coordinates too.
     }
@@ -96,7 +99,7 @@ class _StopDetailScreenState extends ConsumerState<StopDetailScreen> {
 
     return Scaffold(
       key: const ValueKey('stop-detail-screen'),
-      backgroundColor: AppColors.canvas,
+      backgroundColor: AppColors.of(context).canvas,
       body: SafeArea(
         top: false,
         child: Column(
@@ -129,7 +132,7 @@ class _StopDetailScreenState extends ConsumerState<StopDetailScreen> {
                               'No detailed plan for this stop.',
                               key: const ValueKey('detailed-plan-empty'),
                               style: AppType.bodySm.copyWith(
-                                color: AppColors.inkTertiary,
+                                color: AppColors.of(context).inkTertiary,
                               ),
                             )
                           : _DetailPlan(
@@ -159,7 +162,7 @@ class _StopDetailScreenState extends ConsumerState<StopDetailScreen> {
                             key: const ValueKey('stop-detail-road-conditions'),
                             onPressed: _checkRoadConditions,
                             style: TextButton.styleFrom(
-                              foregroundColor: AppColors.primary,
+                              foregroundColor: AppColors.of(context).primary,
                               minimumSize: const Size(
                                 AppMetrics.minTouchTarget,
                                 AppMetrics.minTouchTarget,
@@ -175,14 +178,14 @@ class _StopDetailScreenState extends ConsumerState<StopDetailScreen> {
                           Text(
                             'An internet connection is needed.',
                             style: AppType.bodySm.copyWith(
-                              color: AppColors.inkSubtle,
+                              color: AppColors.of(context).inkSubtle,
                             ),
                           ),
                           if (_roadLaunchFailed)
                             Text(
                               'Road conditions could not be opened. Check your connection and try again.',
                               style: AppType.bodySm.copyWith(
-                                color: AppColors.inkSubtle,
+                                color: AppColors.of(context).inkSubtle,
                               ),
                             ),
                         ],
@@ -259,18 +262,18 @@ class _Hero extends StatelessWidget {
                       width: AppMetrics.stopDetailBackButtonSize,
                       height: AppMetrics.stopDetailBackButtonSize,
                       decoration: BoxDecoration(
-                        color: AppColors.stopDetailHeroScrim,
+                        color: AppColors.of(context).stopDetailHeroScrim,
                         borderRadius: BorderRadius.circular(AppRadius.full),
                         border: Border.all(
-                          color: AppColors.hairlineStrong,
+                          color: AppColors.of(context).hairlineStrong,
                           width: AppElevation.hairlineWidth,
                         ),
                       ),
                       alignment: Alignment.center,
-                      child: const AppIcon(
+                      child: AppIcon(
                         LucideIcons.arrow_left,
                         size: AppMetrics.iconLg,
-                        color: AppColors.ink,
+                        color: AppColors.of(context).ink,
                       ),
                     ),
                   ),
@@ -297,13 +300,15 @@ class _StopHeading extends StatelessWidget {
         Text(
           stop.name,
           key: const ValueKey('stop-detail-name'),
-          style: AppType.cardTitle.copyWith(color: AppColors.ink),
+          style: AppType.cardTitle.copyWith(color: AppColors.of(context).ink),
         ),
         const SizedBox(height: AppSpacing.xxs),
         Text(
           stop.subtitle,
           key: const ValueKey('stop-detail-subtitle'),
-          style: AppType.bodySm.copyWith(color: AppColors.inkSubtle),
+          style: AppType.bodySm.copyWith(
+            color: AppColors.of(context).inkSubtle,
+          ),
         ),
       ],
     );
@@ -320,7 +325,7 @@ class _DetailPlan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeStyle = AppType.captionApp.copyWith(
-      color: AppColors.inkTertiary,
+      color: AppColors.of(context).inkTertiary,
       fontFamily: AppFonts.mono,
     );
     return Table(
@@ -357,7 +362,9 @@ class _DetailPlan extends StatelessWidget {
                 ),
                 child: Text(
                   entry.activity,
-                  style: AppType.bodyApp.copyWith(color: AppColors.inkMuted),
+                  style: AppType.bodyApp.copyWith(
+                    color: AppColors.of(context).inkMuted,
+                  ),
                 ),
               ),
             ],
@@ -380,7 +387,11 @@ class _TagList extends StatelessWidget {
       runSpacing: AppSpacing.xs,
       children: [
         for (final tag in tags)
-          TagDot(color: tagColor(tag), label: tag, bordered: true),
+          TagDot(
+            color: tagColor(tag, light: AppColors.of(context).isLight),
+            label: tag,
+            bordered: true,
+          ),
       ],
     );
   }
@@ -401,9 +412,9 @@ class _InfoCard extends StatelessWidget {
         vertical: AppMetrics.padRowY,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surface1,
+        color: AppColors.of(context).surface1,
         border: Border.all(
-          color: AppColors.hairline,
+          color: AppColors.of(context).hairline,
           width: AppElevation.hairlineWidth,
         ),
         borderRadius: BorderRadius.circular(AppRadius.card),
@@ -416,7 +427,7 @@ class _InfoCard extends StatelessWidget {
             const SizedBox(height: AppMetrics.stopDetailInfoGap),
             Container(
               height: AppElevation.hairlineWidth,
-              color: AppColors.hairline,
+              color: AppColors.of(context).hairline,
             ),
             const SizedBox(height: AppMetrics.stopDetailInfoGap),
             _InfoRow(
@@ -448,7 +459,9 @@ class _InfoRow extends StatelessWidget {
             Flexible(
               child: Text(
                 label,
-                style: AppType.bodySm.copyWith(color: AppColors.inkSubtle),
+                style: AppType.bodySm.copyWith(
+                  color: AppColors.of(context).inkSubtle,
+                ),
               ),
             ),
             if (icon != null) ...[
@@ -456,7 +469,7 @@ class _InfoRow extends StatelessWidget {
               AppIcon(
                 icon!,
                 size: AppMetrics.iconMd,
-                color: AppColors.inkSubtle,
+                color: AppColors.of(context).inkSubtle,
               ),
             ],
           ],
@@ -465,7 +478,7 @@ class _InfoRow extends StatelessWidget {
         Text(
           value,
           textAlign: TextAlign.left,
-          style: AppType.bodySm.copyWith(color: AppColors.ink),
+          style: AppType.bodySm.copyWith(color: AppColors.of(context).ink),
         ),
       ],
     );
@@ -487,9 +500,9 @@ class _AiNote extends StatelessWidget {
         vertical: AppMetrics.padRowY,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surface2,
+        color: AppColors.of(context).surface2,
         border: Border.all(
-          color: AppColors.hairline,
+          color: AppColors.of(context).hairline,
           width: AppElevation.hairlineWidth,
         ),
         borderRadius: BorderRadius.circular(AppRadius.card),
@@ -497,19 +510,21 @@ class _AiNote extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: AppSpacing.xxs),
             child: AppIcon(
               LucideIcons.zap,
               size: AppMetrics.iconSm,
-              color: AppColors.inkSubtle,
+              color: AppColors.of(context).inkSubtle,
             ),
           ),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
               note,
-              style: AppType.bodyApp.copyWith(color: AppColors.inkMuted),
+              style: AppType.bodyApp.copyWith(
+                color: AppColors.of(context).inkMuted,
+              ),
             ),
           ),
         ],
@@ -541,11 +556,11 @@ class _Footer extends StatelessWidget {
         AppMetrics.stopDetailContentPadding,
         AppMetrics.stopDetailFooterPaddingBottom,
       ),
-      decoration: const BoxDecoration(
-        color: AppColors.canvas,
+      decoration: BoxDecoration(
+        color: AppColors.of(context).canvas,
         border: Border(
           top: BorderSide(
-            color: AppColors.hairline,
+            color: AppColors.of(context).hairline,
             width: AppElevation.hairlineWidth,
           ),
         ),
@@ -571,8 +586,10 @@ class _Footer extends StatelessWidget {
                       key: const ValueKey('stop-detail-skip'),
                       onPressed: onSkip,
                       style: TextButton.styleFrom(
-                        foregroundColor: AppColors.actionSecondaryFg,
-                        backgroundColor: AppColors.actionSecondaryBg,
+                        foregroundColor: AppColors.of(context)
+                            .actionSecondaryFg,
+                        backgroundColor: AppColors.of(context)
+                            .actionSecondaryBg,
                         minimumSize: const Size(
                           AppMetrics.minTouchTarget,
                           AppMetrics.minTouchTarget,
@@ -584,8 +601,8 @@ class _Footer extends StatelessWidget {
                         textStyle: AppType.button,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppRadius.button),
-                          side: const BorderSide(
-                            color: AppColors.borderCard,
+                          side: BorderSide(
+                            color: AppColors.of(context).borderCard,
                             width: AppElevation.hairlineWidth,
                           ),
                         ),
@@ -602,8 +619,8 @@ class _Footer extends StatelessWidget {
                       key: const ValueKey('stop-detail-navigate'),
                       onPressed: onNavigate,
                       style: TextButton.styleFrom(
-                        foregroundColor: AppColors.actionPrimaryFg,
-                        backgroundColor: AppColors.actionPrimaryBg,
+                        foregroundColor: AppColors.of(context).actionPrimaryFg,
+                        backgroundColor: AppColors.of(context).actionPrimaryBg,
                         minimumSize: const Size(
                           AppMetrics.minTouchTarget,
                           AppMetrics.minTouchTarget,
@@ -627,10 +644,10 @@ class _Footer extends StatelessWidget {
                           ),
                           if (showNavigateIcon) ...[
                             const SizedBox(width: AppMetrics.gapButtonIcon),
-                            const AppIcon(
+                            AppIcon(
                               LucideIcons.arrow_right,
                               size: AppMetrics.iconMd,
-                              color: AppColors.actionPrimaryFg,
+                              color: AppColors.of(context).actionPrimaryFg,
                             ),
                           ],
                         ],

@@ -11,9 +11,10 @@ import '../../core/util/route_sampler.dart';
 import 'car_glyph.dart';
 import 'dashed_route_polyline.dart';
 import 'map_markers.dart';
+import 'road_route_loader.dart';
 import 'terra_map.dart';
 
-/// A non-interactive map with a car that travels along the decorative NT route.
+/// A non-interactive map with a car that travels along the NT road route.
 class RouteCarBackdrop extends StatefulWidget {
   static const ambientStartDelay = AppMotion.mapAmbientStartDelay;
   static const ambientPause = AppMotion.mapAmbientPause;
@@ -33,9 +34,11 @@ class RouteCarBackdrop extends StatefulWidget {
   const RouteCarBackdrop.ambient({
     super.key,
     this.coordinates = routeCoordinates,
+    this.roadRouteLoader,
   });
 
   final List<List<double>> coordinates;
+  final RoadRouteLoader? roadRouteLoader;
 
   @override
   RouteCarBackdropState createState() => RouteCarBackdropState();
@@ -55,11 +58,17 @@ class RouteCarBackdropState extends State<RouteCarBackdrop>
   final _carTick = _CarTicker();
 
   double _fraction = _minimumFraction;
-  late List<double> _previousSample;
+  late List<List<double>> _routeCoordinates;
+  late List<double> _routeDistances;
   double _longitudeDelta = _minimumFraction;
+  double _headingRadians = _minimumFraction;
 
   LatLng get currentPosition {
-    final sample = pointAtFraction(widget.coordinates, _fraction);
+    final sample = pointAtFraction(
+      _routeCoordinates,
+      _fraction,
+      cumulative: _routeDistances,
+    );
     return LatLng(sample.first, sample.last);
   }
 
@@ -69,14 +78,34 @@ class RouteCarBackdropState extends State<RouteCarBackdrop>
   void initState() {
     super.initState();
     assert(widget.coordinates.length >= 2);
-    _previousSample = widget.coordinates.first;
+    _routeCoordinates = widget.coordinates;
+    _routeDistances = cumulativeDistances(_routeCoordinates);
     _travelController = AnimationController(vsync: this)
       ..addListener(_advanceTravel)
       ..addStatusListener(_completeTravel);
+    _updateCarDirection(_minimumFraction, forward: true);
     _ambientTimer = Timer(
       RouteCarBackdrop.ambientStartDelay,
       _startAmbientLoop,
     );
+    if (widget.roadRouteLoader case final loader?) {
+      unawaited(_loadRoadGeometry(loader));
+    }
+  }
+
+  Future<void> _loadRoadGeometry(RoadRouteLoader loader) async {
+    final road = await loader(widget.coordinates);
+    if (!mounted || road == null || road.length < 2) return;
+
+    _ambientTimer?.cancel();
+    _travelController.stop();
+    setState(() {
+      _routeCoordinates = road;
+      _routeDistances = cumulativeDistances(road);
+      _fraction = _minimumFraction;
+      _updateCarDirection(_minimumFraction, forward: true);
+    });
+    _ambientTimer = Timer(RouteCarBackdrop.ambientPause, _startAmbientLoop);
   }
 
   void _startAmbientLoop() => _animateTo(_maximumFraction);
@@ -107,12 +136,56 @@ class RouteCarBackdropState extends State<RouteCarBackdrop>
     final easedProgress = _easeOutCubic.transform(_travelController.value);
     final fraction =
         _travelStart + (_travelTarget - _travelStart) * easedProgress;
-    final sample = pointAtFraction(widget.coordinates, fraction);
+    final sample = pointAtFraction(
+      _routeCoordinates,
+      fraction,
+      cumulative: _routeDistances,
+    );
     if (!mounted) return;
     _fraction = fraction;
-    _longitudeDelta = sample.last - _previousSample.last;
-    _previousSample = sample;
+    _updateCarDirection(
+      fraction,
+      forward: _travelTarget >= _travelStart,
+      position: sample,
+    );
     _carTick.tick();
+  }
+
+  void _updateCarDirection(
+    double fraction, {
+    required bool forward,
+    List<double>? position,
+  }) {
+    final current =
+        position ??
+        pointAtFraction(
+          _routeCoordinates,
+          fraction,
+          cumulative: _routeDistances,
+        );
+    const lookAhead = 0.00015;
+    var targetFraction = (fraction + (forward ? lookAhead : -lookAhead))
+        .clamp(_minimumFraction, _maximumFraction)
+        .toDouble();
+    if (targetFraction == fraction) {
+      targetFraction = (fraction + (forward ? -lookAhead : lookAhead))
+          .clamp(_minimumFraction, _maximumFraction)
+          .toDouble();
+    }
+    final next = pointAtFraction(
+      _routeCoordinates,
+      targetFraction,
+      cumulative: _routeDistances,
+    );
+    final dx = next.last - current.last;
+    final deltaLat = next.first - current.first;
+    // Web Mercator stretches north/south by sec(latitude). This converts the
+    // route tangent into the direction the marker moves on the map.
+    final dy = -deltaLat / math.cos(current.first * math.pi / 180);
+    if (dx.abs() + dy.abs() < 1e-12) return;
+    _longitudeDelta = dx;
+    final horizontalFacing = dx < 0 ? -1.0 : 1.0;
+    _headingRadians = math.atan2(dy * horizontalFacing, dx.abs());
   }
 
   void _completeTravel(AnimationStatus status) {
@@ -139,7 +212,7 @@ class RouteCarBackdropState extends State<RouteCarBackdrop>
 
   @override
   Widget build(BuildContext context) {
-    final points = widget.coordinates
+    final points = _routeCoordinates
         .map((point) => LatLng(point.first, point.last))
         .toList(growable: false);
     return SizedBox.expand(
@@ -160,7 +233,10 @@ class RouteCarBackdropState extends State<RouteCarBackdrop>
               point: currentPosition,
               width: AppMetrics.mapCarMarkerWidth,
               height: AppMetrics.mapCarMarkerHeight,
-              child: CarGlyph(longitudeDelta: _longitudeDelta),
+              child: CarGlyph(
+                longitudeDelta: _longitudeDelta,
+                headingRadians: _headingRadians,
+              ),
             ),
           ],
         ),

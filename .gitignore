@@ -58,3 +58,8 @@ derin-akil-paketler/
 # Planning server local state: the Codex login copy and the geocode cache
 tools/plan_server/.codex-home/
 tools/plan_server/.cache/
+tools/plan_server/.venv/
+tools/plan_server/.env
+
+# Original transfer archive; extracted Data Collection is versioned.
+/OneDrive_2026-10-17.zip

@@ -1,0 +1,104 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "schema_version": "1.0",
+    "record_id": "demo-ev-track-closed",
+    "source_ids": [
+     "synthetic-fixture"
+    ],
+    "retrieved_at": "2026-10-17T00:00:00Z",
+    "source_updated_at": null,
+    "valid_from": null,
+    "valid_until": null,
+    "review_due_at": null,
+    "verification_status": "unverified",
+    "data_mode": "synthetic_demo",
+    "evidence_refs": [],
+    "affected_entity_ids": [
+     "demo-track-t"
+    ],
+    "road_name": null,
+    "event_type": "closure",
+    "status": "closed",
+    "vehicle_scope": [],
+    "direction": null,
+    "authority": "Synthetic Authority",
+    "issued_at": null,
+    "effective_from": null,
+    "effective_until": null,
+    "description": "Track T closed; parent Park P open.",
+    "official_check_url": "fixture://status"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "schema_version": "1.0",
+    "record_id": "demo-ev-conflict-a",
+    "source_ids": [
+     "synthetic-fixture"
+    ],
+    "retrieved_at": "2026-10-17T00:00:00Z",
+    "source_updated_at": null,
+    "valid_from": null,
+    "valid_until": null,
+    "review_due_at": null,
+    "verification_status": "unverified",
+    "data_mode": "synthetic_demo",
+    "evidence_refs": [],
+    "affected_entity_ids": [
+     "demo-park-p"
+    ],
+    "road_name": null,
+    "event_type": "closure",
+    "status": "open",
+    "vehicle_scope": [],
+    "direction": null,
+    "authority": "Synthetic Authority",
+    "issued_at": null,
+    "effective_from": null,
+    "effective_until": null,
+    "description": "Authority A says open.",
+    "official_check_url": "fixture://status"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "schema_version": "1.0",
+    "record_id": "demo-ev-conflict-b",
+    "source_ids": [
+     "synthetic-fixture"
+    ],
+    "retrieved_at": "2026-10-17T00:00:00Z",
+    "source_updated_at": null,
+    "valid_from": null,
+    "valid_until": null,
+    "review_due_at": null,
+    "verification_status": "unverified",
+    "data_mode": "synthetic_demo",
+    "evidence_refs": [],
+    "affected_entity_ids": [
+     "demo-park-p"
+    ],
+    "road_name": null,
+    "event_type": "closure",
+    "status": "closed",
+    "vehicle_scope": [],
+    "direction": null,
+    "authority": "Synthetic Authority",
+    "issued_at": null,
+    "effective_from": null,
+    "effective_until": null,
+    "description": "Authority B says closed.",
+    "official_check_url": "fixture://status"
+   }
+  }
+ ]
+}

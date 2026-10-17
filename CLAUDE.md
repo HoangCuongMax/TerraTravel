@@ -33,6 +33,25 @@ Codex hooks are user-level: `python D:/TarikOS/.brain/scripts/render_codex_hooks
 
 ### Project-specific operating rules
 
+**Light mode exception (operator, 2026-10-17):** the user explicitly requested light
+mode. This supersedes every older “no light mode” clause below. Both themes use a
+context-scoped palette in `core/theme/colors.dart`; light tokens are also recorded in
+`design/design-system/tokens/light.css`. Profile offers Dark, Light and System.
+Light is the launch default (operator, 2026-10-17). Appearance is app-wide but session-only; the two persisted-key contract remains.
+The map uses OpenFreeMap Positron for light appearance and Dark for dark appearance.
+All other architecture, package, token and verification requirements remain binding.
+
+**Public travel data (operator, 2026-10-17):** at the user's request the existing app
+may query OpenStreetMap through Overpass for accommodation and named roadhouse listings,
+on explicit user action. Queries cover 5 km around at most three active NT stops,
+with a 30-minute session cache and 30-second retry cooldown. This uses the existing
+http package and a concrete client, not another repository interface. Community
+listings do not establish current prices, guest ratings, coverage or availability.
+MyFuel NT, official mobile coverage and Tourism NT are linked for current checks;
+no unrestricted live fuel/coverage/hotel-inventory feed is claimed.
+
+
+
 Blueprint was written by hand on 2026-08-25, before `create-architecture` existed; it is
 **not** re-run here. Amending Blueprint stays a decision to raise with the user.
 
@@ -63,6 +82,12 @@ Rejected: FMTC (GPL-3.0, closed ObjectBox binary, open Android build issue, no r
 2025-03-09); switching provider (Stadia's offline clause is unclear on the free plan);
 vector tiles (`vector_map_tiles` for flutter_map 8 is beta only). Research:
 `reports/research/2026-09-30-offline-map.md`.
+
+**Current map backend (2026-10-06):** the operator asked to remove the CARTO API-key
+watermark and use a free map. The current implementation uses OpenFreeMap's public dark
+vector style with no API key, rendered in `flutter_map` by `flutter_map_vector_tiles`.
+Previously recorded CARTO decisions below are historical; the current stack and attribution
+requirements are described in the table and provider section.
 
 ### Execution routing — which agent
 
@@ -122,7 +147,8 @@ nothing. Editing and reading files needs neither.
 | Package | Version | Why it is here |
 |---|---|---|
 | `flutter_riverpod` | **2.6.1** | Cross-tab shared state (session, saved routes, itinerary order, skipped set) with a `ProviderContainer` that tests without pumping a widget. |
-| `flutter_map` | **8.3.1** | Renders the **same CARTO dark tiles as the prototype**, so fidelity is exact rather than approximated. Markers are ordinary widgets — which is what the numbered pins and the animated car need. |
+| `flutter_map` | **8.3.1** | Owns the map camera, gestures, overlays, widget markers and route lines. |
+| `flutter_map_vector_tiles` | **2.9.0** | Renders OpenFreeMap's MapLibre dark vector style as a layer inside `flutter_map`; keyless public style and cached viewed tiles. Added 2026-10-06 at the operator's request for a free basemap. |
 | `latlong2` | **0.10.1** | Coordinate type `flutter_map` speaks. Kept out of tier 1 — models store raw doubles. |
 | `shared_preferences` | **2.5.5** | The only persistence phase 1 needs: saved routes, session, onboarding flag (`docs/PRD.md` D3). |
 | `url_launcher` | **6.3.2** | Opens the Google Maps directions URL (Result export, and Stop detail "Navigate"). |
@@ -142,28 +168,12 @@ left `package_config` at 3.0.0 and pulled no `test`/`shelf` tree. The three rows
 wave 2 and phase 3 were resolved on 2026-09-22 while writing Task-26…33, with the same
 result: `package_config` 3.0.0, no `test`/`shelf`.
 
-**CARTO tiles need a free API key as of 2026-09-09.** CARTO started watermarking
-unauthenticated raster tiles in late August 2026, and the endpoint this app uses now
-returns a tile stamped “API KEY REQUIRED” — verified by fetching one. The key is free,
-capped at 5 million tile requests a calendar month, and needs no CARTO account. It is
-read from `String.fromEnvironment('CARTO_API_KEY')` into `TileLayer.additionalOptions`.
-The value lives in the gitignored `terra_nt/.env` and reaches the build through
-`--dart-define-from-file=.env`, so no key is committed and no package is added —
-`.env.example` is the committed template.
-
-**Staying on CARTO was the choice, not inertia.** Without a key the endpoint still
-serves the watermarked tile, so a checkout with no key renders instead of going blank.
-Stadia Maps — the closest raster alternative, and the one that is not on a retirement
-path — returns 401 without a key, restricts its free tier to non-commercial use, and
-its dark style differs visibly from the prototype the design is measured against.
-CARTO says raster basemaps are being retired in favour of vector, with no date given;
-moving to vector needs a package outside this table, so it is a decision to raise, not
-a silent bump.
-
-**CARTO's terms bind the offline design (D22).** The Basemap Terms updated 2026-09-29
-forbid bulk download and caching on a device beyond 30 days. The free key allows
-5 million requests a month for non-commercial use (coursework) and 1 million for
-commercial use.
+**Free basemap (2026-10-06):** the map uses OpenFreeMap's hosted `dark` style at
+`https://tiles.openfreemap.org/styles/dark`. OpenFreeMap states the public instance has no
+API keys, registration, or request/view limits; the service is provided as-is and can
+change. The app identifies its requests with a stable TerraNT User-Agent and shows
+`OpenFreeMap · © OpenMapTiles · Data from OpenStreetMap` attribution. `flutter_map_vector_tiles`
+provides a 50 MB-capped, 30-day viewed-tile cache. No map key belongs in `.env`.
 
 **Riverpod is 2.6.1, not the 3.x on pub.dev — deliberately.** Unconstrained, pub resolves
 to 2.6.1; forcing `^3.4.2` succeeds but **downgrades `package_config` 3.0.0 → 2.2.0** and

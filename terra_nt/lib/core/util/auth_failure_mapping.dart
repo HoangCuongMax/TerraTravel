@@ -1,4 +1,5 @@
-import 'package:google_sign_in/google_sign_in.dart' show GoogleSignInExceptionCode;
+import 'package:google_sign_in/google_sign_in.dart'
+    show GoogleSignInExceptionCode;
 
 import '../../data/models/auth_failure.dart';
 

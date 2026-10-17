@@ -1,0 +1,6 @@
+RemoteConnect_enriched_v4.csv (user-supplied)
+Content: NT remote locality infrastructure proximity (Telstra/Optus/TPG distances, LTE/5G within 50km flags).
+Caveat in source: Infrastructure proximity only; not proof of service quality.
+Source year field: 2025.
+Publisher/licence: confirm with data owner before production redistribution.
+Retrieved into package: 2026-10-17

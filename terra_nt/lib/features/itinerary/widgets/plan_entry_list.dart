@@ -31,7 +31,7 @@ class PlanEntryList extends StatelessWidget {
                   child: Text(
                     entry.time,
                     style: AppType.captionApp.copyWith(
-                      color: AppColors.inkTertiary,
+                      color: AppColors.of(context).inkTertiary,
                       fontFamily: AppFonts.mono,
                     ),
                   ),
@@ -40,7 +40,9 @@ class PlanEntryList extends StatelessWidget {
                 Expanded(
                   child: Text(
                     entry.activity,
-                    style: AppType.bodyApp.copyWith(color: AppColors.inkMuted),
+                    style: AppType.bodyApp.copyWith(
+                      color: AppColors.of(context).inkMuted,
+                    ),
                   ),
                 ),
               ],

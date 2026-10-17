@@ -1,55 +1,40 @@
-# Place documents — the planning server's RAG data
+# Terra NT place knowledge base
 
-Every `*.md` file in this directory except this README is one **place document**: a place
-a traveller might stop at, with the facts the model should use for it. The server reads
-them all at start (restart it after adding one), puts the ones for the request's region
-into the prompt, and uses their coordinates before asking a geocoder. No embeddings, no
-vector store: the text goes into the prompt as written.
+This folder contains the planner's curated, source-linked place records. The server loads each Markdown record at startup, selects records by requested region and includes the selected text in the Gemini prompt. Retrieval is file-based and region-filtered. It does not use embeddings or a vector database.
 
-## Format
+## Coverage
 
-A front-matter block between two `---` lines, then free text:
+The records cover the A2 research corridor, all named stops in the Flutter's two seeded routes, and all named destinations in its seeded Explore POIs. This is a complete place-record set for those app seeds, not an encyclopaedia of every NT destination.
 
-```markdown
----
-name: Litchfield National Park
-aliases:
-  - Litchfield
-  - Litchfield NP
-lat: -13.1830
-lng: 130.6805
-region: top_end
-tags: [Nature, Adventure]
-sources:
-  - https://northernterritory.com/darwin-and-surrounds/destinations/litchfield-national-park
----
-Hours: ...
-Fees: ...
-```
+| Region | Place records |
+|---|---|
+| Top End | Darwin, Darwin Waterfront, Mindil Beach, Litchfield, Kakadu, Katherine, Nitmiluk, Leliyn/Edith Falls, Mataranka, Territory Wildlife Park |
+| Red Centre | Alice Springs, Alice Springs Desert Park, Standley Chasm, Ormiston Gorge, Watarrka/Kings Canyon, Uluṟu-Kata Tjuṯa |
+| Stuart Highway link | Karlu Karlu / Devils Marbles |
 
-| Field | Required | What it is |
-|---|---|---|
-| `name` | yes | The official name a map search finds. The model is told to use such names, and a stop whose name matches this (or an alias), ignoring case, takes this document's coordinates. |
-| `aliases` | no | Other names the model might write for the same place (short name, dual name, old name). |
-| `lat`, `lng` | yes | WGS84 decimal degrees, 4 decimals, inside the NT box (`lat` −26.5…−10.5, `lng` 128.5…138.5). |
-| `region` | yes | `top_end`, `red_centre` or `both`. A `top_end` request gets `top_end` and `both` documents; `full_nt` gets all. |
-| `tags` | no | Any of `Nature`, `Culture`, `Adventure`, `Wildlife`, `Relaxation`, exactly as written. |
-| `sources` | no | Public `http(s)` URLs the facts come from. The model copies them into a stop's `sources`, so they must be real pages. |
+Names and aliases also cover Explore destinations including Ubirr, Kata Tjuṯa and Nitmiluk Gorge. The app resolves those names to the closest parent place record where appropriate.
 
-Lists are written either inline (`tags: [Nature, Adventure]`) or as `- item` lines under
-an empty `key:`. Values may be quoted. Lines starting with `#` inside the block are
-comments.
+## Record format and limits
 
-The body is free text: opening hours, fees and passes, permits, seasonal (wet-season)
-closures, road access (sealed, gravel, 4WD only), and what to do there. Short lines and
-plain sentences work best. State only what a source says; the model is told to mark
-anything else "check before you go".
+Each file starts with YAML-like front matter. `places.py` reads `name`, `aliases`, `lat`, `lng`, `region`, `tags`, `authority`, `checked` and `sources`. Lists use comma-separated values; quote any value that itself contains a comma. Use only these regions: `top_end`, `red_centre`, `both`. Use one to three tags, spelled exactly `Nature`, `Culture`, `Adventure`, `Wildlife`, or `Relaxation`.
 
-## Rules the server enforces
+Coordinates mark a usable map anchor, not the extent of a park. Use the destination's main visitor area or official gazetteer location, retain four decimal places, and do not guess coordinates. The current records preserve the app's existing seeded coordinates; the source register records how to recheck place names and map locations.
 
-- A document with a missing or malformed field stops the server at start with the file
-  name and the reason, so a bad document is found before a demo, not during one.
-- The context block is capped at about 12 000 characters. Whole documents are added in
-  file-name order until the next one would not fit; the server logs which ones were left
-  out. Keep a document under about 1 500 characters.
-- The file name (`litchfield.md`) becomes the stop's `placeId` when the name matched here.
+Keep each source list close to the fact it supports. `checked` is the date a person reviewed the cited pages; it is not a claim that the information remains current. Keep place records concise because the server has a 12,000-character context cap. Whole records that do not fit are omitted, so check the context sizes after editing.
+
+## Data rules
+
+- Prefer NT Government, Parks Australia, BOM, councils, relevant land councils and the destination's own operator for their respective facts.
+- Do not hard-code current closure status, daily forecast, fuel availability, room availability, tour availability or a price that may change. Link the live official check and tell the model to direct travellers to it.
+- Separate durable place description from changing access. A park's open status or a swimming area's status can change at short notice.
+- Do not describe a road as suitable for a vehicle profile unless a current authoritative source supports it. Some park sites need high-clearance 4WD, a permit or both.
+- For waterholes, say to swim only where the current official status and on-site signage allow it. Never infer safety from popularity.
+- For Aboriginal land, cultural sites and permits, name the responsible authority. Do not infer permission, cultural protocols or photography rights. Respect dual names and Traditional Owner requests. Never recommend climbing Uluṟu.
+- If sources conflict or the needed fact is missing, preserve the uncertainty and direct the traveller to the authority. Fluency is not evidence.
+- Use the shared live-source register at [`docs/RAG-SOURCE-REGISTER.md`](../../../docs/RAG-SOURCE-REGISTER.md) for roads, park status, permits, fuel, weather, park passes and refresh responsibilities. It is documentation for the team and is not currently included in the model prompt.
+
+## Known system limits
+
+These place records are not live road, closure, weather, fuel, permit, park-pass or booking feeds. The source authority and review date are provided to Gemini as context, but the app response does not yet retain a source-authority and freshness field for each generated fact. The RAG layer must not present its static records as proof a route is safe or a place is open today.
+
+After changing a record, restart the planner and confirm that every regional context fits under the cap with no record omitted. See `tools/plan_server/README.md` for server setup.

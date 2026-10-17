@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:terra_nt/core/theme/colors.dart';
+import 'package:terra_nt/core/theme/app_theme.dart';
 import 'package:terra_nt/core/theme/metrics.dart';
 import 'package:terra_nt/core/theme/motion.dart';
 import 'package:terra_nt/core/util/tag_colors.dart';
@@ -28,6 +29,7 @@ Widget mapHarness({
   TileProvider? tileProvider,
   EdgeInsets padding = EdgeInsets.zero,
 }) => MaterialApp(
+  theme: AppTheme.dark,
   builder: (context, child) => MediaQuery(
     data: MediaQuery.of(context)
         .copyWith(disableAnimations: disableAnimations, padding: padding),
@@ -160,7 +162,10 @@ void main() {
             );
             expect(pinRect.overlaps(noteRect), isFalse, reason: 'pin ${i + 1}');
             expect(pinRect.top, greaterThanOrEqualTo(topInset - 1e-7));
-            expect(pinRect.bottom, lessThanOrEqualTo(size.height - sheet + 1e-7));
+            expect(
+              pinRect.bottom,
+              lessThanOrEqualTo(size.height - sheet + 1e-7),
+            );
             await tester.tapAt(pinRect.center);
             expect(tapped.last, i);
             // The fitted route line also remains outside the notice.
@@ -197,8 +202,14 @@ void main() {
           loaded.dispose();
           await tester.pumpAndSettle();
           expect(notice, findsNothing);
-          expect(controller.camera.center.latitude, closeTo(initialCamera.center.latitude, 1e-7));
-          expect(controller.camera.center.longitude, closeTo(initialCamera.center.longitude, 1e-7));
+          expect(
+            controller.camera.center.latitude,
+            closeTo(initialCamera.center.latitude, 1e-7),
+          );
+          expect(
+            controller.camera.center.longitude,
+            closeTo(initialCamera.center.longitude, 1e-7),
+          );
           expect(controller.camera.zoom, closeTo(initialCamera.zoom, 1e-7));
           expect(tester.takeException(), isNull);
           await tester.pumpWidget(const SizedBox.shrink());
@@ -258,17 +269,12 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
-  testWidgets('maps keep the default shared cache and CARTO tile options', (
-    tester,
-  ) async {
+  testWidgets('maps default to the keyless OpenFreeMap style', (tester) async {
     await tester.pumpWidget(mapHarness(controller: MapController()));
-    final layer = tester.widget<TileLayer>(find.byType(TileLayer));
-    expect(layer.tileProvider, isA<NetworkTileProvider>());
-    // Null selects the singleton configured before runApp, for this map and
-    // for every caller of TerraMap (including the Welcome warm-up).
-    expect((layer.tileProvider as NetworkTileProvider).cachingProvider, isNull);
-    expect(layer.urlTemplate, cartoDarkTileUrl);
-    expect(layer.additionalOptions, const {'key': cartoApiKey});
+    final map = tester.widget<TerraMap>(find.byType(TerraMap));
+    expect(map.tileProvider, isNull);
+    expect(openFreeMapStyleUrl, 'https://tiles.openfreemap.org/styles/dark');
+    expect(openFreeMapUserAgent, contains('TerraNT/1.0'));
   });
 
   test(
@@ -430,7 +436,8 @@ void main() {
           leaders,
           paints..line(
             p1: controller.camera.latLngToScreenOffset(point),
-            p2: tester.getCenter(find.byKey(const ValueKey('numbered-pin-1'))) -
+            p2:
+                tester.getCenter(find.byKey(const ValueKey('numbered-pin-1'))) -
                 tester.getTopLeft(find.byType(FlutterMap)),
             color: AppColors.primary.withValues(alpha: opacity),
             strokeWidth: AppMetrics.mapPinBorderWidth,
@@ -626,21 +633,24 @@ void main() {
     },
   );
 
-  test('Result fit padding clears the status bar and keeps the sheet reserve', () {
-    final padding = TerraMap.resultFitPaddingFor(900, 48);
+  test(
+    'Result fit padding clears the status bar and keeps the sheet reserve',
+    () {
+      final padding = TerraMap.resultFitPaddingFor(900, 48);
 
-    expect(padding.top, 48 + AppMetrics.mapResultFitPadding);
-    expect(padding.left, AppMetrics.mapResultFitPadding);
-    expect(padding.right, AppMetrics.mapResultFitPadding);
-    expect(padding.bottom, greaterThan(AppMetrics.mapResultFitPadding));
-  });
+      expect(padding.top, 48 + AppMetrics.mapResultFitPadding);
+      expect(padding.left, AppMetrics.mapResultFitPadding);
+      expect(padding.right, AppMetrics.mapResultFitPadding);
+      expect(padding.bottom, greaterThan(AppMetrics.mapResultFitPadding));
+    },
+  );
 
-  testWidgets('feeds the API key into the tile layer', (tester) async {
+  testWidgets('the production map style does not require an API key', (
+    tester,
+  ) async {
     await tester.pumpWidget(mapHarness(controller: MapController()));
-
-    final layer = tester.widget<TileLayer>(find.byType(TileLayer));
-    expect(layer.urlTemplate, cartoDarkTileUrl);
-    expect(layer.additionalOptions['key'], cartoApiKey);
+    expect(openFreeMapStyleUrl, isNot(contains('key=')));
+    expect(openFreeMapAttribution, contains('OpenStreetMap'));
   });
 
   testWidgets('renders the required map attribution', (tester) async {
@@ -648,7 +658,7 @@ void main() {
     await tester.pumpWidget(mapHarness(controller: controller));
 
     expect(find.textContaining('OpenStreetMap'), findsOneWidget);
-    expect(find.textContaining('CARTO'), findsOneWidget);
+    expect(find.textContaining('OpenFreeMap'), findsOneWidget);
   });
 
   testWidgets('disables and enables map interaction', (tester) async {
@@ -677,7 +687,7 @@ void main() {
 
   testWidgets('numbered pins render their supplied number', (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(home: NumberedPinMarker(number: 3)),
+      MaterialApp(theme: AppTheme.dark, home: NumberedPinMarker(number: 3)),
     );
 
     expect(find.text('3'), findsOneWidget);
@@ -690,6 +700,7 @@ void main() {
     final accent = tagColor('Wildlife');
     await tester.pumpWidget(
       MaterialApp(
+        theme: AppTheme.dark,
         home: PoiPinMarker(
           selected: true,
           accent: accent,
@@ -713,7 +724,10 @@ void main() {
   ) async {
     final accent = tagColor('Wildlife');
     await tester.pumpWidget(
-      MaterialApp(home: PoiPinMarker(accent: accent)),
+      MaterialApp(
+        theme: AppTheme.dark,
+        home: PoiPinMarker(accent: accent),
+      ),
     );
 
     final pin = tester.widget<Container>(
@@ -734,7 +748,10 @@ void main() {
     expect(accent, AppColors.inkTertiary);
 
     await tester.pumpWidget(
-      MaterialApp(home: PoiPinMarker(accent: accent)),
+      MaterialApp(
+        theme: AppTheme.dark,
+        home: PoiPinMarker(accent: accent),
+      ),
     );
 
     final dot = tester.widget<Container>(
@@ -904,7 +921,10 @@ void main() {
     );
     expect(attribution.color, AppColors.surface1);
     expect(
-      tester.widget<FlutterMap>(find.byType(FlutterMap)).options.backgroundColor,
+      tester
+          .widget<FlutterMap>(find.byType(FlutterMap))
+          .options
+          .backgroundColor,
       AppColors.surface1,
     );
   });
@@ -930,5 +950,4 @@ void main() {
 
     expect(tester.takeException(), isNull);
   });
-
 }

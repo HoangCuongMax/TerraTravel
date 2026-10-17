@@ -428,7 +428,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(
           find.text(
-            'Google Maps could not be opened. You can copy the destination coordinates instead.',
+            'A directions app could not be opened. You can copy the destination coordinates instead.',
           ),
           findsOneWidget,
         );

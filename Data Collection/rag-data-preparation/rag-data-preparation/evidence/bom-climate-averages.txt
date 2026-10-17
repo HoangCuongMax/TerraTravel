@@ -1,0 +1,6 @@
+BOM published climate averages (Darwin Airport 014015)
+Source page: http://www.bom.gov.au/climate/averages/tables/cw_014015.shtml
+Statistic: 1991–2020 monthly mean max/min temperature (October values used)
+Retrieved from public climate averages tables (not bulk scrape of CDO download API).
+Licence: BOM copyright — attribution required.
+Use: long-term climate context for heat planning only; not a weather forecast.

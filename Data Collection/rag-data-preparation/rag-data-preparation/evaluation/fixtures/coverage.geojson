@@ -1,0 +1,62 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       131.0,
+       -13.0
+      ],
+      [
+       131.2,
+       -13.0
+      ],
+      [
+       131.2,
+       -13.2
+      ],
+      [
+       131.0,
+       -13.2
+      ],
+      [
+       131.0,
+       -13.0
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "schema_version": "1.0",
+    "record_id": "demo-cov-001",
+    "source_ids": [
+     "synthetic-fixture"
+    ],
+    "retrieved_at": "2026-10-17T00:00:00Z",
+    "source_updated_at": null,
+    "valid_from": null,
+    "valid_until": null,
+    "review_due_at": null,
+    "verification_status": "unverified",
+    "data_mode": "synthetic_demo",
+    "evidence_refs": [],
+    "carrier": "Synthetic Carrier A",
+    "network_brand": null,
+    "technology": "4G",
+    "coverage_class": "predicted_available",
+    "basis": "operator_prediction",
+    "model_date": "2026-09",
+    "environment": "outdoor",
+    "resolution_m": null,
+    "download_mbps": null,
+    "upload_mbps": null,
+    "measurement_at": null,
+    "limitations": "Synthetic polygon for tests only."
+   }
+  }
+ ]
+}

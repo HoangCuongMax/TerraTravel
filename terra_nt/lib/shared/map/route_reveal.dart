@@ -9,13 +9,18 @@ import '../../core/util/route_sampler.dart';
 /// Clips a route by distance, so long legs draw continuously rather than
 /// waiting for the next stop. Pins share the same distance-based timeline.
 class RouteRevealGeometry {
-  RouteRevealGeometry(this.points)
+  RouteRevealGeometry(this.points, {List<LatLng>? pinPoints})
     : distances = cumulativeDistances([
         for (final point in points) [point.latitude, point.longitude],
-      ]);
+      ]) {
+    pinDistances = [
+      for (final pin in pinPoints ?? points) _distanceAlong(points, pin),
+    ];
+  }
 
   final List<LatLng> points;
   final List<double> distances;
+  late final List<double> pinDistances;
 
   List<LatLng> pointsAt(double progress) {
     if (points.isEmpty || progress <= 0) return const [];
@@ -48,12 +53,13 @@ class RouteRevealGeometry {
   double pinOpacity(int index, double progress) {
     if (index == 0 || progress >= 1) return 1;
     final total = distances.last;
+    if (index >= pinDistances.length) return 0;
     final arrival = total == 0
-        ? index / (points.length - 1)
-        : distances[index] / total;
+        ? index / (pinDistances.length - 1)
+        : pinDistances[index] / total;
     final previousArrival = total == 0
-        ? (index - 1) / (points.length - 1)
-        : distances[index - 1] / total;
+        ? (index - 1) / (pinDistances.length - 1)
+        : pinDistances[index - 1] / total;
     final fadeSpan =
         AppMotion.resultPinReveal.inMicroseconds /
         AppMotion.resultRouteReveal.inMicroseconds;
@@ -62,6 +68,35 @@ class RouteRevealGeometry {
     final start = math.max(previousArrival, arrival - fadeSpan);
     if (arrival == start) return progress >= arrival ? 1 : 0;
     return ((progress - start) / (arrival - start)).clamp(0.0, 1.0);
+  }
+
+  double _distanceAlong(List<LatLng> line, LatLng pin) {
+    if (line.length < 2) return 0;
+    final latitudeScale = math.cos(pin.latitude * math.pi / 180);
+    var closestSquared = double.infinity;
+    var result = 0.0;
+    for (var index = 1; index < line.length; index++) {
+      final start = line[index - 1];
+      final end = line[index];
+      final dx = (end.longitude - start.longitude) * latitudeScale;
+      final dy = end.latitude - start.latitude;
+      final px = (pin.longitude - start.longitude) * latitudeScale;
+      final py = pin.latitude - start.latitude;
+      final lengthSquared = dx * dx + dy * dy;
+      final fraction = lengthSquared == 0
+          ? 0.0
+          : ((px * dx + py * dy) / lengthSquared).clamp(0.0, 1.0).toDouble();
+      final offsetX = px - dx * fraction;
+      final offsetY = py - dy * fraction;
+      final squared = offsetX * offsetX + offsetY * offsetY;
+      if (squared < closestSquared) {
+        closestSquared = squared;
+        result =
+            distances[index - 1] +
+            (distances[index] - distances[index - 1]) * fraction;
+      }
+    }
+    return result;
   }
 }
 

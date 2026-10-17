@@ -151,6 +151,9 @@ void main() {
     (tester) async {
       await pumpProfile(tester);
 
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('delete-account-link')),
+      );
       await tester.tap(find.byKey(const ValueKey('delete-account-link')));
       await tester.pump();
 
@@ -169,6 +172,9 @@ void main() {
       expect(find.byType(BottomSheet), findsNothing);
       expect(find.byKey(const ValueKey('screen-login')), findsNothing);
 
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('cancel-delete-account')),
+      );
       await tester.tap(find.byKey(const ValueKey('cancel-delete-account')));
       await tester.pump();
       expect(find.byKey(const ValueKey('delete-account-link')), findsOneWidget);
@@ -182,8 +188,14 @@ void main() {
     final container = await pumpProfile(tester, store: store);
     await container.read(savedRoutesNotifierProvider.notifier).load();
 
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('delete-account-link')),
+    );
     await tester.tap(find.byKey(const ValueKey('delete-account-link')));
     await tester.pump();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('confirm-delete-account')),
+    );
     await tester.tap(find.byKey(const ValueKey('confirm-delete-account')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
@@ -240,8 +252,14 @@ void main() {
     });
     final deleteContainer = await pumpProfile(tester, store: deleteStore);
     await deleteContainer.read(savedRoutesNotifierProvider.notifier).load();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('delete-account-link')),
+    );
     await tester.tap(find.byKey(const ValueKey('delete-account-link')));
     await tester.pump();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('confirm-delete-account')),
+    );
     await tester.tap(find.byKey(const ValueKey('confirm-delete-account')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
@@ -293,8 +311,14 @@ void main() {
     );
     await container.read(savedRoutesNotifierProvider.notifier).load();
 
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('delete-account-link')),
+    );
     await tester.tap(find.byKey(const ValueKey('delete-account-link')));
     await tester.pump();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('confirm-delete-account')),
+    );
     await tester.tap(find.byKey(const ValueKey('confirm-delete-account')));
     await tester.pump();
     await tester.pump();
@@ -336,8 +360,14 @@ void main() {
         ..nextFailure = AuthFailure.network,
     );
 
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('delete-account-link')),
+    );
     await tester.tap(find.byKey(const ValueKey('delete-account-link')));
     await tester.pump();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('confirm-delete-account')),
+    );
     await tester.tap(find.byKey(const ValueKey('confirm-delete-account')));
     await tester.pump();
     await tester.pump();
@@ -346,10 +376,16 @@ void main() {
       findsOneWidget,
     );
 
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('cancel-delete-account')),
+    );
     await tester.tap(find.byKey(const ValueKey('cancel-delete-account')));
     await tester.pump();
     expect(container.read(profileNotifierProvider).deleteAccountError, isNull);
 
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('delete-account-link')),
+    );
     await tester.tap(find.byKey(const ValueKey('delete-account-link')));
     await tester.pump();
     expect(
@@ -391,6 +427,9 @@ void main() {
     await pumpProfile(tester);
     expect(tester.takeException(), isNull);
 
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('delete-account-link')),
+    );
     await tester.tap(find.byKey(const ValueKey('delete-account-link')));
     await tester.pump();
     expect(tester.takeException(), isNull);

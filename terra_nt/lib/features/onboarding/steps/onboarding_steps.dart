@@ -239,10 +239,14 @@ class _RegionCard extends StatelessWidget {
           curve: AppMotion.easeOut,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: selected ? AppColors.surface2 : AppColors.surface1,
+            color: selected
+                ? AppColors.of(context).surface2
+                : AppColors.of(context).surface1,
             borderRadius: BorderRadius.circular(AppRadius.card),
             border: Border.all(
-              color: selected ? AppColors.primary : AppColors.hairline,
+              color: selected
+                  ? AppColors.of(context).primary
+                  : AppColors.of(context).hairline,
               width: AppElevation.hairlineWidth,
             ),
           ),
@@ -266,14 +270,14 @@ class _RegionCard extends StatelessWidget {
                           Text(
                             option.label,
                             style: AppType.titleApp.copyWith(
-                              color: AppColors.ink,
+                              color: AppColors.of(context).ink,
                             ),
                           ),
                           const SizedBox(height: AppSpacing.xxs),
                           Text(
                             option.description!,
                             style: AppType.bodyApp.copyWith(
-                              color: AppColors.inkMuted,
+                              color: AppColors.of(context).inkMuted,
                             ),
                           ),
                         ],
@@ -282,9 +286,9 @@ class _RegionCard extends StatelessWidget {
                     const SizedBox(width: AppSpacing.sm),
                     Opacity(
                       opacity: selected ? 1 : 0,
-                      child: const AppIcon(
+                      child: AppIcon(
                         LucideIcons.check,
-                        color: AppColors.primary,
+                        color: AppColors.of(context).primary,
                       ),
                     ),
                   ],
@@ -411,10 +415,10 @@ class SliderStep extends StatelessWidget {
             vertical: AppSpacing.lg,
           ),
           decoration: BoxDecoration(
-            color: AppColors.surface2,
+            color: AppColors.of(context).surface2,
             borderRadius: BorderRadius.circular(AppRadius.card),
             border: Border.all(
-              color: AppColors.hairline,
+              color: AppColors.of(context).hairline,
               width: AppElevation.hairlineWidth,
             ),
           ),
@@ -425,7 +429,7 @@ class SliderStep extends StatelessWidget {
                 key: const ValueKey('onboarding-slider-readout'),
                 textAlign: TextAlign.center,
                 style: (readout == null ? AppType.displayMd : AppType.body)
-                    .copyWith(color: AppColors.ink),
+                    .copyWith(color: AppColors.of(context).ink),
               ),
               Slider(
                 key: const ValueKey('onboarding-slider'),
@@ -447,7 +451,7 @@ class SliderStep extends StatelessWidget {
                     child: Text(
                       startLabel,
                       style: AppType.caption.copyWith(
-                        color: AppColors.inkMuted,
+                        color: AppColors.of(context).inkMuted,
                       ),
                     ),
                   ),
@@ -457,7 +461,7 @@ class SliderStep extends StatelessWidget {
                       endLabel,
                       textAlign: TextAlign.end,
                       style: AppType.caption.copyWith(
-                        color: AppColors.inkMuted,
+                        color: AppColors.of(context).inkMuted,
                       ),
                     ),
                   ),
@@ -535,15 +539,18 @@ class _LocationPicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppType.titleApp.copyWith(color: AppColors.ink)),
+        Text(
+          label,
+          style: AppType.titleApp.copyWith(color: AppColors.of(context).ink),
+        ),
         const SizedBox(height: AppSpacing.xs),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: AppMetrics.padRowX),
           decoration: BoxDecoration(
-            color: AppColors.surface2,
+            color: AppColors.of(context).surface2,
             borderRadius: BorderRadius.circular(AppRadius.card),
             border: Border.all(
-              color: AppColors.hairlineStrong,
+              color: AppColors.of(context).hairlineStrong,
               width: AppElevation.hairlineWidth,
             ),
           ),
@@ -551,15 +558,17 @@ class _LocationPicker extends StatelessWidget {
             value: selected,
             isExpanded: true,
             itemHeight: null,
-            dropdownColor: AppColors.surface2,
+            dropdownColor: AppColors.of(context).surface2,
             borderRadius: BorderRadius.circular(AppRadius.card),
             underline: const SizedBox.shrink(),
             icon: const AppIcon(LucideIcons.chevron_down),
             hint: Text(
               hint,
-              style: AppType.bodyApp.copyWith(color: AppColors.inkMuted),
+              style: AppType.bodyApp.copyWith(
+                color: AppColors.of(context).inkMuted,
+              ),
             ),
-            style: AppType.bodyApp.copyWith(color: AppColors.ink),
+            style: AppType.bodyApp.copyWith(color: AppColors.of(context).ink),
             items: [
               for (final location in locations)
                 DropdownMenuItem(
@@ -633,12 +642,17 @@ class _StepColumn extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(question, style: AppType.cardTitle.copyWith(color: AppColors.ink)),
+      Text(
+        question,
+        style: AppType.cardTitle.copyWith(color: AppColors.of(context).ink),
+      ),
       if (subtitle != null) ...[
         const SizedBox(height: AppSpacing.xs),
         Text(
           subtitle!,
-          style: AppType.caption.copyWith(color: AppColors.inkMuted),
+          style: AppType.caption.copyWith(
+            color: AppColors.of(context).inkMuted,
+          ),
         ),
       ],
       SizedBox(height: subtitle == null ? AppSpacing.lg : AppSpacing.md),
@@ -686,12 +700,16 @@ class _OptionRow extends StatelessWidget {
         vertical: AppMetrics.padRowY,
       ),
       decoration: BoxDecoration(
-        color: selected ? AppColors.surface2 : AppColors.surface1,
+        color: selected
+            ? AppColors.of(context).surface2
+            : AppColors.of(context).surface1,
         borderRadius: BorderRadius.circular(AppRadius.card),
         // D18: the row is the choice — plain label, the primary edge and a check
         // mark it selected (a bordered chip inside a bordered row read as clutter).
         border: Border.all(
-          color: selected ? AppColors.primary : AppColors.hairline,
+          color: selected
+              ? AppColors.of(context).primary
+              : AppColors.of(context).hairline,
           width: AppElevation.hairlineWidth,
         ),
       ),
@@ -699,14 +717,20 @@ class _OptionRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (icon != null) ...[
-            AppIcon(icon!, size: AppMetrics.iconXl, color: AppColors.inkMuted),
+            AppIcon(
+              icon!,
+              size: AppMetrics.iconXl,
+              color: AppColors.of(context).inkMuted,
+            ),
             const SizedBox(width: AppSpacing.sm),
           ],
           Expanded(
             child: Text(
               label,
               style: AppType.titleApp.copyWith(
-                color: selected ? AppColors.ink : AppColors.inkSubtle,
+                color: selected
+                    ? AppColors.of(context).ink
+                    : AppColors.of(context).inkSubtle,
               ),
             ),
           ),
@@ -716,7 +740,10 @@ class _OptionRow extends StatelessWidget {
             duration: MediaQuery.disableAnimationsOf(context)
                 ? Duration.zero
                 : AppMotion.fast,
-            child: const AppIcon(LucideIcons.check, color: AppColors.primary),
+            child: AppIcon(
+              LucideIcons.check,
+              color: AppColors.of(context).primary,
+            ),
           ),
         ],
       ),
@@ -748,10 +775,14 @@ class _DetailCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: selected ? AppColors.surface2 : AppColors.surface1,
+        color: selected
+            ? AppColors.of(context).surface2
+            : AppColors.of(context).surface1,
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(
-          color: selected ? AppColors.primary : AppColors.hairline,
+          color: selected
+              ? AppColors.of(context).primary
+              : AppColors.of(context).hairline,
           width: AppElevation.hairlineWidth,
         ),
       ),
@@ -764,12 +795,16 @@ class _DetailCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppType.titleApp.copyWith(color: AppColors.ink),
+                  style: AppType.titleApp.copyWith(
+                    color: AppColors.of(context).ink,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.xxs),
                 Text(
                   description,
-                  style: AppType.bodyApp.copyWith(color: AppColors.inkSubtle),
+                  style: AppType.bodyApp.copyWith(
+                    color: AppColors.of(context).inkSubtle,
+                  ),
                 ),
               ],
             ),
@@ -779,9 +814,12 @@ class _DetailCard extends StatelessWidget {
             duration: MediaQuery.disableAnimationsOf(context)
                 ? Duration.zero
                 : AppMotion.fast,
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.only(left: AppSpacing.sm),
-              child: AppIcon(LucideIcons.check, color: AppColors.primary),
+              child: AppIcon(
+                LucideIcons.check,
+                color: AppColors.of(context).primary,
+              ),
             ),
           ),
         ],

@@ -5,7 +5,6 @@ import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/colors.dart';
 import '../../core/theme/elevation.dart';
@@ -14,6 +13,7 @@ import '../../core/theme/motion.dart';
 import '../../core/theme/radius.dart';
 import '../../core/theme/spacing.dart';
 import '../../core/theme/typography.dart';
+import '../../core/util/maps_launcher.dart';
 import '../../core/util/maps_url.dart';
 import '../../core/util/poi_filter.dart';
 import '../../core/util/tag_colors.dart';
@@ -34,7 +34,7 @@ class ExploreScreen extends ConsumerStatefulWidget {
   const ExploreScreen({
     super.key,
     this.mapController,
-    this.launcher = launchUrl,
+    this.launcher = launchMapExternally,
   });
 
   /// Test injection; the screen owns the controller in normal app use.
@@ -193,7 +193,9 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen>
         detailedPlan: const [],
       ),
     );
-    if (url != null) await widget.launcher(Uri.parse(url));
+    if (url != null) {
+      await launchDrivingDirections(Uri.parse(url), launcher: widget.launcher);
+    }
   }
 
   @override
@@ -216,7 +218,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen>
       },
       child: Scaffold(
         key: const ValueKey('explore-screen'),
-        backgroundColor: AppColors.surface1,
+        backgroundColor: AppColors.of(context).surface1,
         body: LayoutBuilder(
           builder: (context, constraints) {
             final viewport = constraints.biggest;
@@ -279,7 +281,10 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen>
                             child: PoiPinMarker(
                               placeName: poi.name,
                               selected: poi.id == selectedPoi?.id,
-                              accent: tagColor(poi.tag),
+                              accent: tagColor(
+                                poi.tag,
+                                light: AppColors.of(context).isLight,
+                              ),
                               tag: poi.tag,
                             ),
                           ),
@@ -334,16 +339,16 @@ class _SearchPill extends StatelessWidget {
     onTap: focusNode.requestFocus,
     child: ConstrainedBox(
       constraints: const BoxConstraints(minHeight: AppMetrics.minTouchTarget),
-      child: Align(alignment: Alignment.topCenter, child: _pill()),
+      child: Align(alignment: Alignment.topCenter, child: _pill(context)),
     ),
   );
 
-  Widget _pill() => Container(
+  Widget _pill(BuildContext context) => Container(
     key: const ValueKey('explore-search-pill'),
     decoration: BoxDecoration(
-      color: AppColors.surface1,
+      color: AppColors.of(context).surface1,
       border: Border.all(
-        color: AppColors.hairline,
+        color: AppColors.of(context).hairline,
         width: AppElevation.hairlineWidth,
       ),
       borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -355,10 +360,10 @@ class _SearchPill extends StatelessWidget {
     ),
     child: Row(
       children: [
-        const AppIcon(
+        AppIcon(
           LucideIcons.search,
           size: AppMetrics.iconMd,
-          color: AppColors.inkTertiary,
+          color: AppColors.of(context).inkTertiary,
         ),
         const SizedBox(width: AppMetrics.exploreSearchGap),
         Expanded(
@@ -367,10 +372,12 @@ class _SearchPill extends StatelessWidget {
             controller: controller,
             focusNode: focusNode,
             onChanged: onChanged,
-            style: AppType.bodySm.copyWith(color: AppColors.ink),
+            style: AppType.bodySm.copyWith(color: AppColors.of(context).ink),
             decoration: InputDecoration(
               hintText: 'Search the Territory',
-              hintStyle: AppType.bodySm.copyWith(color: AppColors.inkTertiary),
+              hintStyle: AppType.bodySm.copyWith(
+                color: AppColors.of(context).inkTertiary,
+              ),
               border: InputBorder.none,
               isDense: true,
               contentPadding: EdgeInsets.zero,
@@ -392,16 +399,18 @@ class _EmptySearchState extends StatelessWidget {
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const AppIcon(
+        AppIcon(
           LucideIcons.search_x,
           key: ValueKey('explore-empty-search-icon'),
           size: AppMetrics.iconXxl,
-          color: AppColors.inkTertiary,
+          color: AppColors.of(context).inkTertiary,
         ),
         const SizedBox(height: AppSpacing.sm),
         Text(
           'No places match your search.',
-          style: AppType.bodySm.copyWith(color: AppColors.inkTertiary),
+          style: AppType.bodySm.copyWith(
+            color: AppColors.of(context).inkTertiary,
+          ),
         ),
         TextButton(
           key: const ValueKey('explore-clear-search'),
@@ -415,9 +424,9 @@ class _EmptySearchState extends StatelessWidget {
           child: Text(
             'Clear search',
             style: AppType.buttonApp.copyWith(
-              color: AppColors.inkSubtle,
+              color: AppColors.of(context).inkSubtle,
               decoration: TextDecoration.underline,
-              decorationColor: AppColors.inkSubtle,
+              decorationColor: AppColors.of(context).inkSubtle,
             ),
           ),
         ),
@@ -540,10 +549,10 @@ class _PoiInfoCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     key: const ValueKey('explore-poi-card'),
     decoration: BoxDecoration(
-      color: AppColors.surface1,
+      color: AppColors.of(context).surface1,
       borderRadius: BorderRadius.circular(AppRadius.card),
       border: Border.all(
-        color: AppColors.hairlineStrong,
+        color: AppColors.of(context).hairlineStrong,
         width: AppElevation.hairlineWidth,
       ),
       boxShadow: AppElevation.shadowOverlay,
@@ -590,7 +599,7 @@ class _PoiInfoCard extends StatelessWidget {
                           child: Text(
                             poi.name,
                             style: AppType.body.copyWith(
-                              color: AppColors.ink,
+                              color: AppColors.of(context).ink,
                               fontWeight: AppWeights.semibold,
                             ),
                           ),
@@ -602,10 +611,10 @@ class _PoiInfoCard extends StatelessWidget {
                           crossAxisAlignment: WrapCrossAlignment.center,
                           runSpacing: AppMetrics.exploreCardTextGap,
                           children: [
-                            const AppIcon(
+                            AppIcon(
                               LucideIcons.star,
                               size: AppMetrics.iconXxs,
-                              color: AppColors.inkSubtle,
+                              color: AppColors.of(context).inkSubtle,
                             ),
                             const SizedBox(
                               width: AppMetrics.exploreCardMetaGap,
@@ -613,7 +622,7 @@ class _PoiInfoCard extends StatelessWidget {
                             Text(
                               poi.rating,
                               style: AppType.caption.copyWith(
-                                color: AppColors.inkSubtle,
+                                color: AppColors.of(context).inkSubtle,
                               ),
                             ),
                             const SizedBox(
@@ -622,22 +631,28 @@ class _PoiInfoCard extends StatelessWidget {
                             Container(
                               width: AppMetrics.exploreMetaSeparatorSize,
                               height: AppMetrics.exploreMetaSeparatorSize,
-                              decoration: const BoxDecoration(
-                                color: AppColors.hairlineStrong,
+                              decoration: BoxDecoration(
+                                color: AppColors.of(context).hairlineStrong,
                                 shape: BoxShape.circle,
                               ),
                             ),
                             const SizedBox(
                               width: AppMetrics.exploreCardMetaGap,
                             ),
-                            TagDot(color: tagColor(poi.tag), label: poi.tag),
+                            TagDot(
+                              color: tagColor(
+                                poi.tag,
+                                light: AppColors.of(context).isLight,
+                              ),
+                              label: poi.tag,
+                            ),
                           ],
                         ),
                         const SizedBox(height: AppMetrics.exploreCardTextGap),
                         Text(
                           poi.description,
                           style: AppType.bodySm.copyWith(
-                            color: AppColors.inkMuted,
+                            color: AppColors.of(context).inkMuted,
                             fontSize: AppMetrics.exploreDescriptionFontSize,
                             height: AppMetrics.exploreDescriptionHeight,
                           ),
@@ -646,7 +661,7 @@ class _PoiInfoCard extends StatelessWidget {
                           key: const ValueKey('explore-poi-navigate'),
                           onPressed: onNavigate,
                           style: TextButton.styleFrom(
-                            foregroundColor: AppColors.ink,
+                            foregroundColor: AppColors.of(context).ink,
                             minimumSize: const Size(
                               AppMetrics.minTouchTarget,
                               AppMetrics.minTouchTarget,
@@ -654,10 +669,10 @@ class _PoiInfoCard extends StatelessWidget {
                             padding: EdgeInsets.zero,
                             alignment: Alignment.centerLeft,
                           ),
-                          icon: const AppIcon(
+                          icon: AppIcon(
                             LucideIcons.navigation,
                             size: AppMetrics.iconSm,
-                            color: AppColors.ink,
+                            color: AppColors.of(context).ink,
                           ),
                           label: Text('Navigate', style: AppType.buttonApp),
                         ),
@@ -699,16 +714,16 @@ class _PoiInfoCard extends StatelessWidget {
                         key: const ValueKey('explore-poi-close'),
                         onPressed: onClose,
                         padding: EdgeInsets.zero,
-                        icon: const AppIcon(
+                        icon: AppIcon(
                           LucideIcons.x,
                           size: AppMetrics.iconXs,
-                          color: AppColors.inkSubtle,
+                          color: AppColors.of(context).inkSubtle,
                         ),
                         style: IconButton.styleFrom(
-                          backgroundColor: AppColors.surface2,
-                          shape: const CircleBorder(
+                          backgroundColor: AppColors.of(context).surface2,
+                          shape: CircleBorder(
                             side: BorderSide(
-                              color: AppColors.hairline,
+                              color: AppColors.of(context).hairline,
                               width: AppElevation.hairlineWidth,
                             ),
                           ),

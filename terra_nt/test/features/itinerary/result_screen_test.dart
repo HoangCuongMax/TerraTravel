@@ -196,6 +196,30 @@ Future<void> expandSheet(WidgetTester tester) async {
 }
 
 void main() {
+  testWidgets('Trip insights opens from Result and Back preserves the route', (
+    tester,
+  ) async {
+    await pumpAtHeight(tester, 900);
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('result-trip-insights')),
+    );
+    await tester.tap(find.byKey(const ValueKey('result-trip-insights')));
+    await tester.pumpAndSettle();
+    expect(find.text('Trip insights'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('result-trip-insights')), findsOneWidget);
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(ResultScreen)),
+    );
+    expect(
+      container.read(itineraryNotifierProvider).visibleStops,
+      hasLength(3),
+    );
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     '48px sheet handle expands and collapses through named semantic actions',
     (tester) async {
@@ -580,15 +604,16 @@ void main() {
     expect(tester.getTopLeft(map), tester.getTopLeft(resultScaffoldBody()));
   });
 
-  testWidgets('after setItinerary the map and sheet render, not the empty state', (
-    tester,
-  ) async {
-    await pumpResult(tester);
+  testWidgets(
+    'after setItinerary the map and sheet render, not the empty state',
+    (tester) async {
+      await pumpResult(tester);
 
-    expect(find.byKey(const ValueKey('result-map')), findsOneWidget);
-    expect(find.byKey(const ValueKey('result-sheet')), findsOneWidget);
-    expect(find.text('No route yet'), findsNothing);
-  });
+      expect(find.byKey(const ValueKey('result-map')), findsOneWidget);
+      expect(find.byKey(const ValueKey('result-sheet')), findsOneWidget);
+      expect(find.text('No route yet'), findsNothing);
+    },
+  );
 
   test('hasRoute goes from false to true after openSavedRoute', () {
     final container = ProviderContainer();
@@ -961,7 +986,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(
           find.text(
-            'Google Maps could not be opened. You can copy the destination coordinates instead.',
+            'A directions app could not be opened. You can copy the destination coordinates instead.',
           ),
           findsOneWidget,
         );
@@ -1082,7 +1107,12 @@ void main() {
     addTearDown(tester.view.reset);
     await pumpResult(tester);
 
-    final fitPadding = tester.widget<TerraMap>(find.byType(TerraMap)).fitPadding;
-    expect(fitPadding.top, greaterThanOrEqualTo(48 + AppMetrics.mapResultFitPadding));
+    final fitPadding = tester
+        .widget<TerraMap>(find.byType(TerraMap))
+        .fitPadding;
+    expect(
+      fitPadding.top,
+      greaterThanOrEqualTo(48 + AppMetrics.mapResultFitPadding),
+    );
   });
 }

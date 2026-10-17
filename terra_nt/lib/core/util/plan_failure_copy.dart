@@ -28,8 +28,8 @@ class PlanFailureCopy {
 const _tryAgain = PlanFailureCopy(
   title: "Couldn't reach the planner.",
   body:
-      'Try again when you have signal, or use an offline suggestion '
-      'from places on this device.',
+      'Check your connection and try again. The planning service may be unavailable. '
+      'You can also use an offline suggestion from this device.',
   primary: PlanFailureAction.tryAgain,
   showBack: true,
   showOffline: true,

@@ -22,13 +22,18 @@ class AppPillBadge extends StatelessWidget {
         vertical: AppMetrics.padBadgeY,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surface2,
+        color: AppColors.of(context).surface2,
         borderRadius: BorderRadius.circular(AppRadius.pill),
-        border: Border.all(color: AppColors.hairline, width: AppElevation.hairlineWidth),
+        border: Border.all(
+          color: AppColors.of(context).hairline,
+          width: AppElevation.hairlineWidth,
+        ),
       ),
       child: Text(
         label,
-        style: AppType.captionApp.copyWith(color: color ?? AppColors.inkTertiary),
+        style: AppType.captionApp.copyWith(
+          color: color ?? AppColors.of(context).inkTertiary,
+        ),
       ),
     );
   }

@@ -16,9 +16,38 @@ Python 3.13, from the repo root:
 `--no-auth` the server runs on the standard library alone. The default backend also needs
 the Codex CLI on `PATH`, logged in once with `codex login`.
 
+### macOS setup
+
+For an iPhone demo on macOS, install Python 3.13 and Cloudflare Tunnel, then create an
+isolated environment for the server dependencies:
+
+    brew install python@3.13 cloudflared
+    python3.13 -m venv tools/plan_server/.venv
+    tools/plan_server/.venv/bin/python -m pip install -r tools/plan_server/requirements.txt
+
+The `.venv/` and `.env` files are local and gitignored. Put server API credentials in
+`tools/plan_server/.env` (for Gemini, `GEMINI_API_KEY=...`; optionally
+`GEMINI_MODEL=gemini-3.8-flash`). The server loads this file at startup without
+overriding environment variables already set by the shell. Start it with
+`tools/plan_server/.venv/bin/python tools/plan_server/server.py ...`.
+
+## Connected demo on macOS
+
+Start both the authenticated planner and its temporary HTTPS tunnel with:
+
+    tools/plan_server/.venv/bin/python tools/plan_server/start_connected.py
+
+This uses the existing Gemini configuration, verifies that login is required locally
+and through the tunnel, and updates only PLAN_API_URL in terra_nt/.env. Keep the
+window open. Rebuild the app with --dart-define-from-file=.env after each restart,
+because a temporary tunnel gets a new address. Ctrl+C stops this launcher's children.
+If a planner is already using port 8787, keep its current tunnel alive or stop that
+specific process before using the launcher. The launcher does not stop existing processes.
+This is a development/demo connection, not permanent hosted deployment.
+
 ## Run
 
-    python tools/plan_server/server.py --port 8787 [--backend codex|openrouter|fixture] [--no-auth]
+    python tools/plan_server/server.py --port 8787 [--backend codex|openrouter|gemini|fixture] [--no-auth]
 
 | Option | Default | Meaning |
 |---|---|---|
@@ -40,6 +69,7 @@ For a rehearsal with no model and no login:
 |---|---|---|
 | `codex` | `codex exec` on the operator's Codex subscription, prompt on stdin, `--output-schema schema.json`. 18–30 s measured. After 50 s the call is killed and the app gets `504`. | `PLAN_MODEL` (default `gpt-6-luna`), `PLAN_EFFORT` (default `low`) |
 | `openrouter` | `POST https://openrouter.ai/api/v1/chat/completions` with strict `json_schema` output. The route for later; unit-tested, not yet run live. | `OPENROUTER_API_KEY` (required), `PLAN_MODEL` (default `openai/gpt-6-luna`) |
+| `gemini` | Google's `generateContent` REST API with JSON response schema matching `schema.json`. | `GEMINI_API_KEY` (required), `GEMINI_MODEL` (default `gemini-3.8-flash`) |
 | `fixture` | `fixture_output.json`, instantly: a four-stop Top End plan. The request's answers are ignored. | none |
 
 The `codex` backend runs with `CODEX_HOME=tools/plan_server/.codex-home/`. On start the
@@ -76,10 +106,11 @@ than two left is `422 cannot_plan`. `photoUrl` is always `null` (`docs/PRD.md` P
    Debug builds only: release builds refuse plain HTTP. Windows asks once whether Python
    may accept connections; allow it on private networks.
 3. **Any phone, including an iPhone:** run
-   `cloudflared tunnel --url http://localhost:8787` (install with
-   `winget install --id Cloudflare.cloudflared`) and set `PLAN_API_URL` to the
+   `cloudflared tunnel --url http://localhost:8787` (macOS: `brew install cloudflared`;
+   Windows: `winget install --id Cloudflare.cloudflared`) and set `PLAN_API_URL` to the
    `https://….trycloudflare.com` URL it prints. The URL changes every time the tunnel
-   starts. Keep auth on: the tunnel is public.
+   starts. Keep auth on: the tunnel is public. Do not expose a `--no-auth` server through
+   the tunnel.
 
 ## Local state
 

@@ -159,7 +159,7 @@ class OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         onBack();
       },
       child: Scaffold(
-        backgroundColor: AppColors.canvas,
+        backgroundColor: AppColors.of(context).canvas,
         // The bundled terrain stays offline. The route shares the road's step
         // percentage, duration and curve; the opaque question card stays legible.
         body: Stack(
@@ -215,10 +215,10 @@ class OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           vertical: AppMetrics.onboardingCardPaddingY,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.surface1,
+                          color: AppColors.of(context).surface1,
                           borderRadius: BorderRadius.circular(AppRadius.card),
                           border: Border.all(
-                            color: AppColors.hairlineStrong,
+                            color: AppColors.of(context).hairlineStrong,
                             width: AppElevation.hairlineWidth,
                           ),
                           boxShadow: AppElevation.shadowOverlay,
@@ -430,10 +430,10 @@ class _OnboardingTopBar extends StatelessWidget {
                 width: AppMetrics.onboardingBackButtonSize,
                 height: AppMetrics.onboardingBackButtonSize,
                 decoration: BoxDecoration(
-                  color: AppColors.onboardingChrome,
+                  color: AppColors.of(context).onboardingChrome,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: AppColors.hairlineStrong,
+                    color: AppColors.of(context).hairlineStrong,
                     width: AppElevation.hairlineWidth,
                   ),
                 ),
@@ -458,7 +458,9 @@ class _OnboardingTopBar extends StatelessWidget {
               'Step ${onboardingStepNumber(step, answers)} of '
               '${visibleOnboardingStepCount(answers)}',
               key: const ValueKey('onboarding-counter'),
-              style: AppType.captionApp.copyWith(color: AppColors.inkSubtle),
+              style: AppType.captionApp.copyWith(
+                color: AppColors.of(context).inkSubtle,
+              ),
             ),
             const SizedBox(height: AppMetrics.onboardingProgressGap),
             ProgressDrive(percent: progressPercent(step, answers)),
@@ -478,6 +480,6 @@ class _OnboardingStepStub extends StatelessWidget {
   Widget build(BuildContext context) => Text(
     'Onboarding step ${step + 1}',
     key: const ValueKey('onboarding-step-stub'),
-    style: AppType.cardTitle.copyWith(color: AppColors.ink),
+    style: AppType.cardTitle.copyWith(color: AppColors.of(context).ink),
   );
 }

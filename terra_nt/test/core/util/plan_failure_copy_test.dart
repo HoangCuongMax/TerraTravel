@@ -27,8 +27,8 @@ void main() {
       expect(copy.title, "Couldn't reach the planner.");
       expect(
         copy.body,
-        'Try again when you have signal, or use an offline suggestion '
-        'from places on this device.',
+        'Check your connection and try again. The planning service may be unavailable. '
+        'You can also use an offline suggestion from this device.',
       );
       expect(copy.visual, PlanFailureVisual.noSignal);
     }

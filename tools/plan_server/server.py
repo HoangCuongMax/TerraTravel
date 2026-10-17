@@ -11,6 +11,7 @@ the app reaches the server.
 
 import argparse
 import json
+import os
 import re
 import sys
 import threading
@@ -24,11 +25,13 @@ from urllib.parse import urlsplit
 
 import backends
 import places
+import insights
 
 HERE = Path(__file__).resolve().parent
 PROMPTS_DIR = HERE / "prompts"
 RAG_DIR = HERE / "rag"
 GEOCODE_CACHE = HERE / ".cache" / "geocode.json"
+LOCAL_ENV = HERE / ".env"
 
 FIREBASE_PROJECT = "terra-nt-cdu"
 CACHE_TTL_SECONDS = 30 * 60  # §4.3 asks for at least 10 minutes
@@ -215,6 +218,8 @@ class Planner:
         self.generate = generate
         self.geocoder = geocoder
         self.docs = docs
+        insight_path = os.environ.get("TRAVEL_INSIGHTS_FILE", "").strip()
+        self.insight_records = insights.load(insight_path) if insight_path else []
         self.verify_token = verify_token  # None means --no-auth
         self.system_template = (PROMPTS_DIR / "system.txt").read_text(encoding="utf-8").strip()
         self.user_template = (PROMPTS_DIR / "user.txt").read_text(encoding="utf-8").strip()
@@ -225,9 +230,12 @@ class Planner:
         context, left_out = places.context_block(self.docs, answers["region"])
         if left_out:
             print(f"rag: over the context cap, left out {', '.join(left_out)}", flush=True)
+        evidence, _ = insights.context_block(
+            self.insight_records, [answers.get("startLocation", ""), answers.get("endLocation", "")]
+        )
         return backends.Prompt(
             system=fill(self.system_template, answers),
-            context=context,
+            context=context + evidence,
             user=fill(self.user_template, answers),
         )
 
@@ -386,6 +394,7 @@ def parse_args(argv=None):
         description="Terra NT planning server: POST /v1/itinerary as docs/PHASE-3-CONTRACT.md describes.",
     )
     parser.add_argument("--port", type=int, default=8787, help="port to listen on (default 8787)")
+    parser.add_argument("--host", default="0.0.0.0", help="bind address; use 127.0.0.1 behind a local tunnel")
     parser.add_argument(
         "--backend",
         choices=sorted(backends.GENERATORS),
@@ -399,6 +408,22 @@ def parse_args(argv=None):
         help="accept requests without a Firebase ID token (prints a warning; emulator and rehearsal only)",
     )
     return parser.parse_args(argv)
+
+
+def load_local_env():
+    """Load server-only KEY=VALUE settings without overriding shell config."""
+    if not LOCAL_ENV.exists():
+        return
+    for line in LOCAL_ENV.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        name, value = line.split("=", 1)
+        name, value = name.strip(), value.strip()
+        if value[:1] == value[-1:] and value.startswith(("'", '"')):
+            value = value[1:-1]
+        if name and name.replace("_", "").isalnum():
+            os.environ.setdefault(name, value)
 
 
 def create_server(args, *, host="0.0.0.0", generate=None, geocoder=None, verify_token=None, docs=None):
@@ -418,6 +443,7 @@ def create_server(args, *, host="0.0.0.0", generate=None, geocoder=None, verify_
 
 
 def main(argv=None):
+    load_local_env()
     args = parse_args(argv)
     for stream in (sys.stdout, sys.stderr):
         # A place name like "Uluṟu" must not crash a log line when the
@@ -426,10 +452,10 @@ def main(argv=None):
     if args.no_auth:
         print(NO_AUTH_WARNING, file=sys.stderr, flush=True)
     backends.prepare(args.backend)
-    server = create_server(args)
+    server = create_server(args, host=args.host)
     port = server.server_address[1]
     print(
-        f"plan_server listening on http://0.0.0.0:{port}/v1/itinerary "
+        f"plan_server listening on http://{args.host}:{port}/v1/itinerary "
         f"backend={args.backend} auth={'off' if args.no_auth else 'on'} "
         f"place documents={len(server.planner.docs)}",
         flush=True,

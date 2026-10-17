@@ -100,9 +100,7 @@ class RemoteItineraryRepository implements ItineraryRepository {
     }
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw PlanException(
-        failureForStatus(response.statusCode, response.body),
-      );
+      throw PlanException(failureForStatus(response.statusCode, response.body));
     }
 
     return parsePlanResponse(response.body, days: answers.days);

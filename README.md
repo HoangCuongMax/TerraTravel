@@ -1,16 +1,26 @@
 # Terra NT
 
+Start with the [documentation index and team instructions](docs/DOCUMENTATION-INDEX.md) for links, reading order and guidance for each role.
+
 🚧 **Work in progress.** 🚧
 
 ## Run
 
-The Flutter app is in `terra_nt/`. Copy `terra_nt/.env.example` to `terra_nt/.env` and fill
-in `CARTO_API_KEY`, then pass the file to every run and build — without it the map tiles
-say "API KEY REQUIRED":
+The Flutter app is in `terra_nt/`. Copy `terra_nt/.env.example` to `terra_nt/.env`, then
+pass the file to every run and build. The OpenFreeMap basemap needs no API key:
 
     cd terra_nt
     flutter run --dart-define-from-file=.env
     flutter build apk --dart-define-from-file=.env
+
+## Routes and directions
+
+The route line and animated car use road geometry from the public OSRM demo service,
+based on OpenStreetMap roads. It is best effort, without live traffic, closure data, or
+uptime guarantees; if the routing service is unavailable, the app falls back to the
+straight connections between stops. Google Maps opens in its app when installed. On iOS,
+Apple Maps opens when Google Maps is not installed. For actual navigation, confirm current
+road conditions separately.
 
 ## Demo on a phone (Android, USB cable)
 

@@ -1,0 +1,17 @@
+MyFuel NT historical extract — evidence locator
+
+Dataset: MyFuel NT November 2024
+Portal: https://data.nt.gov.au/dataset/myfuel-nt-november-2024
+File: treasury-report-31-oct-to-01-dec-2024.xlsx
+Licence: Creative Commons Attribution (CC-BY)
+Publisher: NT Department of Treasury and Finance (Economic Analysis)
+Retrieved into package: 2026-10-17
+
+Period covered in extract: 31 Oct 2024 – 01 Dec 2024
+Demo observations use prices dated 2024-12-01 for Darwin–Katherine corridor
+and approach stations (96 fuel outlets, product-specific rows).
+
+Attribution: MyFuel NT historical data, Northern Territory Government, CC-BY.
+
+IMPORTANT: These prices are HISTORICAL. Do not display as current pump prices.
+Live MyFuel NT feed remains access_status pending until NT Consumer Affairs clearance.

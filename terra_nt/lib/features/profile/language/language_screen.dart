@@ -20,7 +20,7 @@ class LanguageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: const ValueKey('language-screen'),
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: AppColors.of(context).bgPage,
       body: SafeArea(
         child: Column(
           children: [
@@ -37,9 +37,9 @@ class LanguageScreen extends StatelessWidget {
                     key: const ValueKey('language-back-button'),
                     tooltip: 'Back',
                     onPressed: () => _goBack(context),
-                    icon: const AppIcon(
+                    icon: AppIcon(
                       LucideIcons.arrow_left,
-                      color: AppColors.ink,
+                      color: AppColors.of(context).ink,
                     ),
                   ),
                   const SizedBox(width: AppSpacing.xxs),
@@ -59,11 +59,11 @@ class LanguageScreen extends StatelessWidget {
                 ),
                 child: SettingsRow(
                   label: 'English',
-                  trailing: const AppIcon(
+                  trailing: AppIcon(
                     LucideIcons.check,
                     key: ValueKey('language-selected'),
                     size: AppMetrics.iconMd,
-                    color: AppColors.ink,
+                    color: AppColors.of(context).ink,
                   ),
                   onTap: () {},
                 ),

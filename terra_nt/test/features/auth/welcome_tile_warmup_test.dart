@@ -25,15 +25,15 @@ Finder _insideWarmup(Type type) => find.descendant(
 );
 
 void main() {
-  testWidgets('welcome mounts a real tile layer to warm the tile cache', (
+  testWidgets('welcome mounts the keyless map to warm viewed tiles', (
     tester,
   ) async {
     await tester.pumpWidget(_harness());
 
-    // A mounted TileLayer is the whole point: flutter_map fetches through its
-    // own NetworkTileProvider into its own disk cache, which is the cache
-    // Explore reads. Nothing outside that tile path can warm it.
-    expect(_insideWarmup(TileLayer), findsOneWidget);
+    // Welcome mounts TerraMap with no raster override, selecting the production
+    // OpenFreeMap vector layer and its visited-tile cache.
+    final map = tester.widget<TerraMap>(_insideWarmup(TerraMap));
+    expect(map.tileProvider, isNull);
   });
 
   testWidgets('the warm-up map is laid out, which is what loads tiles', (
@@ -41,10 +41,8 @@ void main() {
   ) async {
     await tester.pumpWidget(_harness());
 
-    // TileLayer reads MapCamera, which FlutterMap derives from a LayoutBuilder,
-    // so a non-zero laid-out map is the precondition for any tile request.
-    // Offstage lays its child out and skips only paint, which is why this
-    // works at all.
+    // Offstage lays the map out and skips only paint, allowing the vector layer
+    // to read the same viewport without showing or making it interactive.
     final mapSize = tester.getSize(_insideWarmup(FlutterMap));
     expect(mapSize.width, greaterThan(0));
     expect(mapSize.height, greaterThan(0));
@@ -86,16 +84,8 @@ void main() {
 
     // Offstage takes no room, is not painted, and swallows hit tests, so the
     // warm-up can neither be seen nor intercept a tap meant for the buttons.
-    // A default finder skips offstage subtrees, so this reaching nothing is
-    // the invisibility itself. Scoped to the warm-up so the cache loader is
-    // checked independently of Welcome's decorative artwork.
-    expect(
-      find.descendant(
-        of: find.byKey(_warmupKey),
-        matching: find.byType(TileLayer),
-      ),
-      findsNothing,
-    );
+    // A default finder skips offstage subtrees, so the hidden map is not
+    // visible or hit-testable above Welcome's actions.
     expect(find.byKey(_warmupKey).hitTestable(), findsNothing);
     expect(tester.getSize(find.byKey(_warmupKey)), Size.zero);
     expect(tester.takeException(), isNull);

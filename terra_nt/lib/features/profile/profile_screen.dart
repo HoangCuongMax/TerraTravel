@@ -6,6 +6,7 @@ import '../../app/routes.dart';
 import '../../app/screen_routes.dart';
 import '../../app/tab_shell.dart';
 import '../../core/theme/colors.dart';
+import '../../core/theme/theme_notifier.dart';
 import '../../core/theme/elevation.dart';
 import '../../core/theme/metrics.dart';
 import '../../core/theme/radius.dart';
@@ -141,10 +142,10 @@ class ProfileScreen extends ConsumerWidget {
                               ),
                               const SizedBox(height: AppSpacing.xs),
                               SettingsRow(
-                                leading: const AppIcon(
+                                leading: AppIcon(
                                   LucideIcons.globe,
                                   size: AppMetrics.iconLg,
-                                  color: AppColors.inkSubtle,
+                                  color: AppColors.of(context).inkSubtle,
                                 ),
                                 label: 'Language',
                                 value: 'English',
@@ -152,37 +153,65 @@ class ProfileScreen extends ConsumerWidget {
                                 onTap: () => _showLanguage(context),
                               ),
                               const SizedBox(height: AppSpacing.xs),
-                              const SettingsRow(
+                              SettingsRow(
+                                key: const ValueKey('profile-appearance'),
+                                label: 'Appearance',
+                                trailing: DropdownButton<ThemeMode>(
+                                  value: ref.watch(themeModeProvider),
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: ThemeMode.dark,
+                                      child: Text('Dark'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: ThemeMode.light,
+                                      child: Text('Light'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: ThemeMode.system,
+                                      child: Text('System'),
+                                    ),
+                                  ],
+                                  onChanged: (mode) {
+                                    if (mode != null) {
+                                      ref
+                                          .read(themeModeProvider.notifier)
+                                          .setMode(mode);
+                                    }
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.xs),
+                              SettingsRow(
                                 key: ValueKey('profile-crash-reports'),
                                 leading: AppIcon(
                                   LucideIcons.shield_check,
                                   size: AppMetrics.iconLg,
-                                  color: AppColors.inkSubtle,
+                                  color: AppColors.of(context).inkSubtle,
                                 ),
                                 label: 'Crash reports',
                                 subtitle: 'Sent anonymously to fix bugs.',
                               ),
                               const SizedBox(height: AppSpacing.xs),
-                              const SettingsRow(
+                              SettingsRow(
                                 key: ValueKey('profile-offline-maps'),
                                 leading: AppIcon(
                                   LucideIcons.map,
                                   size: AppMetrics.iconLg,
-                                  color: AppColors.inkSubtle,
+                                  color: AppColors.of(context).inkSubtle,
                                 ),
                                 label: 'Offline maps',
-                                subtitle:
-                                    'Map areas you have opened stay available offline for up to 30 days.',
+                                subtitle: 'Map areas you have opened stay available offline for up to 30 days.',
                               ),
                               const SizedBox(height: AppSpacing.xs),
                               SettingsRow(
-                                leading: const AppIcon(
+                                leading: AppIcon(
                                   LucideIcons.log_out,
                                   size: AppMetrics.iconLg,
-                                  color: AppColors.tagRed,
+                                  color: AppColors.of(context).tagRed,
                                 ),
                                 label: 'Log Out',
-                                foregroundColor: AppColors.tagRed,
+                                foregroundColor: AppColors.of(context).tagRed,
                                 onTap: () => _logOut(context, ref),
                               ),
                               const Spacer(),
@@ -229,7 +258,8 @@ class ProfileScreen extends ConsumerWidget {
                                               child: Text(
                                                 'Delete account',
                                                 style: AppType.caption.copyWith(
-                                                  color: AppColors.inkTertiary,
+                                                  color: AppColors.of(context)
+                                                      .inkTertiary,
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -263,18 +293,18 @@ class _ProfileAvatar extends StatelessWidget {
       width: AppMetrics.avatarSize,
       height: AppMetrics.avatarSize,
       decoration: BoxDecoration(
-        color: AppColors.surface2,
+        color: AppColors.of(context).surface2,
         borderRadius: BorderRadius.circular(AppRadius.avatar),
         border: Border.all(
-          color: AppColors.hairlineStrong,
+          color: AppColors.of(context).hairlineStrong,
           width: AppElevation.hairlineWidth,
         ),
       ),
       alignment: Alignment.center,
-      child: const AppIcon(
+      child: AppIcon(
         LucideIcons.user,
         size: AppMetrics.iconXl,
-        color: AppColors.inkSubtle,
+        color: AppColors.of(context).inkSubtle,
       ),
     );
   }
@@ -301,10 +331,10 @@ class _DeleteAccountConfirmation extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppMetrics.padRowY),
       decoration: BoxDecoration(
-        color: AppColors.surface1,
+        color: AppColors.of(context).surface1,
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(
-          color: AppColors.hairline,
+          color: AppColors.of(context).hairline,
           width: AppElevation.hairlineWidth,
         ),
       ),
@@ -313,7 +343,9 @@ class _DeleteAccountConfirmation extends StatelessWidget {
         children: [
           Text(
             "Delete your account and all saved routes? This can't be undone.",
-            style: AppType.bodyApp.copyWith(color: AppColors.inkSubtle),
+            style: AppType.bodyApp.copyWith(
+              color: AppColors.of(context).inkSubtle,
+            ),
           ),
           if (errorText != null)
             Padding(
@@ -321,7 +353,9 @@ class _DeleteAccountConfirmation extends StatelessWidget {
               child: Text(
                 errorText!,
                 key: const ValueKey('delete-account-error'),
-                style: AppType.caption.copyWith(color: AppColors.tagRed),
+                style: AppType.caption.copyWith(
+                  color: AppColors.of(context).tagRed,
+                ),
               ),
             ),
           const SizedBox(height: AppSpacing.xs),
@@ -350,7 +384,7 @@ class _DeleteAccountConfirmation extends StatelessWidget {
                   variant: AppButtonVariant.secondary,
                   size: AppButtonSize.md,
                   fullWidth: true,
-                  foregroundColor: AppColors.tagRed,
+                  foregroundColor: AppColors.of(context).tagRed,
                   child: const Expanded(
                     child: FittedBox(
                       fit: BoxFit.scaleDown,

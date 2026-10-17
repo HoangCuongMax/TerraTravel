@@ -12,7 +12,7 @@ import '../../../shared/map/car_glyph.dart';
 /// (deviation V13, polished under D18).
 ///
 /// The road is a quiet band with a dashed centre line; the stretch already
-/// driven is paved in [AppColors.primary]. The [CarGlyph] 4x4 rests on the road
+/// driven is paved in [AppColors.of(context).primary]. The [CarGlyph] 4x4 rests on the road
 /// with its centre on the travelled part's leading edge: on a step change the
 /// fill and the car ease to the new position together, with the step card's
 /// curve and duration, so the whole screen moves as one. It faces the direction
@@ -154,9 +154,13 @@ class _ProgressDriveState extends State<ProgressDrive>
                     key: const ValueKey('onboarding-progress-road'),
                     width: constraints.maxWidth,
                     height: AppMetrics.progressRoadHeight,
-                    child: const ColoredBox(
-                      color: AppColors.hairline,
-                      child: CustomPaint(painter: _CentreLinePainter()),
+                    child: ColoredBox(
+                      color: AppColors.of(context).hairline,
+                      child: CustomPaint(
+                        painter: _CentreLinePainter(
+                          color: AppColors.of(context).hairlineTertiary,
+                        ),
+                      ),
                     ),
                   ),
                   AnimatedBuilder(
@@ -167,7 +171,7 @@ class _ProgressDriveState extends State<ProgressDrive>
                       height: AppMetrics.progressRoadHeight,
                       child: child,
                     ),
-                    child: const ColoredBox(color: AppColors.primary),
+                    child: ColoredBox(color: AppColors.of(context).primary),
                   ),
                 ],
               ),
@@ -213,12 +217,13 @@ class _ProgressDriveState extends State<ProgressDrive>
 
 /// The road's dashed centre line, the one mark that turns a bar into a road.
 class _CentreLinePainter extends CustomPainter {
-  const _CentreLinePainter();
+  const _CentreLinePainter({this.color = AppColors.hairlineTertiary});
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.hairlineTertiary
+      ..color = color
       ..strokeWidth = AppMetrics.progressRoadDashThickness;
     final y = size.height / 2;
     const step =
@@ -230,5 +235,6 @@ class _CentreLinePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _CentreLinePainter oldDelegate) => false;
+  bool shouldRepaint(covariant _CentreLinePainter oldDelegate) =>
+      color != oldDelegate.color;
 }

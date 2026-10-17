@@ -84,7 +84,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
 
     return Scaffold(
       key: const ValueKey('account-screen'),
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: AppColors.of(context).bgPage,
       body: SafeArea(
         child: Column(
           children: [
@@ -101,9 +101,9 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                     key: const ValueKey('account-back-button'),
                     tooltip: 'Back',
                     onPressed: () => _goBack(context),
-                    icon: const AppIcon(
+                    icon: AppIcon(
                       LucideIcons.arrow_left,
-                      color: AppColors.ink,
+                      color: AppColors.of(context).ink,
                     ),
                   ),
                   const SizedBox(width: AppSpacing.xxs),
@@ -158,18 +158,18 @@ class _AccountAvatar extends StatelessWidget {
       width: AppMetrics.avatarSize,
       height: AppMetrics.avatarSize,
       decoration: BoxDecoration(
-        color: AppColors.surface2,
+        color: AppColors.of(context).surface2,
         borderRadius: BorderRadius.circular(AppRadius.avatar),
         border: Border.all(
-          color: AppColors.hairlineStrong,
+          color: AppColors.of(context).hairlineStrong,
           width: AppElevation.hairlineWidth,
         ),
       ),
       alignment: Alignment.center,
-      child: const AppIcon(
+      child: AppIcon(
         LucideIcons.user,
         size: AppMetrics.iconXl,
-        color: AppColors.inkSubtle,
+        color: AppColors.of(context).inkSubtle,
       ),
     );
   }
@@ -207,8 +207,8 @@ class _EmailVerificationRow extends StatelessWidget {
       false => 'Not verified',
     };
     final valueColor = verified == null && !loadFailed
-        ? AppColors.inkTertiary
-        : AppColors.inkSubtle;
+        ? AppColors.of(context).inkTertiary
+        : AppColors.of(context).inkSubtle;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -216,10 +216,10 @@ class _EmailVerificationRow extends StatelessWidget {
         vertical: AppMetrics.padRowY,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surface1,
+        color: AppColors.of(context).surface1,
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(
-          color: AppColors.hairline,
+          color: AppColors.of(context).hairline,
           width: AppElevation.hairlineWidth,
         ),
       ),
@@ -234,7 +234,9 @@ class _EmailVerificationRow extends StatelessWidget {
             if (resendSent)
               Text(
                 'Verification email sent.',
-                style: AppType.caption.copyWith(color: AppColors.inkSubtle),
+                style: AppType.caption.copyWith(
+                  color: AppColors.of(context).inkSubtle,
+                ),
               )
             else ...[
               if (resendError != null)
@@ -244,7 +246,7 @@ class _EmailVerificationRow extends StatelessWidget {
                     resendError!,
                     key: const ValueKey('account-resend-error'),
                     style: AppType.caption.copyWith(
-                      color: AppColors.inkSubtle,
+                      color: AppColors.of(context).inkSubtle,
                     ),
                   ),
                 ),
@@ -275,7 +277,7 @@ class _ResendVerificationLink extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             'Resend email',
-            style: AppType.caption.copyWith(color: AppColors.ink),
+            style: AppType.caption.copyWith(color: AppColors.of(context).ink),
           ),
         ),
       ),

@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-/// Socket failures fetching CARTO tiles are expected without phone signal.
-/// Require both the typed socket failure and the tile origin: a generic HTTP
-/// error, bad image, or a connection failure elsewhere must still be reported.
+/// Network failures fetching public map resources are expected without signal.
+/// Limit suppression to known map hosts; failures elsewhere stay reportable.
 bool _isOfflineTileError(Object error) {
   if (error is! SocketException || error is! http.ClientException) return false;
   final uri = (error as http.ClientException).uri;
   return uri != null &&
       uri.scheme == 'https' &&
-      uri.host == 'basemaps.cartocdn.com' &&
-      uri.path.startsWith('/rastertiles/');
+      (uri.host == 'tiles.openfreemap.org' ||
+          uri.host == 'fonts.openfreemap.org' ||
+          uri.host == 'assets.openfreemap.com');
 }
 
 /// Keep Firebase at startup and allow the actual handlers to be tested without

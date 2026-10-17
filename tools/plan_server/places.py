@@ -5,6 +5,7 @@ front-matter block; rag/README.md states the format. Geocoding tries the
 documents' names and aliases first, then Nominatim.
 """
 
+import csv
 import json
 import os
 import re
@@ -51,15 +52,18 @@ class PlaceDoc:
     tags: tuple
     sources: tuple
     body: str
+    authority: str = "Unspecified"
+    checked: str = "Unknown"
 
     def render(self):
         lines = [f"## {self.name}"]
         if self.aliases:
-            lines.append("Also known as: " + ", ".join(self.aliases))
+            lines.append("Aliases: " + ", ".join(self.aliases))
         if self.tags:
             lines.append("Tags: " + ", ".join(self.tags))
+        lines.append(f"Authority: {self.authority} | checked: {self.checked}")
         if self.sources:
-            lines.append("Sources: " + " ".join(self.sources))
+            lines.append("Refs: " + " ".join(self.sources))
         if self.body:
             lines += ["", self.body]
         return "\n".join(lines)
@@ -109,7 +113,11 @@ def parse_front_matter(text):
         if value == "":
             fields[key] = []
         elif value.startswith("[") and value.endswith("]"):
-            fields[key] = [_scalar(v) for v in value[1:-1].split(",") if v.strip()]
+            fields[key] = [
+                item.strip()
+                for item in next(csv.reader([value[1:-1]], skipinitialspace=True))
+                if item.strip()
+            ]
         else:
             fields[key] = _scalar(value)
     return fields, "\n".join(lines[end + 1 :]).strip()
@@ -153,6 +161,8 @@ def load_place_doc(path):
             tags=tags,
             sources=sources,
             body=body,
+            authority=fields.get("authority", "Unspecified"),
+            checked=fields.get("checked", "Unknown"),
         )
     except ValueError as error:
         raise ValueError(f"rag/{path.name}: {error}") from None

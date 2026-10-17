@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "records": [
+    {
+      "id": "demo-fuel",
+      "kind": "fuel",
+      "title": "Example roadhouse A",
+      "details": "Compare with fictional outlet B; no stock, road access or hours verified.",
+      "place_names": [
+        "Darwin",
+        "Katherine",
+        "Alice Springs"
+      ],
+      "source_url": "https://example.com/terra-nt-demo",
+      "source_name": "Synthetic fixture",
+      "observed_at": "2026-10-17T00:00:00Z",
+      "expires_at": "2026-10-18T00:00:00Z",
+      "data_mode": "synthetic_demo",
+      "data": {
+        "fuel_type": "diesel",
+        "price_cents_per_litre": 185,
+        "comparison_price_cents_per_litre": 215
+      }
+    },
+    {
+      "id": "demo-coverage",
+      "kind": "coverage",
+      "title": "Prepare before a limited-coverage leg",
+      "details": "Example advice: confirm accommodation and open trip information before departure. No real black spot is identified.",
+      "place_names": [
+        "Darwin",
+        "Katherine",
+        "Alice Springs"
+      ],
+      "source_url": "https://example.com/terra-nt-demo",
+      "source_name": "Synthetic fixture",
+      "observed_at": "2026-10-17T00:00:00Z",
+      "expires_at": "2026-10-18T00:00:00Z",
+      "data_mode": "synthetic_demo",
+      "data": {
+        "carrier": "Telstra",
+        "basis": "prediction"
+      }
+    },
+    {
+      "id": "demo-accommodation",
+      "kind": "accommodation",
+      "title": "Example overnight stay",
+      "details": "Fictional property illustrating a sourced review score. Budget, availability and check-in must be checked.",
+      "place_names": [
+        "Darwin",
+        "Katherine",
+        "Alice Springs"
+      ],
+      "source_url": "https://example.com/terra-nt-demo",
+      "source_name": "Synthetic fixture",
+      "observed_at": "2026-10-17T00:00:00Z",
+      "expires_at": "2026-10-18T00:00:00Z",
+      "data_mode": "synthetic_demo",
+      "data": {
+        "rating": 4.4,
+        "rating_scale_max": 5,
+        "review_count": 286
+      }
+    },
+    {
+      "id": "demo-roadhouse",
+      "kind": "roadhouse",
+      "title": "Example combined rest stop",
+      "details": "Illustrates combining a fuel, meal and toilet stop. No real facilities are asserted.",
+      "place_names": [
+        "Darwin",
+        "Katherine",
+        "Alice Springs"
+      ],
+      "source_url": "https://example.com/terra-nt-demo",
+      "source_name": "Synthetic fixture",
+      "observed_at": "2026-10-17T00:00:00Z",
+      "expires_at": "2026-10-18T00:00:00Z",
+      "data_mode": "synthetic_demo",
+      "data": {
+        "facilities": [
+          "Diesel",
+          "Food",
+          "Toilets"
+        ]
+      }
+    }
+  ]
+}

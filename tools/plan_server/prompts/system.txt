@@ -24,6 +24,11 @@ Rules — every one is checked by software, not by a reader:
 8. Every fact you state about hours, fees, permits or closures must come from the
    provided context or be marked in "aiNote" as "check before you go". Put the URLs
    you relied on in "sources"; an empty list is allowed, an invented URL is not.
+9. Treat each record's source authority and checked date as provenance, not live status.
+   A checked date means the curated page was reviewed then; it does not prove a road,
+   site, swim area, service or fee is current. For changing access and safety facts,
+   direct the traveller to the relevant official live status source and say "check before
+   you go" when this context cannot confirm the current condition.
 
 Output format — produce exactly the JSON the schema describes, and follow these
 conventions inside the strings:

@@ -2,13 +2,14 @@ import 'package:flutter/widgets.dart';
 
 import '../../core/theme/colors.dart';
 import '../../core/theme/metrics.dart';
+import '../../shared/map/road_route_loader.dart';
 import '../../shared/map/route_car_backdrop.dart';
 
 /// The decorative map and scrim shared by the pre-app authentication screens.
 class AuthBackdrop extends StatelessWidget {
   const AuthBackdrop({super.key});
 
-  static final _scrim = LinearGradient(
+  static LinearGradient _scrim(BuildContext context) => LinearGradient(
     begin: Alignment.bottomCenter,
     end: Alignment.topCenter,
     stops: const [
@@ -18,10 +19,10 @@ class AuthBackdrop extends StatelessWidget {
       1,
     ],
     colors: [
-      AppColors.loginScrimStart,
-      AppColors.loginScrimMid,
-      AppColors.canvas,
-      AppColors.canvas,
+      AppColors.of(context).loginScrimStart,
+      AppColors.of(context).loginScrimMid,
+      AppColors.of(context).canvas,
+      AppColors.of(context).canvas,
     ],
   );
 
@@ -37,10 +38,16 @@ class AuthBackdrop extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          const Positioned.fill(child: RouteCarBackdrop.ambient()),
+          const Positioned.fill(
+            child: RouteCarBackdrop.ambient(
+              roadRouteLoader: RoadRouteGeometry.load,
+            ),
+          ),
           Positioned.fill(
             child: IgnorePointer(
-              child: DecoratedBox(decoration: BoxDecoration(gradient: _scrim)),
+              child: DecoratedBox(
+                decoration: BoxDecoration(gradient: _scrim(context)),
+              ),
             ),
           ),
         ],

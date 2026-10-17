@@ -1,10 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/screen_routes.dart';
 import '../../core/theme/colors.dart';
@@ -15,15 +16,19 @@ import '../../core/theme/radius.dart';
 import '../../core/theme/spacing.dart';
 import '../../core/theme/typography.dart';
 import '../../core/util/itinerary_ops.dart';
+import '../../core/util/maps_launcher.dart';
 import '../../core/util/maps_url.dart';
 import '../../core/util/sheet_snap.dart';
+import '../../data/models/stop.dart';
 import '../../data/repositories/notifiers.dart';
 import '../../shared/map/dashed_route_polyline.dart';
 import '../../shared/map/map_markers.dart';
+import '../../shared/map/road_route_loader.dart';
 import '../../shared/map/route_reveal.dart';
 import '../../shared/map/terra_map.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/app_chip.dart';
+import '../insights/trip_insights_screen.dart';
 import 'stop_detail/stop_detail_screen.dart';
 import 'widgets/result_empty_state.dart';
 import 'widgets/result_stop_list.dart';
@@ -34,7 +39,7 @@ typedef MapsLauncher = Future<bool> Function(Uri url);
 class ResultScreen extends ConsumerStatefulWidget {
   const ResultScreen({
     super.key,
-    this.launcher = launchUrl,
+    this.launcher = launchMapExternally,
     this.onOpenStop,
     this.onOpenSavedRoutes,
   });
@@ -50,6 +55,8 @@ class ResultScreen extends ConsumerStatefulWidget {
 class _ResultScreenState extends ConsumerState<ResultScreen> {
   double? _sheetHeight;
   bool _dragging = false;
+  String? _roadRouteKey;
+  List<List<double>>? _roadRouteCoordinates;
 
   /// Highlights/Detailed is Result-local and defaults to Highlights: onboarding
   /// no longer asks how detailed the plan should be (V11), and the choice is a
@@ -61,6 +68,39 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   /// Session-only, like Profile's delete-account confirmation.
   bool _confirmPlanAgain = false;
   String? _exportFailureCoordinates;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_loadRoadGeometryForCurrentStops());
+    });
+  }
+
+  String _geometryKey(List<Stop> stops) => stops
+      .map(
+        (stop) =>
+            '${stop.lat.toStringAsFixed(5)},${stop.lng.toStringAsFixed(5)}',
+      )
+      .join(';');
+
+  Future<void> _loadRoadGeometryForCurrentStops() async {
+    if (!mounted) return;
+    final stops = ref.read(itineraryNotifierProvider).visibleStops;
+    if (stops.length < 2) return;
+    final key = _geometryKey(stops);
+    if (_roadRouteKey == key) return;
+    final coordinates = [
+      for (final stop in stops) [stop.lat, stop.lng],
+    ];
+    setState(() {
+      _roadRouteKey = key;
+      _roadRouteCoordinates = null;
+    });
+    final road = await RoadRouteGeometry.load(coordinates);
+    if (!mounted || _roadRouteKey != key || road == null) return;
+    setState(() => _roadRouteCoordinates = road);
+  }
 
   void _planAgain(BuildContext context) {
     ref.read(onboardingNotifierProvider.notifier).reset();
@@ -82,7 +122,10 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     if (url == null) return;
     var opened = false;
     try {
-      opened = await widget.launcher(Uri.parse(url));
+      opened = await launchDrivingDirections(
+        Uri.parse(url),
+        launcher: widget.launcher,
+      );
     } catch (_) {
       // Platform failures have the same useful fallback as a refused launch.
     }
@@ -126,18 +169,34 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
         setState(() => _sheetHeight = AppMetrics.resultSheetMaxHeight);
       }
     });
+    ref.listen(
+      itineraryNotifierProvider.select(
+        (state) => _geometryKey(state.visibleStops),
+      ),
+      (previous, next) {
+        if (previous != next) unawaited(_loadRoadGeometryForCurrentStops());
+      },
+    );
 
     final itineraryState = ref.watch(itineraryNotifierProvider);
     final stops = itineraryState.visibleStops;
     final canExport =
         activeStopOrder(itineraryState.order, itineraryState.skipped).length >=
         2;
-    final points = stops.map((stop) => LatLng(stop.lat, stop.lng)).toList();
-    final reveal = RouteRevealGeometry(points);
+    final stopPoints = stops.map((stop) => LatLng(stop.lat, stop.lng)).toList();
+    final roadCoordinates = _roadRouteKey == _geometryKey(stops)
+        ? _roadRouteCoordinates
+        : null;
+    final points = roadCoordinates == null
+        ? stopPoints
+        : roadCoordinates
+              .map((point) => LatLng(point.first, point.last))
+              .toList(growable: false);
+    final reveal = RouteRevealGeometry(points, pinPoints: stopPoints);
 
     if (!itineraryState.hasRoute) {
       return Scaffold(
-        backgroundColor: AppColors.canvas,
+        backgroundColor: AppColors.of(context).canvas,
         body: ResultEmptyState(
           onPlanMyRoute: () => _planAgain(context),
           onOpenSavedRoutes: ref.watch(savedRoutesNotifierProvider).isNotEmpty
@@ -148,7 +207,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.canvas,
+      backgroundColor: AppColors.of(context).canvas,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final insets = MediaQuery.paddingOf(context);
@@ -237,12 +296,12 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                       : AppMotion.resultSheetSnap,
                   curve: AppMotion.easeOut,
                   decoration: BoxDecoration(
-                    color: AppColors.surface1,
+                    color: AppColors.of(context).surface1,
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(AppRadius.panel),
                     ),
                     border: Border.all(
-                      color: AppColors.hairline,
+                      color: AppColors.of(context).hairline,
                       width: AppElevation.hairlineWidth,
                     ),
                   ),
@@ -296,7 +355,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                                 width: AppMetrics.resultSheetGrabberWidth,
                                 height: AppMetrics.resultSheetGrabberHeight,
                                 decoration: BoxDecoration(
-                                  color: AppColors.hairlineStrong,
+                                  color: AppColors.of(context).hairlineStrong,
                                   borderRadius: BorderRadius.circular(
                                     AppRadius.pill,
                                   ),
@@ -313,6 +372,11 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                           onOpenStop: (originalIndex) =>
                               _openStop(context, originalIndex),
                           header: _ResultHeader(
+                            onInsights: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const TripInsightsScreen(),
+                              ),
+                            ),
                             title: itineraryState.itinerary.title,
                             meta: itineraryMeta(
                               itineraryState.itinerary,
@@ -366,6 +430,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
 class _ResultHeader extends StatelessWidget {
   const _ResultHeader({
     required this.title,
+    required this.onInsights,
     required this.meta,
     required this.detailed,
     required this.editMode,
@@ -382,6 +447,7 @@ class _ResultHeader extends StatelessWidget {
   });
 
   final String title;
+  final VoidCallback onInsights;
   final String meta;
   final bool detailed;
   final bool editMode;
@@ -408,12 +474,16 @@ class _ResultHeader extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppType.titleApp.copyWith(color: AppColors.ink),
+                  style: AppType.titleApp.copyWith(
+                    color: AppColors.of(context).ink,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.xxs),
                 Text(
                   meta,
-                  style: AppType.caption.copyWith(color: AppColors.inkSubtle),
+                  style: AppType.caption.copyWith(
+                    color: AppColors.of(context).inkSubtle,
+                  ),
                 ),
               ],
             ),
@@ -423,10 +493,15 @@ class _ResultHeader extends StatelessWidget {
             visualKey: const ValueKey('result-plan-again-visual'),
             tooltip: 'Plan again',
             icon: LucideIcons.sparkles,
-            color: AppColors.primary,
+            color: AppColors.of(context).primary,
             onTap: onPlanAgain,
           ),
         ],
+      ),
+      TextButton(
+        key: const ValueKey('result-trip-insights'),
+        onPressed: onInsights,
+        child: const Text('Trip insights · fuel, coverage and stays'),
       ),
       if (confirmPlanAgain) ...[
         const SizedBox(height: AppSpacing.xs),
@@ -475,7 +550,7 @@ class _ResultHeader extends StatelessWidget {
         child: const Expanded(
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text('Export to Google Maps'),
+            child: Text('Open driving directions'),
           ),
         ),
       ),
@@ -484,7 +559,9 @@ class _ResultHeader extends StatelessWidget {
         Text(
           'Keep at least two active stops to export a route.',
           key: const ValueKey('result-export-reason'),
-          style: AppType.bodySm.copyWith(color: AppColors.inkSubtle),
+          style: AppType.bodySm.copyWith(
+            color: AppColors.of(context).inkSubtle,
+          ),
         ),
       ],
       if (exportFailureCoordinates != null) ...[
@@ -511,9 +588,9 @@ class _ResultHeader extends StatelessWidget {
                     removedLabel(removedCount),
                     key: const ValueKey('result-restore-removed-label'),
                     style: AppType.caption.copyWith(
-                      color: AppColors.inkTertiary,
+                      color: AppColors.of(context).inkTertiary,
                       decoration: TextDecoration.underline,
-                      decorationColor: AppColors.inkTertiary,
+                      decorationColor: AppColors.of(context).inkTertiary,
                     ),
                   ),
                 ),
@@ -540,10 +617,10 @@ class _ResultSegmentRail extends StatelessWidget {
     key: const ValueKey('result-segment-rail'),
     padding: const EdgeInsets.all(AppMetrics.resultSegmentRailPadding),
     decoration: BoxDecoration(
-      color: AppColors.canvas,
+      color: AppColors.of(context).canvas,
       borderRadius: BorderRadius.circular(AppRadius.pill),
       border: Border.all(
-        color: AppColors.hairline,
+        color: AppColors.of(context).hairline,
         width: AppElevation.hairlineWidth,
       ),
     ),
@@ -591,10 +668,10 @@ class _PlanAgainConfirmation extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppMetrics.padRowY),
       decoration: BoxDecoration(
-        color: AppColors.surface1,
+        color: AppColors.of(context).surface1,
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(
-          color: AppColors.hairline,
+          color: AppColors.of(context).hairline,
           width: AppElevation.hairlineWidth,
         ),
       ),
@@ -603,7 +680,9 @@ class _PlanAgainConfirmation extends StatelessWidget {
         children: [
           Text(
             'Discard edits and plan again?',
-            style: AppType.bodyApp.copyWith(color: AppColors.inkSubtle),
+            style: AppType.bodyApp.copyWith(
+              color: AppColors.of(context).inkSubtle,
+            ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Row(
@@ -631,7 +710,7 @@ class _PlanAgainConfirmation extends StatelessWidget {
                   variant: AppButtonVariant.secondary,
                   size: AppButtonSize.md,
                   fullWidth: true,
-                  foregroundColor: AppColors.primary,
+                  foregroundColor: AppColors.of(context).primary,
                   child: const Expanded(
                     child: FittedBox(
                       fit: BoxFit.scaleDown,

@@ -26,6 +26,8 @@ CODEX_MODEL = "gpt-6-luna"
 CODEX_EFFORT = "low"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 OPENROUTER_MODEL = "openai/gpt-6-luna"
+GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+GEMINI_MODEL = "gemini-3.8-flash"
 
 
 class BackendTimeout(Exception):
@@ -197,9 +199,59 @@ def openrouter_generate(prompt, *, transport=urllib_post, timeout=TIMEOUT_SECOND
     return json.loads(content)
 
 
+# --- gemini ---------------------------------------------------------------
+
+
+def gemini_request(prompt):
+    """Build a Gemini generateContent request with the planner's JSON schema."""
+    return {
+        "systemInstruction": {
+            "parts": [{"text": "\n\n".join(p for p in (prompt.system, prompt.context) if p)}]
+        },
+        "contents": [{"role": "user", "parts": [{"text": prompt.user}]}],
+        "generationConfig": {
+            "responseFormat": {
+                "text": {"mimeType": "APPLICATION_JSON", "schema": load_schema()}
+            },
+            "thinkingConfig": {"thinkingLevel": "low"},
+            "maxOutputTokens": 4096,
+        },
+    }
+
+
+def gemini_generate(prompt, *, transport=urllib_post, timeout=TIMEOUT_SECONDS):
+    key = os.environ.get("GEMINI_API_KEY")
+    if not key:
+        raise RuntimeError("GEMINI_API_KEY is not set")
+    model = os.environ.get("GEMINI_MODEL") or GEMINI_MODEL
+    headers = {"x-goog-api-key": key, "Content-Type": "application/json"}
+    body = json.dumps(gemini_request(prompt)).encode("utf-8")
+    try:
+        status, raw = transport(GEMINI_URL.format(model=model), headers, body, timeout)
+    except TimeoutError:
+        raise BackendTimeout(f"Gemini did not answer in {timeout} s") from None
+    if status != 200:
+        # Do not expose request headers or the credential in server logs.
+        try:
+            detail = json.loads(raw).get("error", {}).get("message", "")
+        except (ValueError, AttributeError):
+            detail = ""
+        raise RuntimeError(f"Gemini answered HTTP {status}: {detail[:500]}")
+    response = json.loads(raw)
+    try:
+        parts = response["candidates"][0]["content"]["parts"]
+    except (KeyError, IndexError, TypeError):
+        raise RuntimeError("Gemini returned no candidate content") from None
+    content = "".join(part.get("text", "") for part in parts)
+    if not content:
+        raise RuntimeError("Gemini returned empty content")
+    return json.loads(content)
+
+
 GENERATORS = {
     "codex": codex_generate,
     "openrouter": openrouter_generate,
+    "gemini": gemini_generate,
     "fixture": fixture_generate,
 }
 
@@ -210,3 +262,5 @@ def prepare(backend):
         prepare_codex_home()
     elif backend == "openrouter" and not os.environ.get("OPENROUTER_API_KEY"):
         raise SystemExit("OPENROUTER_API_KEY is not set")
+    elif backend == "gemini" and not os.environ.get("GEMINI_API_KEY"):
+        raise SystemExit("GEMINI_API_KEY is not set")

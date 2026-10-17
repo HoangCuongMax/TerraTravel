@@ -1,4 +1,4 @@
-import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 
 /// Colour tokens, transcribed from `design/design-system/tokens/colors.css`.
 ///
@@ -10,6 +10,11 @@ import 'package:flutter/painting.dart';
 /// reason this file exists.
 class AppColors {
   AppColors._();
+
+  static AppPalette of(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.light
+      ? const AppPalette.light()
+      : const AppPalette.dark();
 
   // ---------- Brand & accent ----------
   static const primary = Color(0xFF5E6AD2);
@@ -109,4 +114,101 @@ class AppColors {
   static final onboardingScrim = canvas.withValues(alpha: 0.18);
   static final onboardingChrome = surface2.withValues(alpha: 0.7);
   static final stopDetailHeroScrim = surface1.withValues(alpha: 0.8);
+}
+
+/// Context-scoped palette. Static AppColors remain the dark reference tokens.
+class AppPalette {
+  const AppPalette.light() : isLight = true;
+  const AppPalette.dark() : isLight = false;
+  final bool isLight;
+  Color get primary => isLight ? Color(0xFF4F46B5) : AppColors.primary;
+  Color get primaryHover =>
+      isLight ? Color(0xFF413797) : AppColors.primaryHover;
+  Color get primaryFocus =>
+      isLight ? Color(0xFF3A308B) : AppColors.primaryFocus;
+  Color get onPrimary => isLight ? AppColors.onPrimary : AppColors.onPrimary;
+  Color get brandSecure => isLight ? Color(0xFF5D568E) : AppColors.brandSecure;
+  Color get canvas => isLight ? Color(0xFFF6F7FA) : AppColors.canvas;
+  Color get surface1 => isLight ? Color(0xFFFFFFFF) : AppColors.surface1;
+  Color get surface2 => isLight ? Color(0xFFF0F1F6) : AppColors.surface2;
+  Color get surface3 => isLight ? Color(0xFFE8EAF2) : AppColors.surface3;
+  Color get surface4 => isLight ? Color(0xFFE1E4EF) : AppColors.surface4;
+  Color get hairline => isLight ? Color(0xFFD9DDE7) : AppColors.hairline;
+  Color get hairlineStrong =>
+      isLight ? Color(0xFFB9C0D0) : AppColors.hairlineStrong;
+  Color get hairlineTertiary =>
+      isLight ? Color(0xFF9BA5B9) : AppColors.hairlineTertiary;
+  Color get ink => isLight ? Color(0xFF181B26) : AppColors.ink;
+  Color get inkMuted => isLight ? Color(0xFF34394A) : AppColors.inkMuted;
+  Color get inkSubtle => isLight ? Color(0xFF535B70) : AppColors.inkSubtle;
+  Color get inkTertiary => isLight ? Color(0xFF60697E) : AppColors.inkTertiary;
+  Color get inverseCanvas =>
+      isLight ? AppColors.canvas : AppColors.inverseCanvas;
+  Color get inverseSurface1 =>
+      isLight ? AppColors.surface1 : AppColors.inverseSurface1;
+  Color get inverseSurface2 =>
+      isLight ? AppColors.surface2 : AppColors.inverseSurface2;
+  Color get inverseInk => isLight ? AppColors.ink : AppColors.inverseInk;
+  Color get success => isLight ? Color(0xFF177A32) : AppColors.success;
+  Color get overlay => isLight ? AppColors.overlay : AppColors.overlay;
+  Color get bgPage => isLight ? canvas : AppColors.bgPage;
+  Color get bgCard => isLight ? surface1 : AppColors.bgCard;
+  Color get bgCardFeatured => isLight ? surface2 : AppColors.bgCardFeatured;
+  Color get bgCardHover => isLight ? surface2 : AppColors.bgCardHover;
+  Color get bgMenu => isLight ? surface3 : AppColors.bgMenu;
+  Color get bgLifted => isLight ? surface4 : AppColors.bgLifted;
+  Color get bgInverse => isLight ? inverseCanvas : AppColors.bgInverse;
+  Color get bgScrim =>
+      isLight ? canvas.withValues(alpha: 0.72) : AppColors.bgScrim;
+  Color get textHeading => isLight ? ink : AppColors.textHeading;
+  Color get textBody => isLight ? ink : AppColors.textBody;
+  Color get textSecondary => isLight ? inkMuted : AppColors.textSecondary;
+  Color get textTertiary => isLight ? inkSubtle : AppColors.textTertiary;
+  Color get textDisabled => isLight ? inkTertiary : AppColors.textDisabled;
+  Color get textInverse => isLight ? inverseInk : AppColors.textInverse;
+  Color get textLink => isLight ? primary : AppColors.textLink;
+  Color get textLinkHover => isLight ? primaryHover : AppColors.textLinkHover;
+  Color get borderCard => isLight ? hairline : AppColors.borderCard;
+  Color get borderCardFeatured =>
+      isLight ? hairlineStrong : AppColors.borderCardFeatured;
+  Color get borderNested => isLight ? hairlineTertiary : AppColors.borderNested;
+  Color get borderFocus => isLight ? primaryFocus : AppColors.borderFocus;
+  Color get actionPrimaryBg => isLight ? primary : AppColors.actionPrimaryBg;
+  Color get actionPrimaryBgHover =>
+      isLight ? primaryHover : AppColors.actionPrimaryBgHover;
+  Color get actionPrimaryBgPressed =>
+      isLight ? primaryFocus : AppColors.actionPrimaryBgPressed;
+  Color get actionPrimaryFg => isLight ? onPrimary : AppColors.actionPrimaryFg;
+  Color get actionSecondaryBg =>
+      isLight ? surface1 : AppColors.actionSecondaryBg;
+  Color get actionSecondaryBgHover =>
+      isLight ? surface2 : AppColors.actionSecondaryBgHover;
+  Color get actionSecondaryFg => isLight ? ink : AppColors.actionSecondaryFg;
+  Color get actionTertiaryBg =>
+      isLight ? AppColors.actionTertiaryBg : AppColors.actionTertiaryBg;
+  Color get actionTertiaryBgHover =>
+      isLight ? surface1 : AppColors.actionTertiaryBgHover;
+  Color get actionInverseBg =>
+      isLight ? inverseCanvas : AppColors.actionInverseBg;
+  Color get actionInverseBgHover =>
+      isLight ? inverseSurface1 : AppColors.actionInverseBgHover;
+  Color get actionInverseFg => isLight ? inverseInk : AppColors.actionInverseFg;
+  Color get tagBlue => isLight ? primary : AppColors.tagBlue;
+  Color get tagPurple => isLight ? Color(0xFF7040B0) : AppColors.tagPurple;
+  Color get tagGreen => isLight ? success : AppColors.tagGreen;
+  Color get tagYellow => isLight ? Color(0xFF85620C) : AppColors.tagYellow;
+  Color get tagOrange => isLight ? Color(0xFFA64D17) : AppColors.tagOrange;
+  Color get tagRed => isLight ? Color(0xFFB02F37) : AppColors.tagRed;
+  Color get loginScrimStart =>
+      isLight ? canvas.withValues(alpha: 0.5) : AppColors.loginScrimStart;
+  Color get loginScrimMid =>
+      isLight ? canvas.withValues(alpha: 0.72) : AppColors.loginScrimMid;
+  Color get welcomeScrim =>
+      isLight ? canvas.withValues(alpha: 0.42) : AppColors.welcomeScrim;
+  Color get onboardingScrim =>
+      isLight ? canvas.withValues(alpha: 0.18) : AppColors.onboardingScrim;
+  Color get onboardingChrome =>
+      isLight ? surface2.withValues(alpha: 0.7) : AppColors.onboardingChrome;
+  Color get stopDetailHeroScrim =>
+      isLight ? surface1.withValues(alpha: 0.8) : AppColors.stopDetailHeroScrim;
 }

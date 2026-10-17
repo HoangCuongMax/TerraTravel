@@ -1,0 +1,114 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "schema_version": "1.0",
+    "record_id": "event-jim-jim-twin-falls-closure-2026",
+    "source_ids": [
+     "pa-jim-jim-closure-2026",
+     "kakadu-jim-jim-falls"
+    ],
+    "retrieved_at": "2026-10-17T00:00:00Z",
+    "source_updated_at": null,
+    "valid_from": null,
+    "valid_until": null,
+    "review_due_at": "2026-11-17T00:00:00Z",
+    "verification_status": "unverified",
+    "data_mode": "real",
+    "evidence_refs": [
+     "pa-jim-jim-closure-2026#Parks Australia closure notice",
+     "kakadu-jim-jim-falls#site status banner"
+    ],
+    "affected_entity_ids": [
+     "jim-jim-twin-falls"
+    ],
+    "road_name": "Jim Jim Falls Road",
+    "event_type": "closure",
+    "status": "Closed for 2026",
+    "vehicle_scope": [],
+    "direction": null,
+    "authority": "Parks Australia",
+    "issued_at": null,
+    "effective_from": null,
+    "effective_until": null,
+    "description": "Parks Australia advises the Jim Jim and Twin Falls area, including Jim Jim Falls, Twin Falls gorge and escarpment walk and Karnamarr campground, remains closed in 2026 while road and infrastructure upgrades are delivered. The notice's exact start and end instants were not published; geometry is unknown.",
+    "official_check_url": "https://kakadu.gov.au/access/"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "schema_version": "1.0",
+    "record_id": "event-gunlom-lookout-track-closed",
+    "source_ids": [
+     "pa-gunlom-falls"
+    ],
+    "retrieved_at": "2026-10-17T00:00:00Z",
+    "source_updated_at": null,
+    "valid_from": null,
+    "valid_until": null,
+    "review_due_at": "2026-11-17T00:00:00Z",
+    "verification_status": "conflicting",
+    "data_mode": "real",
+    "evidence_refs": [
+     "pa-gunlom-falls#site banner"
+    ],
+    "affected_entity_ids": [
+     "gunlom-falls"
+    ],
+    "road_name": null,
+    "event_type": "closure",
+    "status": "Closed until further notice (walking track to lookout and pools above the falls, at the request of Traditional Owners)",
+    "vehicle_scope": [],
+    "direction": null,
+    "authority": "Parks Australia",
+    "issued_at": null,
+    "effective_from": null,
+    "effective_until": null,
+    "description": "Parks Australia Gunlom Falls page states the walking track to the lookout and upper pools is closed until further notice and says to check the Access Report for the plunge pool, day-use area and campground. Conflicts in wording with the Gunlom lookout walk page.",
+    "official_check_url": "https://kakadu.gov.au/access/"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "schema_version": "1.0",
+    "record_id": "event-gunlom-access-road-4wd",
+    "source_ids": [
+     "kakadu-gunlom-walk"
+    ],
+    "retrieved_at": "2026-10-17T00:00:00Z",
+    "source_updated_at": null,
+    "valid_from": null,
+    "valid_until": null,
+    "review_due_at": "2026-11-17T00:00:00Z",
+    "verification_status": "conflicting",
+    "data_mode": "real",
+    "evidence_refs": [
+     "kakadu-gunlom-walk#status box"
+    ],
+    "affected_entity_ids": [
+     "gunlom-falls"
+    ],
+    "road_name": "Gunlom Road",
+    "event_type": "restriction",
+    "status": "Open with risks; access for high-clearance 4WD only; no access or swimming in the bottom plunge pool",
+    "vehicle_scope": [
+     "high_clearance_4wd"
+    ],
+    "direction": null,
+    "authority": "Parks Australia",
+    "issued_at": null,
+    "effective_from": null,
+    "effective_until": null,
+    "description": "Gunlom lookout walk page status box. The page does not mention the lookout track closure shown on the Gunlom Falls page; treat the two as conflicting until the Access Report is checked.",
+    "official_check_url": "https://kakadu.gov.au/access/"
+   }
+  }
+ ]
+}

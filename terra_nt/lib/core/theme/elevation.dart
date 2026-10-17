@@ -47,8 +47,9 @@ class AppElevation {
   /// they are exported as colours: a caller paints one as a 1px top border or a short
   /// top-edge gradient. Do not approximate them with an outer shadow.
   static final edgeHighlight = AppColors.inverseCanvas.withValues(alpha: 0.06);
-  static final edgeHighlightStrong =
-      AppColors.inverseCanvas.withValues(alpha: 0.1);
+  static final edgeHighlightStrong = AppColors.inverseCanvas.withValues(
+    alpha: 0.1,
+  );
 
   /// `--shadow-overlay: 0 8px 32px rgb(0 0 0 / 0.6)` — the only real shadow in the
   /// system, and reserved for surfaces lifted off the page (menus, dialogs) only.

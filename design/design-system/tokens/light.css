@@ -1,0 +1,24 @@
+/* Light palette authorised 17 October 2026. Mirrors core/theme/colors.dart. */
+[data-theme="light"] {
+  --color-primary: #4f46b5;
+  --color-primary-hover: #413797;
+  --color-primary-focus: #3a308b;
+  --color-brand-secure: #5d568e;
+  --color-canvas: #f6f7fa;
+  --color-surface1: #ffffff;
+  --color-surface2: #f0f1f6;
+  --color-surface3: #e8eaf2;
+  --color-surface4: #e1e4ef;
+  --color-hairline: #d9dde7;
+  --color-hairline-strong: #b9c0d0;
+  --color-hairline-tertiary: #9ba5b9;
+  --color-ink: #181b26;
+  --color-ink-muted: #34394a;
+  --color-ink-subtle: #535b70;
+  --color-ink-tertiary: #60697e;
+  --color-success: #177a32;
+  --color-tag-purple: #7040b0;
+  --color-tag-yellow: #85620c;
+  --color-tag-orange: #a64d17;
+  --color-tag-red: #b02f37;
+}

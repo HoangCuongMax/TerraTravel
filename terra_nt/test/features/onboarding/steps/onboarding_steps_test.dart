@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/semantics.dart';
 import 'package:terra_nt/core/theme/motion.dart';
 import 'package:terra_nt/core/theme/colors.dart';
+import 'package:terra_nt/core/theme/app_theme.dart';
 import 'package:terra_nt/core/theme/typography.dart';
 import 'package:terra_nt/data/models/onboarding_answers.dart';
 import 'package:terra_nt/data/seed/onboarding_options.dart';
@@ -438,6 +439,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       MaterialApp(
+        theme: AppTheme.dark,
         home: MediaQuery(
           data: const MediaQueryData(textScaler: TextScaler.linear(2)),
           child: Scaffold(
@@ -479,6 +481,7 @@ void main() {
     var answers = const OnboardingAnswers();
     await tester.pumpWidget(
       MaterialApp(
+        theme: AppTheme.dark,
         home: Scaffold(
           body: StatefulBuilder(
             builder: (context, setState) => onboardingStepBuilder(
@@ -548,6 +551,7 @@ Future<void> pumpStep(
 }) async {
   await tester.pumpWidget(
     MaterialApp(
+      theme: AppTheme.dark,
       home: Scaffold(
         body: SingleChildScrollView(
           child: Builder(

@@ -365,9 +365,9 @@ class ResultStopRow extends StatelessWidget {
     );
     final image = stop.photoUrl ?? placeImageFor(stop.name, tags: stop.tags);
     final decoration = BoxDecoration(
-      color: AppColors.surface1,
+      color: AppColors.of(context).surface1,
       border: Border.all(
-        color: AppColors.hairline,
+        color: AppColors.of(context).hairline,
         width: AppElevation.hairlineWidth,
       ),
       borderRadius: BorderRadius.circular(AppRadius.card),
@@ -444,7 +444,10 @@ class ResultStopRow extends StatelessWidget {
                             children: [
                               for (final tag in stop.tags)
                                 TagDot(
-                                  color: tagColor(tag),
+                                  color: tagColor(
+                                    tag,
+                                    light: AppColors.of(context).isLight,
+                                  ),
                                   label: tag,
                                   bordered: true,
                                 ),
@@ -464,7 +467,7 @@ class ResultStopRow extends StatelessWidget {
                           const SizedBox(height: AppSpacing.xs),
                           Container(
                             height: AppElevation.hairlineWidth,
-                            color: AppColors.hairline,
+                            color: AppColors.of(context).hairline,
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           _Footer(
@@ -526,8 +529,8 @@ class MapsLaunchFailure extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        'Google Maps could not be opened. You can copy the destination coordinates instead.',
-        style: AppType.bodySm.copyWith(color: AppColors.inkSubtle),
+        'A directions app could not be opened. You can copy the destination coordinates instead.',
+        style: AppType.bodySm.copyWith(color: AppColors.of(context).inkSubtle),
       ),
       TextButton(
         onPressed: () async {
@@ -539,7 +542,7 @@ class MapsLaunchFailure extends StatelessWidget {
         },
         child: Text(
           'Copy destination coordinates',
-          style: AppType.bodySm.copyWith(color: AppColors.primary),
+          style: AppType.bodySm.copyWith(color: AppColors.of(context).primary),
         ),
       ),
     ],
@@ -572,12 +575,16 @@ class _Heading extends StatelessWidget {
               Text(
                 stop.name,
                 key: ValueKey('result-stop-name-$originalIndex'),
-                style: AppType.titleApp.copyWith(color: AppColors.ink),
+                style: AppType.titleApp.copyWith(
+                  color: AppColors.of(context).ink,
+                ),
               ),
               const SizedBox(height: AppMetrics.resultStopSubtitleGap),
               Text(
                 stop.subtitle,
-                style: AppType.caption.copyWith(color: AppColors.inkSubtle),
+                style: AppType.caption.copyWith(
+                  color: AppColors.of(context).inkSubtle,
+                ),
               ),
             ],
           ),
@@ -587,14 +594,14 @@ class _Heading extends StatelessWidget {
           AppPillBadge(
             key: ValueKey('result-stop-skipped-$originalIndex'),
             label: 'Skipped',
-            color: AppColors.inkSubtle,
+            color: AppColors.of(context).inkSubtle,
           ),
         ],
         const SizedBox(width: AppSpacing.xs),
         AppIcon(
           LucideIcons.chevron_right,
           key: ValueKey('result-stop-chevron-$originalIndex'),
-          color: AppColors.inkTertiary,
+          color: AppColors.of(context).inkTertiary,
         ),
       ],
     );
@@ -640,7 +647,7 @@ class _EditRow extends StatelessWidget {
             key: ValueKey('result-stop-name-$originalIndex'),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppType.titleApp.copyWith(color: AppColors.ink),
+            style: AppType.titleApp.copyWith(color: AppColors.of(context).ink),
           ),
         ),
         if (moved)
@@ -649,7 +656,7 @@ class _EditRow extends StatelessWidget {
             visualKey: ValueKey('result-stop-revert-visual-$originalIndex'),
             tooltip: 'Revert to AI Suggestion',
             icon: LucideIcons.rotate_ccw,
-            color: AppColors.primary,
+            color: AppColors.of(context).primary,
             onTap: onRevert,
           ),
         ResultIconAction(
@@ -657,7 +664,7 @@ class _EditRow extends StatelessWidget {
           visualKey: ValueKey('result-stop-remove-visual-$originalIndex'),
           tooltip: 'Delete $name from trip',
           icon: LucideIcons.trash_2,
-          color: AppColors.inkSubtle,
+          color: AppColors.of(context).inkSubtle,
           onTap: onRemove,
         ),
         ReorderableDragStartListener(
@@ -671,7 +678,7 @@ class _EditRow extends StatelessWidget {
               child: AppIcon(
                 LucideIcons.grip_vertical,
                 key: ValueKey('result-stop-drag-visual-$originalIndex'),
-                color: AppColors.inkTertiary,
+                color: AppColors.of(context).inkTertiary,
               ),
             ),
           ),
@@ -694,9 +701,9 @@ class _PositionBadge extends StatelessWidget {
     height: AppMetrics.resultStopBadgeSize,
     alignment: Alignment.center,
     decoration: BoxDecoration(
-      color: AppColors.surface2,
+      color: AppColors.of(context).surface2,
       border: Border.all(
-        color: AppColors.hairlineStrong,
+        color: AppColors.of(context).hairlineStrong,
         width: AppElevation.hairlineWidth,
       ),
       borderRadius: BorderRadius.circular(AppRadius.full),
@@ -704,7 +711,7 @@ class _PositionBadge extends StatelessWidget {
     child: Text(
       '${position + 1}',
       style: AppType.caption.copyWith(
-        color: AppColors.ink,
+        color: AppColors.of(context).ink,
         fontFamily: AppFonts.mono,
       ),
     ),
@@ -754,9 +761,9 @@ class ResultIconAction extends StatelessWidget {
                 height: AppMetrics.resultStopActionVisualSize,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.surface2,
+                  color: AppColors.of(context).surface2,
                   border: Border.all(
-                    color: AppColors.hairline,
+                    color: AppColors.of(context).hairline,
                     width: AppElevation.hairlineWidth,
                   ),
                   borderRadius: BorderRadius.circular(AppRadius.full),
@@ -785,19 +792,21 @@ class _Highlight extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: AppMetrics.resultStopContentTopGap),
             child: AppIcon(
               LucideIcons.zap,
               size: AppMetrics.iconSm,
-              color: AppColors.inkSubtle,
+              color: AppColors.of(context).inkSubtle,
             ),
           ),
           const SizedBox(width: AppSpacing.xs),
           Expanded(
             child: Text(
               note,
-              style: AppType.bodyApp.copyWith(color: AppColors.inkMuted),
+              style: AppType.bodyApp.copyWith(
+                color: AppColors.of(context).inkMuted,
+              ),
             ),
           ),
         ],
@@ -821,7 +830,9 @@ class _DetailedPlan extends StatelessWidget {
           ? Text(
               'No detailed plan for this stop.',
               key: ValueKey('detailed-plan-empty-$originalIndex'),
-              style: AppType.caption.copyWith(color: AppColors.inkTertiary),
+              style: AppType.caption.copyWith(
+                color: AppColors.of(context).inkTertiary,
+              ),
             )
           : PlanEntryList(entries: stop.detailedPlan),
     );
@@ -846,7 +857,9 @@ class _Footer extends StatelessWidget {
       children: [
         Text(
           duration,
-          style: AppType.caption.copyWith(color: AppColors.inkSubtle),
+          style: AppType.caption.copyWith(
+            color: AppColors.of(context).inkSubtle,
+          ),
         ),
         if (driveNext != null) ...[
           const SizedBox(width: AppSpacing.xs),
@@ -860,14 +873,16 @@ class _Footer extends StatelessWidget {
                     driveNext!,
                     key: ValueKey('result-stop-drive-$originalIndex'),
                     textAlign: TextAlign.right,
-                    style: AppType.caption.copyWith(color: AppColors.inkSubtle),
+                    style: AppType.caption.copyWith(
+                      color: AppColors.of(context).inkSubtle,
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppMetrics.resultStopEditActionGap),
-                const AppIcon(
+                AppIcon(
                   LucideIcons.arrow_right,
                   size: AppMetrics.iconXxs,
-                  color: AppColors.inkSubtle,
+                  color: AppColors.of(context).inkSubtle,
                 ),
               ],
             ),

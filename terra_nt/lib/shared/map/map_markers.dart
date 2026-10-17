@@ -20,8 +20,8 @@ class RouteDotMarker extends StatelessWidget {
     key: const ValueKey('route-dot-marker'),
     width: AppMetrics.mapRouteDotSize,
     height: AppMetrics.mapRouteDotSize,
-    decoration: const BoxDecoration(
-      color: AppColors.ink,
+    decoration: BoxDecoration(
+      color: AppColors.of(context).ink,
       shape: BoxShape.circle,
     ),
   );
@@ -44,17 +44,17 @@ class NumberedPinMarker extends StatelessWidget {
       height: AppMetrics.mapNumberedPinSize,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppColors.surface2,
+        color: AppColors.of(context).surface2,
         shape: BoxShape.circle,
         border: Border.all(
-          color: AppColors.primary,
+          color: AppColors.of(context).primary,
           width: AppMetrics.mapPinBorderWidth,
         ),
       ),
       child: Text(
         '$number',
         style: AppType.caption.copyWith(
-          color: AppColors.ink,
+          color: AppColors.of(context).ink,
           fontWeight: AppWeights.semibold,
         ),
       ),
@@ -99,7 +99,7 @@ class PoiPinMarker extends StatelessWidget {
           height: AppMetrics.mapPoiPinSize,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: backgroundColor,
+            color: selected ? accent : AppColors.of(context).surface2,
             shape: BoxShape.circle,
             border: Border.all(
               color: accent,
@@ -117,7 +117,7 @@ class PoiPinMarker extends StatelessWidget {
                     _ => LucideIcons.map_pin,
                   },
                   size: AppMetrics.iconSm,
-                  color: selected ? AppColors.surface1 : accent,
+                  color: selected ? AppColors.of(context).surface1 : accent,
                 )
               : selected
               ? null

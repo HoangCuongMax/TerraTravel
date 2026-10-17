@@ -9,7 +9,12 @@ import '../../core/theme/metrics.dart';
 /// inherits from the ambient [IconTheme], matching the CSS `currentColor` behaviour
 /// the prototype relies on (e.g. `GripVertical` L454, `ArrowRight` L513).
 class AppIcon extends StatelessWidget {
-  const AppIcon(this.icon, {super.key, this.size = AppMetrics.iconMd, this.color});
+  const AppIcon(
+    this.icon, {
+    super.key,
+    this.size = AppMetrics.iconMd,
+    this.color,
+  });
 
   final IconData icon;
   final double size;

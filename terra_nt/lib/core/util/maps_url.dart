@@ -12,11 +12,7 @@ String? buildMapsUrl(
   Set<int>? skippedIndices,
   Set<int>? skippedIndexes,
 }) {
-  final excluded = <int>{
-    ...skipped,
-    ...?skippedIndices,
-    ...?skippedIndexes,
-  };
+  final excluded = <int>{...skipped, ...?skippedIndices, ...?skippedIndexes};
   final liveStops = <Stop>[];
   for (var i = 0; i < stops.length; i++) {
     if (!excluded.contains(i)) {
@@ -30,7 +26,8 @@ String? buildMapsUrl(
 
   final origin = '${liveStops.first.lat},${liveStops.first.lng}';
   final destination = '${liveStops.last.lat},${liveStops.last.lng}';
-  var url = '$_mapsDirectionsBase'
+  var url =
+      '$_mapsDirectionsBase'
       '&origin=${Uri.encodeComponent(origin)}'
       '&destination=${Uri.encodeComponent(destination)}'
       '&travelmode=driving';
@@ -51,11 +48,11 @@ String? mapsUrl(
   Set<int>? skippedIndices,
   Set<int>? skippedIndexes,
 }) => buildMapsUrl(
-      stops,
-      skipped: skipped,
-      skippedIndices: skippedIndices,
-      skippedIndexes: skippedIndexes,
-    );
+  stops,
+  skipped: skipped,
+  skippedIndices: skippedIndices,
+  skippedIndexes: skippedIndexes,
+);
 
 String? singleDestinationUrl(Stop stop) {
   final destination = destinationCoordinates(stop);

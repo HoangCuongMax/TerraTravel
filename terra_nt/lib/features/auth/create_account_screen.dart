@@ -21,7 +21,6 @@ class CreateAccountScreen extends ConsumerStatefulWidget {
 
   final VoidCallback? onAuthenticated;
 
-
   @override
   ConsumerState<CreateAccountScreen> createState() =>
       _CreateAccountScreenState();
@@ -191,7 +190,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
 
     return Scaffold(
       key: const ValueKey('screen-create-account'),
-      backgroundColor: AppColors.canvas,
+      backgroundColor: AppColors.of(context).canvas,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -246,7 +245,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                                             'Create account',
                                             maxLines: 1,
                                             style: AppType.displayApp.copyWith(
-                                              color: AppColors.ink,
+                                              color: AppColors.of(context).ink,
                                               letterSpacing:
                                                   AppType.loginHeadlineTracking,
                                             ),
@@ -256,7 +255,8 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                                         Text(
                                           'Start exploring the Northern Territory.',
                                           style: AppType.bodyLg.copyWith(
-                                            color: AppColors.inkMuted,
+                                            color: AppColors.of(context)
+                                                .inkMuted,
                                           ),
                                         ),
                                       ],
@@ -376,13 +376,15 @@ class _SignInLink extends StatelessWidget {
         child: Center(
           child: Text.rich(
             TextSpan(
-              style: AppType.caption.copyWith(color: AppColors.inkSubtle),
+              style: AppType.caption.copyWith(
+                color: AppColors.of(context).inkSubtle,
+              ),
               children: [
                 const TextSpan(text: 'Already have an account? '),
                 TextSpan(
                   text: 'Sign in',
                   style: AppType.caption.copyWith(
-                    color: AppColors.ink,
+                    color: AppColors.of(context).ink,
                     fontWeight: AppWeights.medium,
                   ),
                 ),

@@ -1,0 +1,8 @@
+Bureau of Meteorology — NT forecast products via anonymous FTP
+Access: ftp://ftp.bom.gov.au/anon/gen/fwo/
+Products loaded: IDD10150 (Darwin city), IDD10161 (Alice Springs), IDD10111 (NT district), IDD10721 (NT fire weather)
+Retrieved: 2026-10-17
+Licence: Subject to BOM copyright http://www.bom.gov.au/other/copyright.shtml
+Anonymous FTP is the BOM-recommended channel for automated access under default copyright terms.
+These are time-limited forecasts — do not reuse after valid_until; always prefer latest product from BOM.
+Attribution: © Commonwealth of Australia, Bureau of Meteorology.

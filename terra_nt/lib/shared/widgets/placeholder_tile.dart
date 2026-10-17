@@ -20,9 +20,9 @@ class PlaceholderTile extends StatelessWidget {
     this.iconSize = AppMetrics.iconXl,
     this.image,
     this.fallbackImage,
-  })  : width = size,
-        height = size,
-        _hero = false;
+  }) : width = size,
+       height = size,
+       _hero = false;
 
   const PlaceholderTile.hero({
     super.key,
@@ -31,8 +31,8 @@ class PlaceholderTile extends StatelessWidget {
     this.iconSize = AppMetrics.iconXxl,
     this.image,
     this.fallbackImage,
-  })  : width = double.infinity,
-        _hero = true;
+  }) : width = double.infinity,
+       _hero = true;
 
   final double width;
   final double height;
@@ -42,19 +42,27 @@ class PlaceholderTile extends StatelessWidget {
   final String? fallbackImage;
   final bool _hero;
 
-  Widget _placeholder() => ColoredBox(
-        color: AppColors.surface2,
-        child: Center(child: AppIcon(icon, size: iconSize, color: AppColors.inkTertiary)),
-      );
+  Widget _placeholder(BuildContext context) => ColoredBox(
+    color: AppColors.of(context).surface2,
+    child: Center(
+      child: AppIcon(
+        icon,
+        size: iconSize,
+        color: AppColors.of(context).inkTertiary,
+      ),
+    ),
+  );
 
   Widget _image(String image) {
-    final isNetwork = image.startsWith("http://") || image.startsWith("https://");
+    final isNetwork =
+        image.startsWith("http://") || image.startsWith("https://");
     return isNetwork
         ? Image.network(
             image,
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) =>
-                fallbackImage == null ? _placeholder() : _asset(fallbackImage!),
+            errorBuilder: (context, error, stackTrace) => fallbackImage == null
+                ? _placeholder(context)
+                : _asset(fallbackImage!),
           )
         : _asset(image);
   }
@@ -62,12 +70,12 @@ class PlaceholderTile extends StatelessWidget {
   Widget _asset(String path) => Image.asset(
     path,
     fit: BoxFit.cover,
-    errorBuilder: (context, error, stackTrace) => _placeholder(),
+    errorBuilder: (context, error, stackTrace) => _placeholder(context),
   );
 
   @override
   Widget build(BuildContext context) {
-    final content = image == null ? _placeholder() : _image(image!);
+    final content = image == null ? _placeholder(context) : _image(image!);
 
     if (_hero) {
       return SizedBox(width: width, height: height, child: content);
@@ -78,9 +86,12 @@ class PlaceholderTile extends StatelessWidget {
       height: height,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.surface2,
+        color: AppColors.of(context).surface2,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.hairline, width: AppElevation.hairlineWidth),
+        border: Border.all(
+          color: AppColors.of(context).hairline,
+          width: AppElevation.hairlineWidth,
+        ),
       ),
       child: content,
     );

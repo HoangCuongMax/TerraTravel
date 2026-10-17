@@ -20,7 +20,8 @@ class Entrance extends StatefulWidget {
   State<Entrance> createState() => _EntranceState();
 }
 
-class _EntranceState extends State<Entrance> with SingleTickerProviderStateMixin {
+class _EntranceState extends State<Entrance>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _progress;
 

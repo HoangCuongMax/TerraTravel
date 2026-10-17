@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:terra_nt/core/theme/colors.dart';
+import 'package:terra_nt/core/theme/app_theme.dart';
 import 'package:terra_nt/core/theme/elevation.dart';
 import 'package:terra_nt/core/theme/metrics.dart';
 import 'package:terra_nt/core/theme/spacing.dart';
 import 'package:terra_nt/shared/widgets/app_text_input.dart';
 
 void main() {
-  Widget host(Widget child) =>
-      MaterialApp(home: Scaffold(body: Center(child: child)));
+  Widget host(Widget child) => MaterialApp(
+    theme: AppTheme.dark,
+    home: Scaffold(body: Center(child: child)),
+  );
 
   Finder decoratedBox() => find.descendant(
     of: find.byType(AppTextInput),
@@ -25,7 +28,9 @@ void main() {
 
   group('AppTextInput', () {
     testWidgets('obscureText: true hides input', (tester) async {
-      await tester.pumpWidget(host(const AppTextInput(label: 'Password', obscureText: true)));
+      await tester.pumpWidget(
+        host(const AppTextInput(label: 'Password', obscureText: true)),
+      );
 
       final field = tester.widget<TextField>(find.byType(TextField));
       expect(field.obscureText, isTrue);
@@ -41,16 +46,16 @@ void main() {
 
     testWidgets('errorText: null occupies zero height', (tester) async {
       final key = GlobalKey();
-      await tester.pumpWidget(
-        host(AppTextInput(key: key, label: 'Email')),
-      );
+      await tester.pumpWidget(host(AppTextInput(key: key, label: 'Email')));
 
       final shrinkFinder = find.descendant(
         of: find.byKey(key),
         matching: find.byType(SizedBox),
       );
       final sizes = tester.widgetList<SizedBox>(shrinkFinder);
-      final errorSlot = sizes.firstWhere((box) => box.height == 0 && box.width == 0);
+      final errorSlot = sizes.firstWhere(
+        (box) => box.height == 0 && box.width == 0,
+      );
       expect(
         tester.getSize(find.byWidget(errorSlot)).height,
         0,
@@ -104,10 +109,7 @@ void main() {
         await tester.pumpWidget(host(const AppTextInput(label: 'Email')));
 
         final control = tester.getRect(find.byType(AppTextInput));
-        expect(
-          control.height,
-          greaterThanOrEqualTo(AppMetrics.minTouchTarget),
-        );
+        expect(control.height, greaterThanOrEqualTo(AppMetrics.minTouchTarget));
         expect(control.width, greaterThanOrEqualTo(AppMetrics.minTouchTarget));
 
         // Size alone is not the target: the whole box must accept a pointer,
@@ -137,9 +139,7 @@ void main() {
         final field = tester.getSize(find.byType(TextField)).height;
         expect(
           tester.getSize(decoratedBox()).height,
-          field +
-              AppSpacing.padInputY * 2 +
-              AppElevation.hairlineWidth * 2,
+          field + AppSpacing.padInputY * 2 + AppElevation.hairlineWidth * 2,
           reason: 'the box is one line of field plus its padding and hairline',
         );
       });

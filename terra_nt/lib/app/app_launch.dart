@@ -44,7 +44,7 @@ class _AppLaunchState extends ConsumerState<AppLaunch> {
       future: _initialSession,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const ColoredBox(color: AppColors.canvas);
+          return ColoredBox(color: AppColors.of(context).canvas);
         }
         final session = snapshot.requireData;
         if (session.email == null) {

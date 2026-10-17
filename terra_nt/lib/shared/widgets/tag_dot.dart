@@ -12,7 +12,12 @@ import '../../core/theme/typography.dart';
 /// colour mapping is Task-04's `tagColor()`, and callers resolve it and pass the
 /// [Color] down.
 class TagDot extends StatelessWidget {
-  const TagDot({super.key, required this.color, required this.label, this.bordered = false});
+  const TagDot({
+    super.key,
+    required this.color,
+    required this.label,
+    this.bordered = false,
+  });
 
   final Color color;
   final String label;
@@ -26,10 +31,18 @@ class TagDot extends StatelessWidget {
         Container(
           width: AppMetrics.tagDotSize,
           height: AppMetrics.tagDotSize,
-          decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(AppRadius.pill)),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+          ),
         ),
         const SizedBox(width: AppMetrics.gapTagDot),
-        Text(label, style: AppType.captionApp.copyWith(color: AppColors.inkSubtle)),
+        Text(
+          label,
+          style: AppType.captionApp.copyWith(
+            color: AppColors.of(context).inkSubtle,
+          ),
+        ),
       ],
     );
 
@@ -41,9 +54,12 @@ class TagDot extends StatelessWidget {
         vertical: AppMetrics.padTagY,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surface2,
+        color: AppColors.of(context).surface2,
         borderRadius: BorderRadius.circular(AppRadius.pill),
-        border: Border.all(color: AppColors.hairline, width: AppElevation.hairlineWidth),
+        border: Border.all(
+          color: AppColors.of(context).hairline,
+          width: AppElevation.hairlineWidth,
+        ),
       ),
       child: dot,
     );

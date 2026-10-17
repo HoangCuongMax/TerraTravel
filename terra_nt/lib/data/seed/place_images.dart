@@ -27,7 +27,13 @@ const List<MapEntry<String, String>> _placeImageMatchers = [
   MapEntry("angkerle", "standley-chasm"),
 ];
 
-const Set<String> _tagsWithImages = {"Nature", "Culture", "Adventure", "Wildlife", "Relaxation"};
+const Set<String> _tagsWithImages = {
+  "Nature",
+  "Culture",
+  "Adventure",
+  "Wildlife",
+  "Relaxation",
+};
 
 /// Case-insensitive substring match against a fixed slug order — first hit wins.
 /// With no name hit, the first exact-case known tag picks a fallback picture.

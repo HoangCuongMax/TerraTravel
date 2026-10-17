@@ -18,16 +18,23 @@ class AppChipColors {
   final Color foreground;
   final Color border;
 
-  factory AppChipColors.resolve(bool selected) => selected
-      ? const AppChipColors._(
-          AppColors.surface2,
-          AppColors.ink,
-          AppColors.hairlineStrong,
+  factory AppChipColors.resolve(bool selected, {BuildContext? context}) =>
+      selected
+      ? AppChipColors._(
+          (context == null ? const AppPalette.dark() : AppColors.of(context))
+              .surface2,
+          (context == null ? const AppPalette.dark() : AppColors.of(context))
+              .ink,
+          (context == null ? const AppPalette.dark() : AppColors.of(context))
+              .hairlineStrong,
         )
-      : const AppChipColors._(
-          AppColors.surface1,
-          AppColors.inkSubtle,
-          AppColors.hairline,
+      : AppChipColors._(
+          (context == null ? const AppPalette.dark() : AppColors.of(context))
+              .surface1,
+          (context == null ? const AppPalette.dark() : AppColors.of(context))
+              .inkSubtle,
+          (context == null ? const AppPalette.dark() : AppColors.of(context))
+              .hairline,
         );
 }
 
@@ -49,7 +56,7 @@ class AppChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppChipColors.resolve(selected);
+    final colors = AppChipColors.resolve(selected, context: context);
 
     return GestureDetector(
       onTap: onTap,
@@ -63,7 +70,10 @@ class AppChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: colors.background,
           borderRadius: BorderRadius.circular(AppRadius.pill),
-          border: Border.all(color: colors.border, width: AppElevation.hairlineWidth),
+          border: Border.all(
+            color: colors.border,
+            width: AppElevation.hairlineWidth,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -72,7 +82,10 @@ class AppChip extends StatelessWidget {
               AppIcon(icon!, size: AppMetrics.iconSm, color: colors.foreground),
               const SizedBox(width: AppMetrics.gapChipIcon),
             ],
-            Text(label, style: AppType.buttonApp.copyWith(color: colors.foreground)),
+            Text(
+              label,
+              style: AppType.buttonApp.copyWith(color: colors.foreground),
+            ),
           ],
         ),
       ),

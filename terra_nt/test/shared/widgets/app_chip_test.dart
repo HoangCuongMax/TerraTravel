@@ -1,4 +1,5 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:terra_nt/core/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:terra_nt/core/theme/colors.dart';
 import 'package:terra_nt/shared/widgets/app_chip.dart';
@@ -23,17 +24,23 @@ void main() {
   });
 
   group('AppChip', () {
-    testWidgets('paints the resolved background for its selected state',
-        (tester) async {
+    testWidgets('paints the resolved background for its selected state', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        const Directionality(
-          textDirection: TextDirection.ltr,
-          child: AppChip(label: 'Waterfalls', selected: true),
+        Theme(
+          data: AppTheme.dark,
+          child: const Directionality(
+            textDirection: TextDirection.ltr,
+            child: AppChip(label: 'Waterfalls', selected: true),
+          ),
         ),
       );
 
       final decoration =
-          tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).decoration
+          tester
+                  .widget<AnimatedContainer>(find.byType(AnimatedContainer))
+                  .decoration
               as BoxDecoration;
 
       expect(decoration.color, AppColors.surface2);

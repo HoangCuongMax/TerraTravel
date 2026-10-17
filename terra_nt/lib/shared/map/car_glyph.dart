@@ -6,8 +6,8 @@ import '../../core/theme/motion.dart';
 /// The side-view 4x4 that drives the map backdrop, the onboarding road and
 /// Loading's looping bar: the rendered sprite `assets/images/car.png`.
 ///
-/// It faces its direction of travel — a negative [longitudeDelta] mirrors it —
-/// and bobs gently on [AppMotion.mapCarBob] while it is on screen.
+/// It follows its direction of travel, with [headingRadians] tracking road
+/// bends, and bobs gently on [AppMotion.mapCarBob] while it is on screen.
 ///
 /// The glyph owns its size, [width] wide at the sprite's own aspect. A parent
 /// that hands it a smaller slot (the backdrop's 36x32 map marker) gets the car
@@ -15,6 +15,7 @@ import '../../core/theme/motion.dart';
 /// smudge.
 class CarGlyph extends StatefulWidget {
   final double longitudeDelta;
+  final double headingRadians;
 
   /// Logical width of the car; its height follows the sprite's aspect.
   final double width;
@@ -22,6 +23,7 @@ class CarGlyph extends StatefulWidget {
   const CarGlyph({
     super.key,
     required this.longitudeDelta,
+    this.headingRadians = 0,
     this.width = AppMetrics.mapCarSpriteWidth,
   });
 
@@ -77,23 +79,27 @@ class _CarGlyphState extends State<CarGlyph>
             ),
             child: child,
           ),
-          child: TweenAnimationBuilder<double>(
-            tween: Tween<double>(end: facingScale),
-            duration: flipDuration,
-            curve: Curves.linear,
-            builder: (context, scale, child) => Transform.scale(
-              key: const ValueKey('car-facing-transform'),
-              scaleX: scale,
-              child: child,
-            ),
-            child: Image.asset(
-              CarGlyph.asset,
-              width: width,
-              height: height,
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.medium,
-              gaplessPlayback: true,
-              excludeFromSemantics: true,
+          child: Transform.rotate(
+            key: const ValueKey('car-heading-transform'),
+            angle: widget.headingRadians,
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(end: facingScale),
+              duration: flipDuration,
+              curve: Curves.linear,
+              builder: (context, scale, child) => Transform.scale(
+                key: const ValueKey('car-facing-transform'),
+                scaleX: scale,
+                child: child,
+              ),
+              child: Image.asset(
+                CarGlyph.asset,
+                width: width,
+                height: height,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.medium,
+                gaplessPlayback: true,
+                excludeFromSemantics: true,
+              ),
             ),
           ),
         ),

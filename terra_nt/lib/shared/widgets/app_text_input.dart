@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart' show TextField, InputDecoration, InputBorder;
+import 'package:flutter/material.dart'
+    show TextField, InputDecoration, InputBorder;
 import 'package:flutter/widgets.dart';
 
 import '../../core/theme/colors.dart';
@@ -77,7 +78,9 @@ class _AppTextInputState extends State<AppTextInput> {
         children: [
           Text(
             widget.label,
-            style: AppType.caption.copyWith(color: AppColors.textTertiary),
+            style: AppType.caption.copyWith(
+              color: AppColors.of(context).textTertiary,
+            ),
           ),
           const SizedBox(height: AppSpacing.xxs),
           Container(
@@ -86,12 +89,12 @@ class _AppTextInputState extends State<AppTextInput> {
               vertical: AppSpacing.padInputY,
             ),
             decoration: BoxDecoration(
-              color: AppColors.surface1,
+              color: AppColors.of(context).surface1,
               borderRadius: BorderRadius.circular(AppRadius.input),
               border: Border.all(
                 color: focused
-                    ? AppElevation.ringFocusColor
-                    : AppColors.borderCard,
+                    ? AppColors.of(context).primaryFocus.withValues(alpha: 0.5)
+                    : AppColors.of(context).borderCard,
                 width: focused
                     ? AppElevation.ringFocusWidth
                     : AppElevation.hairlineWidth,
@@ -103,10 +106,14 @@ class _AppTextInputState extends State<AppTextInput> {
               onChanged: widget.onChanged,
               obscureText: widget.obscureText,
               keyboardType: widget.keyboardType,
-              style: AppType.body.copyWith(color: AppColors.textBody),
+              style: AppType.body.copyWith(
+                color: AppColors.of(context).textBody,
+              ),
               decoration: InputDecoration(
                 hintText: widget.placeholder,
-                hintStyle: AppType.body.copyWith(color: AppColors.textTertiary),
+                hintStyle: AppType.body.copyWith(
+                  color: AppColors.of(context).textTertiary,
+                ),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
@@ -118,7 +125,9 @@ class _AppTextInputState extends State<AppTextInput> {
               padding: const EdgeInsets.only(top: AppSpacing.xxs),
               child: Text(
                 widget.errorText!,
-                style: AppType.caption.copyWith(color: AppColors.tagRed),
+                style: AppType.caption.copyWith(
+                  color: AppColors.of(context).tagRed,
+                ),
               ),
             )
           else

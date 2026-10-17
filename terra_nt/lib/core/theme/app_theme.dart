@@ -4,21 +4,40 @@ import 'colors.dart';
 import 'motion.dart';
 import 'typography.dart';
 
-/// Assembles the app's [ThemeData] from the token files in this directory.
-///
-/// There is exactly one theme and it is dark. No light theme is defined anywhere —
-/// `CLAUDE.md` Part 2 forbids adding one.
+/// Theme palettes, including the light mode requested on 17 October 2026.
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get dark => ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: AppColors.bgPage,
-        fontFamily: AppFonts.text,
-        colorScheme: _colorScheme,
-        textTheme: _textTheme,
-        pageTransitionsTheme: _pageTransitionsTheme,
-      );
+  static ThemeData get dark => _build(Brightness.dark);
+  static ThemeData get light => _build(Brightness.light);
+
+  static ThemeData _build(Brightness brightness) {
+    final palette = brightness == Brightness.light
+        ? const AppPalette.light()
+        : const AppPalette.dark();
+    return ThemeData(
+      brightness: brightness,
+      scaffoldBackgroundColor: palette.bgPage,
+      fontFamily: AppFonts.text,
+      colorScheme: ColorScheme(
+        brightness: brightness,
+        primary: palette.primary,
+        onPrimary: palette.onPrimary,
+        secondary: palette.brandSecure,
+        onSecondary: palette.onPrimary,
+        surface: palette.surface1,
+        onSurface: palette.ink,
+        error: palette.tagRed,
+        onError: palette.onPrimary,
+        outline: palette.hairlineStrong,
+      ),
+      textTheme: _textTheme.apply(
+        bodyColor: palette.ink,
+        displayColor: palette.ink,
+      ),
+      pageTransitionsTheme: _pageTransitionsTheme,
+    );
+  }
 
   /// One quiet transition for every pushed screen on both platforms, in place
   /// of Android's sideways slide-and-fade and iOS's edge slide (`docs/PRD.md`
@@ -28,24 +47,6 @@ class AppTheme {
       TargetPlatform.android: FadeThroughPageTransitionsBuilder(),
       TargetPlatform.iOS: FadeThroughPageTransitionsBuilder(),
     },
-  );
-
-  /// Built explicitly, never with `ColorScheme.fromSeed`: seeding generates a whole
-  /// tonal palette of colours that are not in the token set, which is precisely what
-  /// the "no colour outside `design/design-system/tokens/`" rule exists to prevent.
-  static const _colorScheme = ColorScheme(
-    brightness: Brightness.dark,
-    primary: AppColors.primary,
-    onPrimary: AppColors.onPrimary,
-    secondary: AppColors.brandSecure,
-    onSecondary: AppColors.ink,
-    surface: AppColors.surface1,
-    onSurface: AppColors.ink,
-    // The token set has no error or danger colour. `tag-red` is the nearest hue and
-    // is itself provisional (`docs/PRD.md` Q7); referencing it by name keeps a later
-    // correction a one-line change, which inlining a hex here would not.
-    error: AppColors.tagRed,
-    onError: AppColors.onPrimary,
   );
 
   /// Maps Material's text slots onto the type roles.
@@ -110,7 +111,7 @@ class FadeThroughPageTransitionsBuilder extends PageTransitionsBuilder {
       children: [
         FadeTransition(
           opacity: cover,
-          child: const ColoredBox(color: AppColors.bgPage),
+          child: ColoredBox(color: AppColors.of(context).bgPage),
         ),
         AnimatedBuilder(
           animation: arrive,
