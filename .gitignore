@@ -78,3 +78,6 @@ tools/plan_server/.env
 /reports/screens/
 /reports/shots/
 /docs/application-walkthrough/*.zip
+
+# Local AI editor configuration is not part of the submission.
+/.claude/

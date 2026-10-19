@@ -23,7 +23,7 @@ No new application features or runtime behaviour were changed by this repository
 
 - Removed the duplicate walkthrough ZIP from the tracked tree; the individual screenshots and guides already contain its contents. GitHub's repository Download ZIP provides a submission archive.
 - Removed obsolete development capture batches under `reports/screens/` and `reports/shots/` from the tracked tree. Local originals remain in place and are ignored, so this cleanup is recoverable.
-- Removed local Zed editor settings from version control; retained project engineering instructions and useful development tools.
+- Removed local Zed editor settings and the `.claude/` agent configuration/command folder from version control; retained root engineering instructions and useful development tools.
 - Preserved the current 51-screen walkthrough, original design reference captures and the 30 September review because the project explicitly uses that review as a reference.
 - Replaced the generated Flutter README and short root README with project-specific setup and assessment instructions.
 - Updated the overall documentation index and historical image-link descriptions.
