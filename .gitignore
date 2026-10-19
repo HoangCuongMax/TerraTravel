@@ -63,3 +63,18 @@ tools/plan_server/.env
 
 # Original transfer archive; extracted Data Collection is versioned.
 /OneDrive_2026-10-17.zip
+
+# Local configuration and editor state
+.env
+.env.*
+!.env.example
+.zed/
+.claude/settings.local.json
+**/serviceAccount*.json
+**/service-account*.json
+
+# Historical development captures and duplicate export archive.
+# Originals remain locally; the current walkthrough is versioned under docs/.
+/reports/screens/
+/reports/shots/
+/docs/application-walkthrough/*.zip

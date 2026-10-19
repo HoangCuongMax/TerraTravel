@@ -1,17 +1,15 @@
-# terra_nt
+# Terra NT Flutter application
 
-A new Flutter project.
+This directory contains the mobile app. Start with the [project README](../README.md) for setup, Firebase requirements, demo modes and known limitations, or the [complete documentation index](../docs/DOCUMENTATION-INDEX.md) for team instructions.
 
-## Getting Started
+Run Flutter commands from this directory:
 
-This project is a starting point for a Flutter application.
+```sh
+flutter pub get
+cp .env.example .env
+flutter run --dart-define-from-file=.env
+```
 
-A few resources to get you started if this is your first Flutter project:
+Use Flutter 3.47.1 / Dart 3.13.1, as specified in the project engineering guide. On Windows, use `copy .env.example .env` instead of `cp`.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+An empty `PLAN_API_URL` uses the seeded planning repository. Authentication still uses Firebase; an empty planner URL does not bypass sign-in or make this a completely disconnected first-install demo.

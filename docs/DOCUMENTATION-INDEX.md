@@ -1,8 +1,12 @@
 # Terra NT — documentation index and team instructions
 
-Updated: 17 October 2026 (Australia/Darwin).
+Updated: 19 October 2026 (Australia/Darwin).
 
 This is the starting point for understanding, running, improving and preparing data for the existing Terra NT Flutter app. Links are relative to this file so they work in the repository on another teammate’s computer and on GitHub. Share this file with access to the repository; sending this Markdown file alone does not include the linked documents.
+
+## Submission handoff
+
+Read the [submission guide and verification results](SUBMISSION.md) for repository cleanup, assessor instructions, known test failures and remaining physical-device checks. The root [README](../README.md) is the concise entry point; this file remains the complete documentation directory.
 
 ## Project overview and latest update
 
@@ -73,7 +77,7 @@ Start with [Data Collection integration](DATA-COLLECTION-INTEGRATION.md) for the
 
 ### Application screenshots and walkthrough
 
-Start at the [walkthrough guide](application-walkthrough/2026-10-17/README.md), or use the [complete ZIP folder](application-walkthrough/terra-nt-walkthrough-2026-10-17.zip). The 51 screenshots are actual app captures; the guide explicitly lists uncaptured states.
+Start at the [walkthrough guide](application-walkthrough/2026-10-17/README.md). Use GitHub’s Download ZIP to obtain the repository and its walkthrough; a duplicate walkthrough archive is no longer versioned. The 51 screenshots are actual app captures; the guide explicitly lists uncaptured states.
 
 | Stage | Guide and screenshots |
 |---|---|
